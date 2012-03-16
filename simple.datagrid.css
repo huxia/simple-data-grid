@@ -1,0 +1,7 @@
+.simple-data-grid {
+    border-collapse: collapse;
+}
+
+.simple-data-grid tbody tr:hover {
+    background: #ccc;
+}
