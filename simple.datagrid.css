@@ -2,6 +2,41 @@
     border-collapse: collapse;
 }
 
+.simple-data-grid thead th,
 .simple-data-grid tbody tr:hover {
-    background: #ccc;
+	background: #dfdfdf;
+	background: -webkit-gradient(linear, left top, left bottom, from(#eaeaea), to(#d3d3d3));
+	background: -moz-linear-gradient(top, #eaeaea, #d3d3d3);
+}
+
+.simple-data-grid thead th {
+	font-weight: bold;
+	padding: 0.5em;
+	border-right: solid 1px #ccc;
+	text-align: left;
+}
+
+.simple-data-grid thead th:last-child {
+	border-right: none;
+}
+
+.simple-data-grid thead th:hover {
+	background: #e4e4e4;
+	background: -webkit-gradient(linear, left top, left bottom, from(#d3d3d3), to(#eaeaea));
+	background: -moz-linear-gradient(top, #d3d3d3, #eaeaea);
+}
+
+.simple-data-grid tbody td {
+	padding: 0.5em;
+}
+
+.simple-data-grid tbody tr {
+	border-bottom: solid 1px #ddd;
+}
+
+.simple-data-grid tbody .selected,
+.simple-data-grid tbody .selected:hover {
+	background: #97bdd6;
+	background: -webkit-gradient(linear, left top, left bottom, from(#bee0f5), to(#89afca));
+	background: -moz-linear-gradient(top, #bee0f5, #89afca);
 }
