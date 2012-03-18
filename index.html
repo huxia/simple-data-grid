@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Simple data grid</title>
+
+	<link rel="stylesheet" href="extra/bootstrap.min.css">
+	<link rel="stylesheet" href="simple.datagrid.css">
+	<link rel="stylesheet" href="extra/documentation.css">
+
+	<link rel="stylesheet" href="extra/syntax_highlighter/shCore.css">
+	<link rel="stylesheet" href="extra/syntax_highlighter/shThemeRDark.css">
+
+	<script src="extra/jquery-1.7.1.min.js"></script>
+	<script src="extra/jquery-ui1.9m6.min.js"></script>
+
+	<script src="simple.datagrid.js"></script>
+	<script src="extra/example-data.js"></script>
+
+	<script src="extra/syntax_highlighter/shCore.js"></script>
+	<script src="extra/syntax_highlighter/shBrushJScript.js"></script>
+</head>
+<body>
+
+	<div class="container-fluid">
+		<div class="row-fluid">
+
+			<div class="span3" id="toc">
+				<ul class="unstyled">
+					<li>
+						<a href="#simple-data-grid">Simple data grid</a>
+						<ul>
+							<li><a href="#features">Features</a></li>
+							<li><a href="#demo">Demo</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="#tutorial">Tutorial</a>
+						<ul>
+							<li>
+								<a href="#example1">Example 1: a very simple data grid</a>
+								<ul>
+									<li><a href="#example1-step1">Step 1: define a table</a></li>
+									<li><a href="#example1-step2">Step 2: add columns</a></li>
+									<li><a href="#example1-step3">Step 3: include javascript and css</a></li>
+									<li><a href="#example1-step4">Step 4: some javascript</a></li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+
+			<div class="span9" id="page">
+				<h1 id="simple-data-grid">Simple data grid</h1>
+				<p>
+					Simple-data-grid is a datagrid widget for jQuery UI.
+				</p>
+				<p>
+					The project is <a href="https://github.com/mbraak/simple-data-grid">hosted on github</a>.
+				</p>
+
+				<h2 id="features">Features</h2>
+				<ul>
+					<li>Works on Internet Explorer 7+, Firefox 3.6+, Chrome and Safari</li>
+					<li>Works with jQuery UI 1.8 or 1.9 beta</li>
+					<li>Written in Coffeescript</li>
+				</ul>
+
+				<h2 id="demo">Demo</h2>
+				<div class="row-fluid">
+					<div class="span4">
+						<table id="demo-table">
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>Latin name</th>
+								</tr>
+							</thead>
+						</table>
+						<script>
+							$(function() {
+								$('#demo-table').simple_datagrid({
+									data: ExampleData.fruits.slice(0, 5)
+								});
+							});
+						</script>
+					</div>
+					<div class="span6">
+<pre>
+&lt;table id="demo-table" data-url="/fruits.json"&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Name&lt;/th&gt;
+      &lt;th&gt;Latin name&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+&lt;/table&gt;
+
+$(function() {
+  $('#demo-table').simple_datagrid();
+});
+</pre>
+					</div>
+				</div>
+
+				<h2 id="tutorial">Tutorial</h2>
+				<h3 id="example1">Example 1: a very simple data grid</h3>
+				<h4 id="example1-step1">Step 1: define a table</h4>
+				<p>
+					First, we need an html table.
+				</p>
+
+<pre>
+&lt;table id="example1"&gt;
+&lt;/table&gt;
+</pre>
+
+				<h4 id="example1-step2">Step 2: add columns</h4>
+				<p>
+					Lets's add some columns. We can define them in <strong>&lt;th&gt;</strong> elements.
+				</p>
+
+<pre>
+&lt;table id="example1"&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th>Title&lt;/th&gt;
+      &lt;th>Author&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+&lt;/table&gt;
+</pre>
+
+				<h4 id="example1-step3">Step 3: include javascript and css</h4>
+				<p>
+					We need to include some javascript and css.
+				</p>
+
+<pre>
+&lt;link rel="stylesheet" href="simple.datagrid.css"&gt;
+&lt;script src="extra/jquery-1.7.1.min.js"&gt;&lt;/script&gt;
+&lt;script src="extra/jquery-ui1.9m6.min.js">&lt;/script&gt;
+&lt;script src="simple.datagrid.js"&gt;&lt;/script&gt;
+</pre>
+
+				<h4 id="example1-step4">Step 4: some javascript</h4>
+				<p>
+					Fill the grid with some data:
+				</p>
+
+<pre>
+&lt;script&gt;
+  $('#example1').simple_datagrid({
+    data: [
+      ["Avocado", "Persea americana"],
+      ["Bell pepper", "Capsicum annuum"],
+      ["Bitter melon", "Momordica charantia"]
+    ]
+  });
+&lt;/script&gt;
+</pre>
+
+				<p>
+					The result look like this:
+				</p>
+
+				<table id="table2">
+					<thead>
+						<tr>
+							<th>Title</th>
+							<th>Author</th>
+						</tr>
+					</thead>
+				</table>
+				<script>
+					$(function() {
+						$('#table2').simple_datagrid({
+							data: [
+								["Avocado", "Persea americana"],
+								["Bell pepper", "Capsicum annuum"],
+								["Bitter melon", "Momordica charantia"]
+							]
+						});
+					});
+				</script>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		$(function() {
+			$('pre').addClass('brush: js; toolbar: false; class-name: dark');
+
+			SyntaxHighlighter.defaults['gutter'] = false;
+			SyntaxHighlighter.all();
+		});
+	</script>
+</body>
