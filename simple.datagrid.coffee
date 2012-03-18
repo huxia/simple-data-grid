@@ -122,6 +122,8 @@ $.widget("ui.simple_datagrid", {
         onGetData: null
 
     _create: ->
+        @url = @_getBaseUrl()
+
         @_generateColumnData()
         @_createPaginator()
         @_createDomElements()
@@ -184,7 +186,7 @@ $.widget("ui.simple_datagrid", {
         @paginator = new Paginator(
             @element,
             @columns.length,
-            @_getBaseUrl(),
+            @url,
             $.proxy(@_loadData, this)
         )
 
@@ -264,24 +266,35 @@ $.widget("ui.simple_datagrid", {
     _loadData: ->
         query_parameters = $.extend(@parameters, @paginator.getQueryParameters())
 
-        if @options.onGetData
+        getDataFromCallback = =>
             @options.onGetData(
                 query_parameters,
                 $.proxy(@_fillGrid, this)
             )
-        else
+
+        getDataFromUrl = =>
             url = buildUrl(
                 @paginator.url,
                 query_parameters
             )
 
-            $.ajax({
+            $.ajax(
                 url: url,
                 success: (result) =>
                     @_fillGrid(result)
                 , datatType: 'json',
                 cache: false
-            })
+            )
+
+        getDataFromArray = =>
+            @_fillGrid(@options.data)
+
+        if @options.onGetData
+            getDataFromCallback()
+        else if @url
+            getDataFromUrl()
+        else if @options.data
+            getDataFromArray()
 
     _fillGrid: (data) ->
         addRowFromObject = (row) =>

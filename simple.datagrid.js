@@ -145,6 +145,7 @@
       onGetData: null
     },
     _create: function() {
+      this.url = this._getBaseUrl();
       this._generateColumnData();
       this._createPaginator();
       this._createDomElements();
@@ -209,7 +210,7 @@
       }
     },
     _createPaginator: function() {
-      return this.paginator = new Paginator(this.element, this.columns.length, this._getBaseUrl(), $.proxy(this._loadData, this));
+      return this.paginator = new Paginator(this.element, this.columns.length, this.url, $.proxy(this._loadData, this));
     },
     _createDomElements: function() {
       var initBody, initFoot, initHead, initTable,
@@ -289,13 +290,15 @@
       return this.element.trigger(event);
     },
     _loadData: function() {
-      var query_parameters, url,
+      var getDataFromArray, getDataFromCallback, getDataFromUrl, query_parameters,
         _this = this;
       query_parameters = $.extend(this.parameters, this.paginator.getQueryParameters());
-      if (this.options.onGetData) {
-        return this.options.onGetData(query_parameters, $.proxy(this._fillGrid, this));
-      } else {
-        url = buildUrl(this.paginator.url, query_parameters);
+      getDataFromCallback = function() {
+        return _this.options.onGetData(query_parameters, $.proxy(_this._fillGrid, _this));
+      };
+      getDataFromUrl = function() {
+        var url;
+        url = buildUrl(_this.paginator.url, query_parameters);
         return $.ajax({
           url: url,
           success: function(result) {
@@ -304,6 +307,16 @@
           datatType: 'json',
           cache: false
         });
+      };
+      getDataFromArray = function() {
+        return _this._fillGrid(_this.options.data);
+      };
+      if (this.options.onGetData) {
+        return getDataFromCallback();
+      } else if (this.url) {
+        return getDataFromUrl();
+      } else if (this.options.data) {
+        return getDataFromArray();
       }
     },
     _fillGrid: function(data) {
