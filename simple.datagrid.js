@@ -15,13 +15,18 @@
       value = query_parameters[key];
       if (is_first) {
         result += '?';
-        is_first = true;
+        is_first = false;
       } else {
         result += '&';
       }
       result += "" + key + "=" + value;
     }
     return result;
+  };
+
+  this.SimpleDataGrid = {
+    slugify: slugify,
+    buildUrl: buildUrl
   };
 
   ColumnInfo = (function() {
@@ -171,6 +176,9 @@
     },
     setParameter: function(key, value) {
       return this.parameters[key] = value;
+    },
+    getColumns: function() {
+      return this.columns;
     },
     _generateColumnData: function() {
       var generateFromOptions, generateFromThElements,

@@ -11,13 +11,17 @@ buildUrl = (url, query_parameters) ->
     for key, value of query_parameters
         if is_first
             result += '?'
-            is_first = true
+            is_first = false
         else
             result += '&'
 
         result += "#{ key }=#{ value }"
 
     return result
+
+@SimpleDataGrid =
+    slugify: slugify
+    buildUrl: buildUrl
 
 
 class ColumnInfo
@@ -150,6 +154,9 @@ $.widget("ui.simple_datagrid", {
 
     setParameter: (key, value) ->
         @parameters[key] = value
+
+    getColumns: ->
+        return @columns
 
     _generateColumnData: ->
         generateFromThElements = =>
