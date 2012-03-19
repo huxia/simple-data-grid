@@ -74,18 +74,18 @@
       } else {
         html = "<tr><td class=\"paginator\" colspan=\"" + this.number_of_columns + "\">";
         if (!this.page || this.page === 1) {
-          html += '<span class="first">first</span>';
-          html += '<span class="previous">previous</span>';
+          html += '<span class="first disabled">first</span>';
+          html += '<span class="previous disabled">previous</span>';
         } else {
           html += "<a href=\"" + (this.getUrl(1)) + "\" class=\"first\">first</a>";
           html += "<a href=\"" + (this.getUrl(this.page - 1)) + "\" class=\"previous\">previous</a>";
         }
         html += "<span>page " + this.page + " of " + this.total_pages + "</span>";
         if (!this.page || this.page === this.total_pages) {
-          html += '<span class="next">next</span>';
-          html += '<span class="last"></span>';
+          html += '<span class="next disabled">next</span>';
+          html += '<span class="last disabled">last</span>';
         } else {
-          html += "<a href=\"" + (this.getUrl(this.page + 1)) + "\" class=\"next\">next</a>";
+          html += "<a href=\"" + (this.getUrl(this.page + 1)) + "\" class=\"next\">next</i></a>";
           html += "<a href=\"" + (this.getUrl(this.total_pages)) + "\" class=\"last\">last</a>";
         }
         html += "</td></tr>";

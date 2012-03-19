@@ -63,8 +63,8 @@ class Paginator
             html = "<tr><td class=\"paginator\" colspan=\"#{ @number_of_columns }\">"
 
             if not @page or @page == 1
-                html += '<span class="first">first</span>'
-                html += '<span class="previous">previous</span>'
+                html += '<span class="first disabled">first</span>'
+                html += '<span class="previous disabled">previous</span>'
             else
                 html += "<a href=\"#{ @getUrl(1) }\" class=\"first\">first</a>"
                 html += "<a href=\"#{ @getUrl(@page - 1) }\" class=\"previous\">previous</a>"
@@ -72,10 +72,10 @@ class Paginator
             html += "<span>page #{ @page } of #{ @total_pages }</span>"
 
             if not @page or @page == @total_pages
-                html += '<span class="next">next</span>'
-                html += '<span class="last"></span>'
+                html += '<span class="next disabled">next</span>'
+                html += '<span class="last disabled">last</span>'
             else
-                html += "<a href=\"#{ @getUrl(@page + 1) }\" class=\"next\">next</a>"
+                html += "<a href=\"#{ @getUrl(@page + 1) }\" class=\"next\">next</i></a>"
                 html += "<a href=\"#{ @getUrl(@total_pages) }\" class=\"last\">last</a>"
 
             html += "</td></tr>"

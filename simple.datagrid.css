@@ -7,6 +7,7 @@
 	background: #dfdfdf;
 	background: -webkit-gradient(linear, left top, left bottom, from(#eaeaea), to(#d3d3d3));
 	background: -moz-linear-gradient(top, #eaeaea, #d3d3d3);
+	background: -ms-linear-gradient(top, #eaeaea, #d3d3d3);
 }
 
 .simple-data-grid thead th {
@@ -24,6 +25,7 @@
 	background: #e4e4e4;
 	background: -webkit-gradient(linear, left top, left bottom, from(#d3d3d3), to(#eaeaea));
 	background: -moz-linear-gradient(top, #d3d3d3, #eaeaea);
+	background: -ms-linear-gradient(top, #d3d3d3, #eaeaea);
 }
 
 .simple-data-grid tbody td {
@@ -39,6 +41,7 @@
 	background: #97bdd6;
 	background: -webkit-gradient(linear, left top, left bottom, from(#bee0f5), to(#89afca));
 	background: -moz-linear-gradient(top, #bee0f5, #89afca);
+	background: -ms-linear-gradient(top, #bee0f5, #89afca);
 }
 
 .simple-data-grid tfoot .paginator {
@@ -48,4 +51,40 @@
 .simple-data-grid tfoot .paginator span,
 .simple-data-grid tfoot .paginator a {
 	margin-right: 0.5em;
+}
+
+.simple-data-grid .paginator {
+	background: #eaeaea;
+}
+
+.simple-data-grid .paginator .first,
+.simple-data-grid .paginator .previous,
+.simple-data-grid .paginator .next,
+.simple-data-grid .paginator .last {
+	background-image: url("glyphicons-halflings.png");
+	display: inline-block;
+	width: 14px;
+	height: 14px;
+	line-height: 14px;
+	text-indent: -9999px;
+}
+
+.simple-data-grid .paginator .disabled {
+	opacity: 0.35;
+}
+
+.simple-data-grid .paginator .first {
+	background-position: -216px -72px;
+}
+
+.simple-data-grid .paginator .previous {
+	background-position: -432px -72px;
+}
+
+.simple-data-grid .paginator .next {
+	background-position: -456px -72px;
+}
+
+.simple-data-grid .paginator .last {
+	background-position: -360px -72px;
 }
