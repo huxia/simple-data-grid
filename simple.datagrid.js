@@ -80,7 +80,7 @@
           html += "<a href=\"" + (this.getUrl(1)) + "\" class=\"first\">first</a>";
           html += "<a href=\"" + (this.getUrl(this.page - 1)) + "\" class=\"previous\">previous</a>";
         }
-        html += "page " + this.page + " of " + this.total_pages;
+        html += "<span>page " + this.page + " of " + this.total_pages + "</span>";
         if (!this.page || this.page === this.total_pages) {
           html += '<span class="next">next</span>';
           html += '<span class="last"></span>';
@@ -121,6 +121,7 @@
     };
 
     Paginator.prototype.getUrl = function(page) {
+      if (!this.url) return '#';
       if (!(page != null)) page = this.page;
       if (!page || page === 1) {
         return this.url;
@@ -131,7 +132,7 @@
 
     Paginator.prototype.getQueryParameters = function() {
       var page;
-      if (!(typeof page !== "undefined" && page !== null)) page = this.page;
+      page = this.page;
       if (!page || page === 1) {
         return {};
       } else {
@@ -300,7 +301,7 @@
     _loadData: function() {
       var getDataFromArray, getDataFromCallback, getDataFromUrl, query_parameters,
         _this = this;
-      query_parameters = $.extend(this.parameters, this.paginator.getQueryParameters());
+      query_parameters = $.extend({}, this.parameters, this.paginator.getQueryParameters());
       getDataFromCallback = function() {
         return _this.options.onGetData(query_parameters, $.proxy(_this._fillGrid, _this));
       };

@@ -69,7 +69,7 @@ class Paginator
                 html += "<a href=\"#{ @getUrl(1) }\" class=\"first\">first</a>"
                 html += "<a href=\"#{ @getUrl(@page - 1) }\" class=\"previous\">previous</a>"
 
-            html += "page #{ @page } of #{ @total_pages }"
+            html += "<span>page #{ @page } of #{ @total_pages }</span>"
 
             if not @page or @page == @total_pages
                 html += '<span class="next">next</span>'
@@ -103,6 +103,9 @@ class Paginator
             @on_load_data()
 
     getUrl: (page) ->
+        if not @url
+            return '#'
+
         if not page?
             page = @page
 
@@ -112,8 +115,7 @@ class Paginator
             return @url + "?page=#{ page }"
 
     getQueryParameters: ->
-        if not page?
-            page = @page
+        page = @page
 
         if not page or page == 1
             return {}
@@ -271,7 +273,7 @@ $.widget("ui.simple_datagrid", {
         @element.trigger(event)
 
     _loadData: ->
-        query_parameters = $.extend(@parameters, @paginator.getQueryParameters())
+        query_parameters = $.extend({}, @parameters, @paginator.getQueryParameters())
 
         getDataFromCallback = =>
             @options.onGetData(
