@@ -17,6 +17,12 @@
 	text-align: left;
 }
 
+.simple-data-grid thead th a {
+	color: #000;
+	text-decoration: none;
+	display: block;
+}
+
 .simple-data-grid thead th:last-child {
 	border-right: none;
 }

@@ -27,12 +27,17 @@ buildUrl = (url, query_parameters) ->
 $.widget("ui.simple_datagrid", {
     options:
         onGetData: null
+        sorting: true
+        url: null
+        data: null
 
     _create: ->
         @url = @_getBaseUrl()
         @$selected_row = null
         @current_page = 1
         @parameters = {}
+        @sort_key = null
+        @sort_ascending = true
 
         @_generateColumnData()
         @_createDomElements()
@@ -131,7 +136,14 @@ $.widget("ui.simple_datagrid", {
 
             html = '<tr>'
             for column in @columns
-                html += "<th data-key=\"#{ column.key }\">#{ column.title }</th>"
+                html += "<th data-key=\"#{ column.key }\">"
+
+                if @options.sorting
+                    html += "<a href=\"#\">#{ column.title }</a>"
+                else
+                    html += column.title
+
+                html += "</th>"
 
             html += '</tr>'
             @$thead.append($(html))
@@ -148,6 +160,7 @@ $.widget("ui.simple_datagrid", {
 
     _bindEvents: ->
         @element.delegate('tbody tr', 'click', $.proxy(this._clickRow, this))
+        @element.delegate('thead th a', 'click', $.proxy(this._clickHeader, this))
         @element.delegate('.paginator .first', 'click', $.proxy(this._handleClickFirstPage, this))
         @element.delegate('.paginator .previous', 'click', $.proxy(this._handleClickPreviousPage, this))
         @element.delegate('.paginator .next', 'click', $.proxy(this._handleClickNextPage, this))
@@ -155,6 +168,7 @@ $.widget("ui.simple_datagrid", {
 
     _removeEvents: ->
         @element.undelegate('tbody tr', 'click')
+        @element.undelegate('tbody thead th a', 'click')
         @element.undelegate('.paginator .first', 'click')
         @element.undelegate('.paginator .previous', 'click')
         @element.undelegate('.paginator .next', 'click')
@@ -180,6 +194,10 @@ $.widget("ui.simple_datagrid", {
 
     _loadData: ->
         query_parameters = $.extend({}, @parameters, {page: @current_page})
+
+        if @sort_key
+            query_parameters.sort_key = @sort_key
+            query_parameters.sort_ascending = @sort_ascending
 
         getDataFromCallback = =>
             @options.onGetData(
@@ -336,4 +354,19 @@ $.widget("ui.simple_datagrid", {
         if page <= @total_pages
             @current_page = page
             @_loadData()
+
+    _clickHeader: (e) ->
+        $th = $(e.target).closest('th')
+
+        if $th.length
+            key = $th.data('key')
+
+            if key == @sort_key
+                @sort_ascending = not @sort_ascending
+
+            @sort_key = key
+            @current_page = 1
+            @_loadData()
+
+        return false
 })

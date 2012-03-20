@@ -31,13 +31,18 @@
 
   $.widget("ui.simple_datagrid", {
     options: {
-      onGetData: null
+      onGetData: null,
+      sorting: true,
+      url: null,
+      data: null
     },
     _create: function() {
       this.url = this._getBaseUrl();
       this.$selected_row = null;
       this.current_page = 1;
       this.parameters = {};
+      this.sort_key = null;
+      this.sort_ascending = true;
       this._generateColumnData();
       this._createDomElements();
       this._bindEvents();
@@ -148,7 +153,13 @@
         _ref = _this.columns;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           column = _ref[_i];
-          html += "<th data-key=\"" + column.key + "\">" + column.title + "</th>";
+          html += "<th data-key=\"" + column.key + "\">";
+          if (_this.options.sorting) {
+            html += "<a href=\"#\">" + column.title + "</a>";
+          } else {
+            html += column.title;
+          }
+          html += "</th>";
         }
         html += '</tr>';
         return _this.$thead.append($(html));
@@ -165,6 +176,7 @@
     },
     _bindEvents: function() {
       this.element.delegate('tbody tr', 'click', $.proxy(this._clickRow, this));
+      this.element.delegate('thead th a', 'click', $.proxy(this._clickHeader, this));
       this.element.delegate('.paginator .first', 'click', $.proxy(this._handleClickFirstPage, this));
       this.element.delegate('.paginator .previous', 'click', $.proxy(this._handleClickPreviousPage, this));
       this.element.delegate('.paginator .next', 'click', $.proxy(this._handleClickNextPage, this));
@@ -172,6 +184,7 @@
     },
     _removeEvents: function() {
       this.element.undelegate('tbody tr', 'click');
+      this.element.undelegate('tbody thead th a', 'click');
       this.element.undelegate('.paginator .first', 'click');
       this.element.undelegate('.paginator .previous', 'click');
       this.element.undelegate('.paginator .next', 'click');
@@ -201,6 +214,10 @@
       query_parameters = $.extend({}, this.parameters, {
         page: this.current_page
       });
+      if (this.sort_key) {
+        query_parameters.sort_key = this.sort_key;
+        query_parameters.sort_ascending = this.sort_ascending;
+      }
       getDataFromCallback = function() {
         return _this.options.onGetData(query_parameters, $.proxy(_this._fillGrid, _this));
       };
@@ -353,6 +370,18 @@
         this.current_page = page;
         return this._loadData();
       }
+    },
+    _clickHeader: function(e) {
+      var $th, key;
+      $th = $(e.target).closest('th');
+      if ($th.length) {
+        key = $th.data('key');
+        if (key === this.sort_key) this.sort_ascending = !this.sort_ascending;
+        this.sort_key = key;
+        this.current_page = 1;
+        this._loadData();
+      }
+      return false;
     }
   });
 
