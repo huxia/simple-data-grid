@@ -24,120 +24,20 @@ buildUrl = (url, query_parameters) ->
     buildUrl: buildUrl
 
 
-class ColumnInfo
-    constructor: (title, key, on_generate) ->
-        # The key parameter is optional. If it's empty, then it's defined as the slugified title.
-        @title = title
-        @key = key or slugify(title)
-        @on_generate = on_generate
-
-
-class Paginator
-    constructor: (element, number_of_columns, url, on_load_data) ->
-        @element = element
-        @number_of_columns = number_of_columns
-        @url = url
-        @on_load_data = on_load_data
-
-        @page = 1
-        @total_pages = 1
-
-        @_bindEvents()
-
-    _bindEvents: ->
-        @element.delegate('.paginator .first', 'click', $.proxy(this._handleClickFirstPage, this))
-        @element.delegate('.paginator .previous', 'click', $.proxy(this._handleClickPreviousPage, this))
-        @element.delegate('.paginator .next', 'click', $.proxy(this._handleClickNextPage, this))
-        @element.delegate('.paginator .last', 'click', $.proxy(this._handleClickLastPage, this))
-
-    removeEvents: ->
-        @element.undelegate('.paginator .first', 'click')
-        @element.undelegate('.paginator .previous', 'click')
-        @element.undelegate('.paginator .next', 'click')
-        @element.undelegate('.paginator .last', 'click')
-
-    buildHtml: ->
-        if not @total_pages or @total_pages == 1
-            return ''
-        else
-            html = "<tr><td class=\"paginator\" colspan=\"#{ @number_of_columns }\">"
-
-            if not @page or @page == 1
-                html += '<span class="first disabled">first</span>'
-                html += '<span class="previous disabled">previous</span>'
-            else
-                html += "<a href=\"#{ @getUrl(1) }\" class=\"first\">first</a>"
-                html += "<a href=\"#{ @getUrl(@page - 1) }\" class=\"previous\">previous</a>"
-
-            html += "<span>page #{ @page } of #{ @total_pages }</span>"
-
-            if not @page or @page == @total_pages
-                html += '<span class="next disabled">next</span>'
-                html += '<span class="last disabled">last</span>'
-            else
-                html += "<a href=\"#{ @getUrl(@page + 1) }\" class=\"next\">next</i></a>"
-                html += "<a href=\"#{ @getUrl(@total_pages) }\" class=\"last\">last</a>"
-
-            html += "</td></tr>"
-            return html
-
-    _handleClickFirstPage: (e) ->
-        @_gotoPage(1)
-        return false
-
-    _handleClickPreviousPage: (e) ->
-        @_gotoPage(@page - 1)
-        return false
-
-    _handleClickNextPage: (e) ->
-        @_gotoPage(@page + 1)
-        return false
-
-    _handleClickLastPage: (e) ->
-        @_gotoPage(@total_pages)
-        return false
-
-    _gotoPage: (page) ->
-        if page <= @total_pages
-            @page = page
-            @on_load_data()
-
-    getUrl: (page) ->
-        if not @url
-            return '#'
-
-        if not page?
-            page = @page
-
-        if not page or page == 1
-            return @url
-        else
-            return @url + "?page=#{ page }"
-
-    getQueryParameters: ->
-        page = @page
-
-        if not page or page == 1
-            return {}
-        else
-            return {page: page}
-
-
 $.widget("ui.simple_datagrid", {
     options:
         onGetData: null
 
     _create: ->
         @url = @_getBaseUrl()
+        @$selected_row = null
+        @current_page = 1
+        @parameters = {}
 
         @_generateColumnData()
-        @_createPaginator()
         @_createDomElements()
         @_bindEvents()
         @_loadData()
-
-        @$selected_row = null
-        @parameters = {}
 
     destroy: ->
         @_removeDomElements()
@@ -169,10 +69,10 @@ $.widget("ui.simple_datagrid", {
                     $th = $(th)
 
                     title = $th.text()
-                    key = $th.data('key')
+                    key = $th.data('key') or slugify(title)
 
                     @columns.push(
-                        new ColumnInfo(title, key)
+                        {title: title, key: key}
                     )
             )
 
@@ -180,9 +80,16 @@ $.widget("ui.simple_datagrid", {
             @columns = []
             for column in @options.columns
                 if typeof column == 'object'
-                    column_info = new ColumnInfo(column.title, column.key, column.on_generate)
+                    column_info = {
+                        title: column.title,
+                        key: column.key,
+                        on_generate: column.on_generate
+                    }
                 else
-                    column_info = new ColumnInfo(column)
+                    column_info = {
+                        title: column,
+                        key: slugify(column)
+                    }
 
                 @columns.push(column_info)
 
@@ -190,14 +97,6 @@ $.widget("ui.simple_datagrid", {
             generateFromOptions()
         else
             generateFromThElements()
-
-    _createPaginator: ->
-        @paginator = new Paginator(
-            @element,
-            @columns.length,
-            @url,
-            $.proxy(@_loadData, this)
-        )
 
     _createDomElements: ->
         initTable = =>
@@ -249,10 +148,17 @@ $.widget("ui.simple_datagrid", {
 
     _bindEvents: ->
         @element.delegate('tbody tr', 'click', $.proxy(this._clickRow, this))
+        @element.delegate('.paginator .first', 'click', $.proxy(this._handleClickFirstPage, this))
+        @element.delegate('.paginator .previous', 'click', $.proxy(this._handleClickPreviousPage, this))
+        @element.delegate('.paginator .next', 'click', $.proxy(this._handleClickNextPage, this))
+        @element.delegate('.paginator .last', 'click', $.proxy(this._handleClickLastPage, this))
 
     _removeEvents: ->
         @element.undelegate('tbody tr', 'click')
-        @paginator.removeEvents()
+        @element.undelegate('.paginator .first', 'click')
+        @element.undelegate('.paginator .previous', 'click')
+        @element.undelegate('.paginator .next', 'click')
+        @element.undelegate('.paginator .last', 'click')
 
     _getBaseUrl: ->
         url = @options.url
@@ -273,7 +179,7 @@ $.widget("ui.simple_datagrid", {
         @element.trigger(event)
 
     _loadData: ->
-        query_parameters = $.extend({}, @parameters, @paginator.getQueryParameters())
+        query_parameters = $.extend({}, @parameters, {page: @current_page})
 
         getDataFromCallback = =>
             @options.onGetData(
@@ -358,20 +264,76 @@ $.widget("ui.simple_datagrid", {
                 $tr.data('row', row)
                 @$tbody.append($tr)
 
-        fillFooter = =>
-            @$tfoot.html(
-                @paginator.buildHtml()
-            )
+        getUrl = (page) =>
+            if not @url
+                return '#'
+
+            if not page?
+                page = @page
+
+            if not page or page == 1
+                return @url
+            else
+                return @url + "?page=#{ page }"
+
+        fillFooter = (total_pages) =>
+            if not total_pages or total_pages == 1
+                html = ''
+            else
+                html = "<tr><td class=\"paginator\" colspan=\"#{ @columns.length }\">"
+
+                if not @current_page or @current_page == 1
+                    html += '<span class="first disabled">first</span>'
+                    html += '<span class="previous disabled">previous</span>'
+                else
+                    html += "<a href=\"#{ getUrl(1) }\" class=\"first\">first</a>"
+                    html += "<a href=\"#{ getUrl(@current_page - 1) }\" class=\"previous\">previous</a>"
+
+                html += "<span>page #{ @current_page } of #{ total_pages }</span>"
+
+                if not @current_page or @current_page == total_pages
+                    html += '<span class="next disabled">next</span>'
+                    html += '<span class="last disabled">last</span>'
+                else
+                    html += "<a href=\"#{ getUrl(@current_page + 1) }\" class=\"next\">next</i></a>"
+                    html += "<a href=\"#{ getUrl(total_pages) }\" class=\"last\">last</a>"
+
+                html += "</td></tr>"
+
+            @$tfoot.html(html)
 
         if $.isArray(data)
             rows = data
-            @paginator.total_pages = 0
+            total_pages = 0
         else if data.rows
             rows = data.rows
-            @paginator.total_pages = data.total_pages or 0
+            total_pages = data.total_pages or 0
         else
             rows = []
 
+        @total_pages = total_pages
+
         fillRows(rows)
-        fillFooter()
+        fillFooter(total_pages)
+
+    _handleClickFirstPage: (e) ->
+        @_gotoPage(1)
+        return false
+
+    _handleClickPreviousPage: (e) ->
+        @_gotoPage(@current_page - 1)
+        return false
+
+    _handleClickNextPage: (e) ->
+        @_gotoPage(@current_page + 1)
+        return false
+
+    _handleClickLastPage: (e) ->
+        @_gotoPage(@total_pages)
+        return false
+
+    _gotoPage: (page) ->
+        if page <= @total_pages
+            @current_page = page
+            @_loadData()
 })

@@ -1,5 +1,5 @@
 (function() {
-  var $, ColumnInfo, Paginator, buildUrl, slugify;
+  var $, buildUrl, slugify;
 
   $ = this.jQuery;
 
@@ -29,136 +29,19 @@
     buildUrl: buildUrl
   };
 
-  ColumnInfo = (function() {
-
-    function ColumnInfo(title, key, on_generate) {
-      this.title = title;
-      this.key = key || slugify(title);
-      this.on_generate = on_generate;
-    }
-
-    return ColumnInfo;
-
-  })();
-
-  Paginator = (function() {
-
-    function Paginator(element, number_of_columns, url, on_load_data) {
-      this.element = element;
-      this.number_of_columns = number_of_columns;
-      this.url = url;
-      this.on_load_data = on_load_data;
-      this.page = 1;
-      this.total_pages = 1;
-      this._bindEvents();
-    }
-
-    Paginator.prototype._bindEvents = function() {
-      this.element.delegate('.paginator .first', 'click', $.proxy(this._handleClickFirstPage, this));
-      this.element.delegate('.paginator .previous', 'click', $.proxy(this._handleClickPreviousPage, this));
-      this.element.delegate('.paginator .next', 'click', $.proxy(this._handleClickNextPage, this));
-      return this.element.delegate('.paginator .last', 'click', $.proxy(this._handleClickLastPage, this));
-    };
-
-    Paginator.prototype.removeEvents = function() {
-      this.element.undelegate('.paginator .first', 'click');
-      this.element.undelegate('.paginator .previous', 'click');
-      this.element.undelegate('.paginator .next', 'click');
-      return this.element.undelegate('.paginator .last', 'click');
-    };
-
-    Paginator.prototype.buildHtml = function() {
-      var html;
-      if (!this.total_pages || this.total_pages === 1) {
-        return '';
-      } else {
-        html = "<tr><td class=\"paginator\" colspan=\"" + this.number_of_columns + "\">";
-        if (!this.page || this.page === 1) {
-          html += '<span class="first disabled">first</span>';
-          html += '<span class="previous disabled">previous</span>';
-        } else {
-          html += "<a href=\"" + (this.getUrl(1)) + "\" class=\"first\">first</a>";
-          html += "<a href=\"" + (this.getUrl(this.page - 1)) + "\" class=\"previous\">previous</a>";
-        }
-        html += "<span>page " + this.page + " of " + this.total_pages + "</span>";
-        if (!this.page || this.page === this.total_pages) {
-          html += '<span class="next disabled">next</span>';
-          html += '<span class="last disabled">last</span>';
-        } else {
-          html += "<a href=\"" + (this.getUrl(this.page + 1)) + "\" class=\"next\">next</i></a>";
-          html += "<a href=\"" + (this.getUrl(this.total_pages)) + "\" class=\"last\">last</a>";
-        }
-        html += "</td></tr>";
-        return html;
-      }
-    };
-
-    Paginator.prototype._handleClickFirstPage = function(e) {
-      this._gotoPage(1);
-      return false;
-    };
-
-    Paginator.prototype._handleClickPreviousPage = function(e) {
-      this._gotoPage(this.page - 1);
-      return false;
-    };
-
-    Paginator.prototype._handleClickNextPage = function(e) {
-      this._gotoPage(this.page + 1);
-      return false;
-    };
-
-    Paginator.prototype._handleClickLastPage = function(e) {
-      this._gotoPage(this.total_pages);
-      return false;
-    };
-
-    Paginator.prototype._gotoPage = function(page) {
-      if (page <= this.total_pages) {
-        this.page = page;
-        return this.on_load_data();
-      }
-    };
-
-    Paginator.prototype.getUrl = function(page) {
-      if (!this.url) return '#';
-      if (!(page != null)) page = this.page;
-      if (!page || page === 1) {
-        return this.url;
-      } else {
-        return this.url + ("?page=" + page);
-      }
-    };
-
-    Paginator.prototype.getQueryParameters = function() {
-      var page;
-      page = this.page;
-      if (!page || page === 1) {
-        return {};
-      } else {
-        return {
-          page: page
-        };
-      }
-    };
-
-    return Paginator;
-
-  })();
-
   $.widget("ui.simple_datagrid", {
     options: {
       onGetData: null
     },
     _create: function() {
       this.url = this._getBaseUrl();
+      this.$selected_row = null;
+      this.current_page = 1;
+      this.parameters = {};
       this._generateColumnData();
-      this._createPaginator();
       this._createDomElements();
       this._bindEvents();
-      this._loadData();
-      this.$selected_row = null;
-      return this.parameters = {};
+      return this._loadData();
     },
     destroy: function() {
       this._removeDomElements();
@@ -192,8 +75,11 @@
           var $th, key, title;
           $th = $(th);
           title = $th.text();
-          key = $th.data('key');
-          return _this.columns.push(new ColumnInfo(title, key));
+          key = $th.data('key') || slugify(title);
+          return _this.columns.push({
+            title: title,
+            key: key
+          });
         });
       };
       generateFromOptions = function() {
@@ -204,9 +90,16 @@
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           column = _ref[_i];
           if (typeof column === 'object') {
-            column_info = new ColumnInfo(column.title, column.key, column.on_generate);
+            column_info = {
+              title: column.title,
+              key: column.key,
+              on_generate: column.on_generate
+            };
           } else {
-            column_info = new ColumnInfo(column);
+            column_info = {
+              title: column,
+              key: slugify(column)
+            };
           }
           _results.push(_this.columns.push(column_info));
         }
@@ -217,9 +110,6 @@
       } else {
         return generateFromThElements();
       }
-    },
-    _createPaginator: function() {
-      return this.paginator = new Paginator(this.element, this.columns.length, this.url, $.proxy(this._loadData, this));
     },
     _createDomElements: function() {
       var initBody, initFoot, initHead, initTable,
@@ -274,11 +164,18 @@
       return this.$tbody = null;
     },
     _bindEvents: function() {
-      return this.element.delegate('tbody tr', 'click', $.proxy(this._clickRow, this));
+      this.element.delegate('tbody tr', 'click', $.proxy(this._clickRow, this));
+      this.element.delegate('.paginator .first', 'click', $.proxy(this._handleClickFirstPage, this));
+      this.element.delegate('.paginator .previous', 'click', $.proxy(this._handleClickPreviousPage, this));
+      this.element.delegate('.paginator .next', 'click', $.proxy(this._handleClickNextPage, this));
+      return this.element.delegate('.paginator .last', 'click', $.proxy(this._handleClickLastPage, this));
     },
     _removeEvents: function() {
       this.element.undelegate('tbody tr', 'click');
-      return this.paginator.removeEvents();
+      this.element.undelegate('.paginator .first', 'click');
+      this.element.undelegate('.paginator .previous', 'click');
+      this.element.undelegate('.paginator .next', 'click');
+      return this.element.undelegate('.paginator .last', 'click');
     },
     _getBaseUrl: function() {
       var url;
@@ -301,7 +198,9 @@
     _loadData: function() {
       var getDataFromArray, getDataFromCallback, getDataFromUrl, query_parameters,
         _this = this;
-      query_parameters = $.extend({}, this.parameters, this.paginator.getQueryParameters());
+      query_parameters = $.extend({}, this.parameters, {
+        page: this.current_page
+      });
       getDataFromCallback = function() {
         return _this.options.onGetData(query_parameters, $.proxy(_this._fillGrid, _this));
       };
@@ -329,7 +228,7 @@
       }
     },
     _fillGrid: function(data) {
-      var addRowFromArray, addRowFromObject, fillFooter, fillRows, generateTr, rows,
+      var addRowFromArray, addRowFromObject, fillFooter, fillRows, generateTr, getUrl, rows, total_pages,
         _this = this;
       addRowFromObject = function(row) {
         var column, html, value, _i, _len, _ref;
@@ -386,20 +285,74 @@
         }
         return _results;
       };
-      fillFooter = function() {
-        return _this.$tfoot.html(_this.paginator.buildHtml());
+      getUrl = function(page) {
+        if (!_this.url) return '#';
+        if (!(page != null)) page = _this.page;
+        if (!page || page === 1) {
+          return _this.url;
+        } else {
+          return _this.url + ("?page=" + page);
+        }
+      };
+      fillFooter = function(total_pages) {
+        var html;
+        if (!total_pages || total_pages === 1) {
+          html = '';
+        } else {
+          html = "<tr><td class=\"paginator\" colspan=\"" + _this.columns.length + "\">";
+          if (!_this.current_page || _this.current_page === 1) {
+            html += '<span class="first disabled">first</span>';
+            html += '<span class="previous disabled">previous</span>';
+          } else {
+            html += "<a href=\"" + (getUrl(1)) + "\" class=\"first\">first</a>";
+            html += "<a href=\"" + (getUrl(_this.current_page - 1)) + "\" class=\"previous\">previous</a>";
+          }
+          html += "<span>page " + _this.current_page + " of " + total_pages + "</span>";
+          if (!_this.current_page || _this.current_page === total_pages) {
+            html += '<span class="next disabled">next</span>';
+            html += '<span class="last disabled">last</span>';
+          } else {
+            html += "<a href=\"" + (getUrl(_this.current_page + 1)) + "\" class=\"next\">next</i></a>";
+            html += "<a href=\"" + (getUrl(total_pages)) + "\" class=\"last\">last</a>";
+          }
+          html += "</td></tr>";
+        }
+        return _this.$tfoot.html(html);
       };
       if ($.isArray(data)) {
         rows = data;
-        this.paginator.total_pages = 0;
+        total_pages = 0;
       } else if (data.rows) {
         rows = data.rows;
-        this.paginator.total_pages = data.total_pages || 0;
+        total_pages = data.total_pages || 0;
       } else {
         rows = [];
       }
+      this.total_pages = total_pages;
       fillRows(rows);
-      return fillFooter();
+      return fillFooter(total_pages);
+    },
+    _handleClickFirstPage: function(e) {
+      this._gotoPage(1);
+      return false;
+    },
+    _handleClickPreviousPage: function(e) {
+      this._gotoPage(this.current_page - 1);
+      return false;
+    },
+    _handleClickNextPage: function(e) {
+      this._gotoPage(this.current_page + 1);
+      return false;
+    },
+    _handleClickLastPage: function(e) {
+      this._gotoPage(this.total_pages);
+      return false;
+    },
+    _gotoPage: function(page) {
+      if (page <= this.total_pages) {
+        this.current_page = page;
+        return this._loadData();
+      }
     }
   });
 
