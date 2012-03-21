@@ -32,7 +32,7 @@
   $.widget("ui.simple_datagrid", {
     options: {
       onGetData: null,
-      sorting: true,
+      sorting: false,
       url: null,
       data: null
     },
@@ -141,28 +141,13 @@
         }
       };
       initHead = function() {
-        var column, html, _i, _len, _ref;
         _this.$thead = _this.element.find('thead');
         if (_this.$thead.length) {
-          _this.$thead.empty();
+          return _this.$thead.empty();
         } else {
           _this.$thead = $('<thead></thead>');
-          _this.element.append(_this.$thead);
+          return _this.element.append(_this.$thead);
         }
-        html = '<tr>';
-        _ref = _this.columns;
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          column = _ref[_i];
-          html += "<th data-key=\"" + column.key + "\">";
-          if (_this.options.sorting) {
-            html += "<a href=\"#\">" + column.title + "</a>";
-          } else {
-            html += column.title;
-          }
-          html += "</th>";
-        }
-        html += '</tr>';
-        return _this.$thead.append($(html));
       };
       initTable();
       initHead();
@@ -245,7 +230,7 @@
       }
     },
     _fillGrid: function(data) {
-      var addRowFromArray, addRowFromObject, fillFooter, fillRows, generateTr, getUrl, rows, total_pages,
+      var addRowFromArray, addRowFromObject, fillFooter, fillHeader, fillRows, generateTr, getUrl, rows, total_pages,
         _this = this;
       addRowFromObject = function(row) {
         var column, html, value, _i, _len, _ref;
@@ -329,12 +314,39 @@
             html += '<span class="next disabled">next</span>';
             html += '<span class="last disabled">last</span>';
           } else {
-            html += "<a href=\"" + (getUrl(_this.current_page + 1)) + "\" class=\"next\">next</i></a>";
+            html += "<a href=\"" + (getUrl(_this.current_page + 1)) + "\" class=\"next\">next</a>";
             html += "<a href=\"" + (getUrl(total_pages)) + "\" class=\"last\">last</a>";
           }
           html += "</td></tr>";
         }
         return _this.$tfoot.html(html);
+      };
+      fillHeader = function() {
+        var class_html, column, html, _i, _len, _ref;
+        html = '<tr>';
+        _ref = _this.columns;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          column = _ref[_i];
+          html += "<th data-key=\"" + column.key + "\">";
+          if (!_this.options.sorting) {
+            html += column.title;
+          } else {
+            html += "<a href=\"#\">" + column.title;
+            if (column.key === _this.sort_key) {
+              class_html = "sort ";
+              if (_this.sort_ascending) {
+                class_html += "asc";
+              } else {
+                class_html += "desc";
+              }
+              html += "<span class=\"" + class_html + "\">sort</span>";
+            }
+            html += "</a>";
+          }
+          html += "</th>";
+        }
+        html += '</tr>';
+        return _this.$thead.html(html);
       };
       if ($.isArray(data)) {
         rows = data;
@@ -347,7 +359,8 @@
       }
       this.total_pages = total_pages;
       fillRows(rows);
-      return fillFooter(total_pages);
+      fillFooter(total_pages);
+      return fillHeader();
     },
     _handleClickFirstPage: function(e) {
       this._gotoPage(1);

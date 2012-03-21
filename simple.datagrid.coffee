@@ -27,7 +27,7 @@ buildUrl = (url, query_parameters) ->
 $.widget("ui.simple_datagrid", {
     options:
         onGetData: null
-        sorting: true
+        sorting: false
         url: null
         data: null
 
@@ -133,20 +133,6 @@ $.widget("ui.simple_datagrid", {
             else
                 @$thead = $('<thead></thead>')
                 @element.append(@$thead)
-
-            html = '<tr>'
-            for column in @columns
-                html += "<th data-key=\"#{ column.key }\">"
-
-                if @options.sorting
-                    html += "<a href=\"#\">#{ column.title }</a>"
-                else
-                    html += column.title
-
-                html += "</th>"
-
-            html += '</tr>'
-            @$thead.append($(html))
 
         initTable()
         initHead()
@@ -313,12 +299,37 @@ $.widget("ui.simple_datagrid", {
                     html += '<span class="next disabled">next</span>'
                     html += '<span class="last disabled">last</span>'
                 else
-                    html += "<a href=\"#{ getUrl(@current_page + 1) }\" class=\"next\">next</i></a>"
+                    html += "<a href=\"#{ getUrl(@current_page + 1) }\" class=\"next\">next</a>"
                     html += "<a href=\"#{ getUrl(total_pages) }\" class=\"last\">last</a>"
 
                 html += "</td></tr>"
 
             @$tfoot.html(html)
+
+        fillHeader = =>
+            html = '<tr>'
+            for column in @columns
+                html += "<th data-key=\"#{ column.key }\">"
+
+                if not @options.sorting
+                    html += column.title
+                else
+                    html += "<a href=\"#\">#{ column.title }"
+
+                    if column.key == @sort_key
+                        class_html = "sort "
+                        if @sort_ascending
+                            class_html += "asc"
+                        else
+                            class_html += "desc"
+                        html += "<span class=\"#{ class_html }\">sort</span>"
+
+                    html += "</a>"
+
+                html += "</th>"
+
+            html += '</tr>'
+            @$thead.html(html)
 
         if $.isArray(data)
             rows = data
@@ -333,6 +344,7 @@ $.widget("ui.simple_datagrid", {
 
         fillRows(rows)
         fillFooter(total_pages)
+        fillHeader()
 
     _handleClickFirstPage: (e) ->
         @_gotoPage(1)

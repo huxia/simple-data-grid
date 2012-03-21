@@ -47,7 +47,7 @@
 					var a = left[parameters.sort_key];
 					var b = right[parameters.sort_key];
 
-					if (parameters.sort_ascending) {
+					if (! parameters.sort_ascending) {
 						var c = b;
 						b = a;
 						a = c;
@@ -73,7 +73,8 @@
 
 		$(function() {
 			$('#example2').simple_datagrid({
-				onGetData: getData
+				onGetData: getData,
+				sorting: true
 			});
 		});
 	</script>

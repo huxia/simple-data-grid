@@ -21,6 +21,23 @@
 	color: #000;
 	text-decoration: none;
 	display: block;
+	position: relative;
+}
+
+.simple-data-grid thead th a .sort {
+	position: absolute;
+	right: 0;
+	background-image: url("glyphicons-halflings.png");
+	display: inline-block;
+	width: 14px;
+	height: 14px;
+	line-height: 14px;
+	text-indent: -9999px;
+	background-position: -288px -120px;
+}
+
+.simple-data-grid thead th a .sort.desc {
+	background-position: -313px -119px;
 }
 
 .simple-data-grid thead th:last-child {
