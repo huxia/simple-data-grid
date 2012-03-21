@@ -69,15 +69,13 @@
 
 .simple-data-grid tfoot .paginator {
 	padding: 0.5em;
+	text-align: center;
+	background: #eaeaea;
 }
 
 .simple-data-grid tfoot .paginator span,
 .simple-data-grid tfoot .paginator a {
 	margin-right: 0.5em;
-}
-
-.simple-data-grid .paginator {
-	background: #eaeaea;
 }
 
 .simple-data-grid .paginator .first,
