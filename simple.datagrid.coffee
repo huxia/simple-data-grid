@@ -287,20 +287,20 @@ $.widget("ui.simple_datagrid", {
                 html = "<tr><td class=\"paginator\" colspan=\"#{ @columns.length }\">"
 
                 if not @current_page or @current_page == 1
-                    html += '<span class="first disabled">first</span>'
-                    html += '<span class="previous disabled">previous</span>'
+                    html += '<span class="sprite-icons-first-disabled">first</span>'
+                    html += '<span class="sprite-icons-previous-disabled">previous</span>'
                 else
-                    html += "<a href=\"#{ getUrl(1) }\" class=\"first\">first</a>"
-                    html += "<a href=\"#{ getUrl(@current_page - 1) }\" class=\"previous\">previous</a>"
+                    html += "<a href=\"#{ getUrl(1) }\" class=\"sprite-icons-first first\">first</a>"
+                    html += "<a href=\"#{ getUrl(@current_page - 1) }\" class=\"sprite-icons-previous previous\">previous</a>"
 
                 html += "<span>page #{ @current_page } of #{ total_pages }</span>"
 
                 if not @current_page or @current_page == total_pages
-                    html += '<span class="next disabled">next</span>'
-                    html += '<span class="last disabled">last</span>'
+                    html += '<span class="sprite-icons-next-disabled">next</span>'
+                    html += '<span class="sprite-icons-last-disabled">last</span>'
                 else
-                    html += "<a href=\"#{ getUrl(@current_page + 1) }\" class=\"next\">next</a>"
-                    html += "<a href=\"#{ getUrl(total_pages) }\" class=\"last\">last</a>"
+                    html += "<a href=\"#{ getUrl(@current_page + 1) }\" class=\"sprite-icons-next next\">next</a>"
+                    html += "<a href=\"#{ getUrl(total_pages) }\" class=\"sprite-icons-last last\">last</a>"
 
                 html += "</td></tr>"
 
@@ -319,9 +319,9 @@ $.widget("ui.simple_datagrid", {
                     if column.key == @sort_key
                         class_html = "sort "
                         if @sort_ascending
-                            class_html += "asc"
+                            class_html += "asc sprite-icons-up"
                         else
-                            class_html += "desc"
+                            class_html += "desc sprite-icons-down"
                         html += "<span class=\"#{ class_html }\">sort</span>"
 
                     html += "</a>"
