@@ -192,10 +192,7 @@ $.widget("ui.simple_datagrid", {
             )
 
         getDataFromUrl = =>
-            url = buildUrl(
-                @paginator.url,
-                query_parameters
-            )
+            url = buildUrl(@url, query_parameters)
 
             $.ajax(
                 url: url,

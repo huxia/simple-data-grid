@@ -208,7 +208,7 @@
       };
       getDataFromUrl = function() {
         var url;
-        url = buildUrl(_this.paginator.url, query_parameters);
+        url = buildUrl(_this.url, query_parameters);
         return $.ajax({
           url: url,
           success: function(result) {
