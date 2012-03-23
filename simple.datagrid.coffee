@@ -339,7 +339,7 @@ $.widget("ui.simple_datagrid", {
 
                     if column.key == @order_by
                         class_html = "sort "
-                        if @sortorder == SortOrder.DESCENDING
+                        if @sort_order == SortOrder.DESCENDING
                             class_html += "asc sprite-icons-down"
                         else
                             class_html += "desc sprite-icons-up"

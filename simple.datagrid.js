@@ -360,7 +360,7 @@ limitations under the License.
             html += "<a href=\"#\">" + column.title;
             if (column.key === _this.order_by) {
               class_html = "sort ";
-              if (_this.sortorder === SortOrder.DESCENDING) {
+              if (_this.sort_order === SortOrder.DESCENDING) {
                 class_html += "asc sprite-icons-down";
               } else {
                 class_html += "desc sprite-icons-up";
