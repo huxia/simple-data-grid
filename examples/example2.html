@@ -46,12 +46,12 @@
 				total_pages = parseInt((data.length - 1) / rows_per_page) + 1;
 			}
 
-			if (parameters.sort_key) {
+			if (parameters.order_by) {
 				data.sort(function(left, right) {
-					var a = left[parameters.sort_key];
-					var b = right[parameters.sort_key];
+					var a = left[parameters.order_by];
+					var b = right[parameters.order_by];
 
-					if (! parameters.sort_ascending) {
+					if (parameters.sortorder == 'desc') {
 						var c = b;
 						b = a;
 						a = c;
@@ -78,7 +78,7 @@
 		$(function() {
 			$('#example2').simple_datagrid({
 				onGetData: getData,
-				sorting: true
+				order_by: 'name'
 			});
 		});
 	</script>
