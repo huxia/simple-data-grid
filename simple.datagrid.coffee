@@ -23,11 +23,15 @@ buildUrl = (url, query_parameters) ->
     slugify: slugify
     buildUrl: buildUrl
 
+SortOrder =
+    ASCENDING: 1
+    DESCENDING: 2
+
 
 $.widget("ui.simple_datagrid", {
     options:
         onGetData: null
-        sorting: false
+        order_by: null
         url: null
         data: null
 
@@ -36,8 +40,8 @@ $.widget("ui.simple_datagrid", {
         @$selected_row = null
         @current_page = 1
         @parameters = {}
-        @sort_key = null
-        @sort_ascending = true
+        @order_by = @options.order_by
+        @sort_order = SortOrder.ASCENDING
 
         @_generateColumnData()
         @_createDomElements()
@@ -181,9 +185,13 @@ $.widget("ui.simple_datagrid", {
     _loadData: ->
         query_parameters = $.extend({}, @parameters, {page: @current_page})
 
-        if @sort_key
-            query_parameters.sort_key = @sort_key
-            query_parameters.sort_ascending = @sort_ascending
+        if @order_by
+            query_parameters.order_by = @order_by
+
+            if @sort_order == SortOrder.DESCENDING
+                query_parameters.sortorder = 'desc'
+            else
+                query_parameters.sortorder = 'asc'
 
         getDataFromCallback = =>
             @options.onGetData(
@@ -308,17 +316,17 @@ $.widget("ui.simple_datagrid", {
             for column in @columns
                 html += "<th data-key=\"#{ column.key }\">"
 
-                if not @options.sorting
+                if not @order_by
                     html += column.title
                 else
                     html += "<a href=\"#\">#{ column.title }"
 
-                    if column.key == @sort_key
+                    if column.key == @order_by
                         class_html = "sort "
-                        if @sort_ascending
-                            class_html += "asc sprite-icons-up"
+                        if @sortorder == SortOrder.DESCENDING
+                            class_html += "asc sprite-icons-down"
                         else
-                            class_html += "desc sprite-icons-down"
+                            class_html += "desc sprite-icons-up"
                         html += "<span class=\"#{ class_html }\">sort</span>"
 
                     html += "</a>"
@@ -370,10 +378,13 @@ $.widget("ui.simple_datagrid", {
         if $th.length
             key = $th.data('key')
 
-            if key == @sort_key
-                @sort_ascending = not @sort_ascending
+            if key == @order_by
+                if @sort_order == SortOrder.ASCENDING
+                    @sort_order = SortOrder.DESCENDING
+                else
+                    @sort_order = SortOrder.ASCENDING
 
-            @sort_key = key
+            @order_by = key
             @current_page = 1
             @_loadData()
 

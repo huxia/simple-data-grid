@@ -1,5 +1,5 @@
 (function() {
-  var $, buildUrl, slugify;
+  var $, SortOrder, buildUrl, slugify;
 
   $ = this.jQuery;
 
@@ -29,10 +29,15 @@
     buildUrl: buildUrl
   };
 
+  SortOrder = {
+    ASCENDING: 1,
+    DESCENDING: 2
+  };
+
   $.widget("ui.simple_datagrid", {
     options: {
       onGetData: null,
-      sorting: false,
+      order_by: null,
       url: null,
       data: null
     },
@@ -41,8 +46,8 @@
       this.$selected_row = null;
       this.current_page = 1;
       this.parameters = {};
-      this.sort_key = null;
-      this.sort_ascending = true;
+      this.order_by = this.options.order_by;
+      this.sort_order = SortOrder.ASCENDING;
       this._generateColumnData();
       this._createDomElements();
       this._bindEvents();
@@ -199,9 +204,13 @@
       query_parameters = $.extend({}, this.parameters, {
         page: this.current_page
       });
-      if (this.sort_key) {
-        query_parameters.sort_key = this.sort_key;
-        query_parameters.sort_ascending = this.sort_ascending;
+      if (this.order_by) {
+        query_parameters.order_by = this.order_by;
+        if (this.sort_order === SortOrder.DESCENDING) {
+          query_parameters.sortorder = 'desc';
+        } else {
+          query_parameters.sortorder = 'asc';
+        }
       }
       getDataFromCallback = function() {
         return _this.options.onGetData(query_parameters, $.proxy(_this._fillGrid, _this));
@@ -328,16 +337,16 @@
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           column = _ref[_i];
           html += "<th data-key=\"" + column.key + "\">";
-          if (!_this.options.sorting) {
+          if (!_this.order_by) {
             html += column.title;
           } else {
             html += "<a href=\"#\">" + column.title;
-            if (column.key === _this.sort_key) {
+            if (column.key === _this.order_by) {
               class_html = "sort ";
-              if (_this.sort_ascending) {
-                class_html += "asc sprite-icons-up";
+              if (_this.sortorder === SortOrder.DESCENDING) {
+                class_html += "asc sprite-icons-down";
               } else {
-                class_html += "desc sprite-icons-down";
+                class_html += "desc sprite-icons-up";
               }
               html += "<span class=\"" + class_html + "\">sort</span>";
             }
@@ -389,8 +398,14 @@
       $th = $(e.target).closest('th');
       if ($th.length) {
         key = $th.data('key');
-        if (key === this.sort_key) this.sort_ascending = !this.sort_ascending;
-        this.sort_key = key;
+        if (key === this.order_by) {
+          if (this.sort_order === SortOrder.ASCENDING) {
+            this.sort_order = SortOrder.DESCENDING;
+          } else {
+            this.sort_order = SortOrder.ASCENDING;
+          }
+        }
+        this.order_by = key;
         this.current_page = 1;
         this._loadData();
       }
