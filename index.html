@@ -8,6 +8,10 @@
 	<link rel="stylesheet" href="simple.datagrid.css">
 	<link rel="stylesheet" href="extra/documentation.css">
 
+	<!--[if IE 7]>
+		<link rel="stylesheet" href="simple.datagrid.ie7.css">
+	<![endif]-->
+
 	<link rel="stylesheet" href="extra/syntax_highlighter/shCore.css">
 	<link rel="stylesheet" href="extra/syntax_highlighter/shThemeRDark.css">
 
@@ -82,7 +86,8 @@
 						<script>
 							$(function() {
 								$('#demo-table').simple_datagrid({
-									data: ExampleData.fruits.slice(0, 5)
+									onGetData: ExampleData.getData,
+									order_by: 'name'
 								});
 							});
 						</script>
