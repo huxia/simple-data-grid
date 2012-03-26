@@ -85,6 +85,9 @@ limitations under the License.
     reload: function() {
       return this._loadData();
     },
+    loadData: function(data) {
+      return this._fillGrid(data);
+    },
     setParameter: function(key, value) {
       return this.parameters[key] = value;
     },

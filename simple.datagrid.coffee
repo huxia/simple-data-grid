@@ -79,6 +79,9 @@ $.widget("ui.simple_datagrid", {
     reload: ->
         @_loadData()
 
+    loadData: (data) ->
+        @_fillGrid(data)
+
     setParameter: (key, value) ->
         @parameters[key] = value
 
