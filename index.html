@@ -35,7 +35,13 @@
 					<li>
 						<a href="#simple-data-grid">Simple data grid</a>
 						<ul>
-							<li><a href="#features">Features</a></li>
+							<li>
+								<a href="#features">Features</a>
+								<ul>
+									<li><a href="#requirements">Requirements</a></li>
+									<li><a href="#downloads">Downloads</a></li>
+								</ul>
+							</li>
 							<li><a href="#demo">Demo</a></li>
 						</ul>
 					</li>
@@ -49,6 +55,26 @@
 									<li><a href="#example1-step2">Step 2: add columns</a></li>
 									<li><a href="#example1-step3">Step 3: include javascript and css</a></li>
 									<li><a href="#example1-step4">Step 4: some javascript</a></li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a href="#api">Api</a>
+						<ul>
+							<li>
+								<a href="#api-columns">Defining columns</a>
+								<ul>
+									<li><a href="#api-columns-html">Define columns in html</a></li>
+									<li><a href="#api-columns-javascript">Define columns in javascript</a></li>
+								</ul>
+							</li>
+							<li>
+								<a href="#api-data">Defining the data</a>
+								<ul>
+									<li><a href="#api-data-ajax">Define the data using ajax</a></li>
+									<li><a href="#api-data-array">Define the data as an array</a></li>
+									<li><a href="#api-data-callback">Define the data in a javascript callback</a></li>
 								</ul>
 							</li>
 						</ul>
@@ -71,6 +97,17 @@
 					<li>Works with jQuery UI 1.8 or 1.9 beta</li>
 					<li>Written in Coffeescript</li>
 				</ul>
+
+				<h3 id="requirements">Requirements</h3>
+				<ul>
+					<li><a href="http://jquery.com">jQuery 1.5+</a></li>
+					<li><a href="http://jqueryui.com">jQuery UI 1.8 or 1.9 beta</a></li>
+				</ul>
+
+				<h3 id="downloads">Downloads</h3>
+				<p>
+					<a href="https://github.com/mbraak/simple-data-grid/tarball/master">simple-data-grid.tar.gz</a>
+				</p>
 
 				<h2 id="demo">Demo</h2>
 				<div class="row-fluid">
@@ -136,7 +173,7 @@ $(function() {
 &lt;table id="example1"&gt;
   &lt;thead&gt;
     &lt;tr&gt;
-      &lt;th>Namelt;/th&gt;
+      &lt;th>Name&lt;/th&gt;
       &lt;th>Latin name&lt;/th&gt;
     &lt;/tr&gt;
   &lt;/thead&gt;
@@ -197,6 +234,166 @@ $(function() {
 						});
 					});
 				</script>
+
+				<h2 id="api">Api</h2>
+				<h3 id="api-columns">Defining columns</h3>
+				<p>
+					A column has the following properties:
+					<ul>
+						<li>
+							<strong>Title</strong>: the title is displayed in the grid header
+						</li>
+						<li>
+							<strong>Key</strong>: you use a key to refer to a column, for example in the data.<
+							<br>
+							If you do not define the key for a column, then it's defined as the slugified title.
+							<br>
+							E.g. the title <strong>Latin name</strong> is slugified to <strong>latin-name</strong>.
+						</li>
+					</ul>
+				</p>
+
+				<h4 id="api-columns-html">Define columns in html</h4>
+				<p>
+					You can define columns in the <strong>&lt;th&gt;</strong> elements of a table. The elements must be in the <strong>&lt;thead&gt;</strong>.
+				</p>
+<pre>
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;th&gt;Name&lt;/th&gt;
+    &lt;th&gt;Latin name&lt;/th&gt;
+  &lt;/thead&gt;
+&lt;/table&gt;
+</pre>
+
+				<p>
+					You can also set the <strong>key</strong> of a column in the <strong>data-key</strong> property.
+					<br><br>
+					For example, to set the key for the <strong>Latin name</strong> column to <strong>latin</strong>:
+				</p>
+
+<pre>
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;th&gt;Name&lt;/th&gt;
+    &lt;th data-key="latin"&gt;Latin name&lt;/th&gt;
+  &lt;/thead&gt;
+&lt;/table&gt;
+</pre>
+				<h4 id="api-columns-javascript">Define columns in javascript</h4>
+				<p>
+					You can define the columns in the <strong>columns</strong> property of the javascript options.
+				</p>
+
+<pre>
+$('#table1').simple_datagrid({
+  columns: ['Name', 'Latin name']
+});
+</pre>
+
+				<p>
+					You can also define columns as an object:
+				</p>
+
+<pre>
+$('#table1').simple_datagrid({
+  columns: [
+    {
+      title: 'Name'
+    },
+    {
+      title: 'Latin name',
+      key: 'latin'
+    }
+  ]
+});
+</pre>
+
+				<h3 id="api-data">Defining the data</h3>
+				<h4 id="api-data-ajax">Define the data using ajax</h4>
+				<p>
+					You can set an url in the <strong>data-url</strong> property of the table.
+				</p>
+
+<pre>
+&lt;table data-url="/fruits.json"&gt;
+&lt;/table&gt;
+</pre>
+
+				<p>
+					You can also set the url in javascript.
+				</p>
+
+<pre>
+$('#table1').simple_datagrid({
+  url: '/fruits.json'
+});
+</pre>
+
+				<h4 id="api-data-array">Define the data as an array</h4>
+				<p>
+					You can define the data in a javascript array:
+				</p>
+
+<pre>
+$('#table1').simple_datagrid({
+  data: [
+    ["Avocado", "Persea americana"],
+    ["Bell pepper", "Capsicum annuum"],
+    ["Bitter melon", "Momordica charantia"]
+  ]
+});
+</pre>
+
+				<p>
+					You can also define the data as an array of objects:
+				</p>
+
+<pre>
+$('#table1').simple_datagrid({
+  data: [
+    {
+      name: 'Avocado',
+      'latin-name': 'Persea americana'
+    },
+    {
+      name: 'Bell pepper',
+      'latin-name': 'Capsicum annuum'
+    }
+  ]
+});
+</pre>
+
+				<h4 id="api-data-callback">Define the data in a javascript callback</h4>
+				<p>
+					You can define the data in a javascript callback using the <strong>onGetData</strong> option.
+					<br>
+					The callback has the following signature: function(parameters, on_success). You can return the data by calling <strong>on_success</strong>:
+				</p>
+
+<pre>
+$('table1').simple_datagrid({
+  onGetData: function(parameters, on_success) {
+    on_success(
+      [
+        ["Avocado", "Persea americana"],
+        ["Bell pepper", "Capsicum annuum"],
+        ["Bitter melon", "Momordica charantia"]
+      ]
+    );
+  }
+});
+</pre>
+
+			<p>
+				The <strong>parameters</strong> object has the following properties:
+				<ul>
+					<li><strong>page</strong>: page index; starts with 1</li>
+					<li><strong>order_by</strong>: column that is sorted</li>
+					<li><strong>sortorder</strong>: sort order; 'asc' or 'desc'</li>
+				</ul>
+			</p>
+
 			</div>
 		</div>
 	</div>

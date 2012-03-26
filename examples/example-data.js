@@ -1,6 +1,6 @@
 ExampleData = {};
 
-ExampleData.getData = function (parameters, on_success) {
+ExampleData.getData = function(parameters, on_success) {
 	var rows_per_page = 5;
 	var page = parameters.page || 1;
 	var start_index = (page - 1) * rows_per_page;
