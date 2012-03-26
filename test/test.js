@@ -81,4 +81,39 @@ test('get column data from options', function() {
     equal(columns[1].key, 'c2');   // defined in options
 });
 
+test('get data from array', function() {
+	var $table1 = $('#table1');
+
+	function getValues() {
+		var values = $table1.find('tbody td').map(function() {
+			return $(this).text();
+		});
+		return values.toArray().join(';');
+	}
+
+	// 1. row is an array
+	$table1.simple_datagrid({
+		data: [
+			['Avocado', 'Persea americana']
+		]
+	});
+	equal(getValues(), 'Avocado;Persea americana');
+
+	// 2. make empty
+	$table1.simple_datagrid('loadData', []);
+	equal(getValues(), '');
+
+	// 3. row is an object
+	$table1.simple_datagrid(
+		'loadData',
+		[
+			{
+				name: "Bell pepper",
+				'latin-name': "Capsicum annuum"
+			}
+		]
+	);
+	equal(getValues(), 'Bell pepper;Capsicum annuum');
+});
+
 });
