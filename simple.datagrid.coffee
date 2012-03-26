@@ -238,6 +238,8 @@ $.widget("ui.simple_datagrid", {
             getDataFromUrl()
         else if @options.data
             getDataFromArray()
+        else
+            @_fillGrid([])
 
     _fillGrid: (data) ->
         addRowFromObject = (row) =>

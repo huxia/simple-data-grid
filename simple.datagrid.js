@@ -256,6 +256,8 @@ limitations under the License.
         return getDataFromUrl();
       } else if (this.options.data) {
         return getDataFromArray();
+      } else {
+        return this._fillGrid([]);
       }
     },
     _fillGrid: function(data) {

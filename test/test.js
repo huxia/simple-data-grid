@@ -1,5 +1,12 @@
 $(function() {
 
+function formatValues($elements) {
+	var values = $elements.map(function() {
+		return $(this).text();
+	});
+	return values.toArray().join(';');
+}
+
 module('utils');
 
 test('slugify', function() {
@@ -84,11 +91,10 @@ test('get column data from options', function() {
 test('get data from array', function() {
 	var $table1 = $('#table1');
 
-	function getValues() {
-		var values = $table1.find('tbody td').map(function() {
-			return $(this).text();
-		});
-		return values.toArray().join(';');
+	function getRowValues() {
+		return formatValues(
+			$table1.find('tbody td')
+		);
 	}
 
 	// 1. row is an array
@@ -97,11 +103,11 @@ test('get data from array', function() {
 			['Avocado', 'Persea americana']
 		]
 	});
-	equal(getValues(), 'Avocado;Persea americana');
+	equal(getRowValues(), 'Avocado;Persea americana');
 
 	// 2. make empty
 	$table1.simple_datagrid('loadData', []);
-	equal(getValues(), '');
+	equal(getRowValues(), '');
 
 	// 3. row is an object
 	$table1.simple_datagrid(
@@ -113,7 +119,51 @@ test('get data from array', function() {
 			}
 		]
 	);
-	equal(getValues(), 'Bell pepper;Capsicum annuum');
+	equal(getRowValues(), 'Bell pepper;Capsicum annuum');
+});
+
+test('getSelectedRow', function() {
+	// setup
+	var $table1 = $('#table1');
+	$table1.simple_datagrid({
+		data: [
+			{
+				name: 'Avocado',
+				'latin-name': 'Persea americana',
+				id: 200
+			},
+			{
+				name: 'Bell pepper',
+				'latin-name': 'Capsicum annuum',
+				id: 201
+			}
+		]
+	});
+
+	// 1. no selection
+	equal($table1.simple_datagrid('getSelectedRow'), null);
+
+	// 2. select second row
+	$table1.find('tbody tr:eq(1) td:first').click();
+	ok($('tbody tr:eq(1)').hasClass('selected'));
+	equal($table1.simple_datagrid('getSelectedRow').id, 201);
+});
+
+test('header html', function() {
+	// setup
+	var $table1 = $('#table1');
+	$table1.simple_datagrid();
+
+	// 1. check html
+	equal(
+		formatValues($table1.find('thead th')),
+		'Name;Latin name'
+	);
+
+	var keys = $table1.find('thead th').map(function() {
+		return $(this).data('key');
+	});
+	equal(keys.toArray().join(' '), 'name latin-name');
 });
 
 });
