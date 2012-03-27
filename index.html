@@ -72,6 +72,7 @@
 							<li>
 								<a href="#api-data">Defining the data</a>
 								<ul>
+									<li><a href="#api-data-syntax">Syntax of the data</a></li>
 									<li><a href="#api-data-ajax">Define the data using ajax</a></li>
 									<li><a href="#api-data-array">Define the data as an array</a></li>
 									<li><a href="#api-data-callback">Define the data in a javascript callback</a></li>
@@ -310,6 +311,40 @@ $('#table1').simple_datagrid({
 </pre>
 
 				<h3 id="api-data">Defining the data</h3>
+
+				<h4 id="api-data-syntax">Syntax of the data</h4>
+				<p>
+					The data is an array of rows. You can define a row as an <strong>array</strong> or as an <strong>object</strong>.
+				</p>
+				<ul>
+					<li>
+						<strong>array</strong>: an array of strings, for all the columns in the grid:
+						<br>
+					    <pre>
+							var data = [
+								['Avocado', 'Persea americana'],
+								['Bell pepper', 'Capsicum annuum']
+							];
+						</pre>
+					</li>
+					<li>
+						<strong>object</strong>: an object with the column keys:
+						<br>
+						<pre>
+							var data = [
+								{
+									name: 'Avocado',
+									'latin-name': 'Persea americana'
+								},
+								{
+									name: 'Bell pepper',
+									'latin-name': 'Capsicum annuum'
+								}
+							];
+						</pre>
+					</li>
+				</ul>
+
 				<h4 id="api-data-ajax">Define the data using ajax</h4>
 				<p>
 					You can set an url in the <strong>data-url</strong> property of the table.
