@@ -294,18 +294,6 @@ $.widget("ui.simple_datagrid", {
                 $tr.data('row', row)
                 @$tbody.append($tr)
 
-        getUrl = (page) =>
-            if not @url
-                return '#'
-
-            if not page?
-                page = @page
-
-            if not page or page == 1
-                return @url
-            else
-                return @url + "?page=#{ page }"
-
         fillFooter = (total_pages) =>
             if not total_pages or total_pages == 1
                 html = ''
@@ -316,8 +304,8 @@ $.widget("ui.simple_datagrid", {
                     html += '<span class="sprite-icons-first-disabled">first</span>'
                     html += '<span class="sprite-icons-previous-disabled">previous</span>'
                 else
-                    html += "<a href=\"#{ getUrl(1) }\" class=\"sprite-icons-first first\">first</a>"
-                    html += "<a href=\"#{ getUrl(@current_page - 1) }\" class=\"sprite-icons-previous previous\">previous</a>"
+                    html += "<a href=\"#\" class=\"sprite-icons-first first\">first</a>"
+                    html += "<a href=\"#\" class=\"sprite-icons-previous previous\">previous</a>"
 
                 html += "<span>page #{ @current_page } of #{ total_pages }</span>"
 
@@ -325,8 +313,8 @@ $.widget("ui.simple_datagrid", {
                     html += '<span class="sprite-icons-next-disabled">next</span>'
                     html += '<span class="sprite-icons-last-disabled">last</span>'
                 else
-                    html += "<a href=\"#{ getUrl(@current_page + 1) }\" class=\"sprite-icons-next next\">next</a>"
-                    html += "<a href=\"#{ getUrl(total_pages) }\" class=\"sprite-icons-last last\">last</a>"
+                    html += "<a href=\"#\" class=\"sprite-icons-next next\">next</a>"
+                    html += "<a href=\"#\" class=\"sprite-icons-last last\">last</a>"
 
                 html += "</td></tr>"
 

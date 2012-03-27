@@ -261,7 +261,7 @@ limitations under the License.
       }
     },
     _fillGrid: function(data) {
-      var addRowFromArray, addRowFromObject, fillFooter, fillHeader, fillRows, generateTr, getUrl, rows, total_pages,
+      var addRowFromArray, addRowFromObject, fillFooter, fillHeader, fillRows, generateTr, rows, total_pages,
         _this = this;
       addRowFromObject = function(row) {
         var column, html, value, _i, _len, _ref;
@@ -318,15 +318,6 @@ limitations under the License.
         }
         return _results;
       };
-      getUrl = function(page) {
-        if (!_this.url) return '#';
-        if (!(page != null)) page = _this.page;
-        if (!page || page === 1) {
-          return _this.url;
-        } else {
-          return _this.url + ("?page=" + page);
-        }
-      };
       fillFooter = function(total_pages) {
         var html;
         if (!total_pages || total_pages === 1) {
@@ -337,16 +328,16 @@ limitations under the License.
             html += '<span class="sprite-icons-first-disabled">first</span>';
             html += '<span class="sprite-icons-previous-disabled">previous</span>';
           } else {
-            html += "<a href=\"" + (getUrl(1)) + "\" class=\"sprite-icons-first first\">first</a>";
-            html += "<a href=\"" + (getUrl(_this.current_page - 1)) + "\" class=\"sprite-icons-previous previous\">previous</a>";
+            html += "<a href=\"#\" class=\"sprite-icons-first first\">first</a>";
+            html += "<a href=\"#\" class=\"sprite-icons-previous previous\">previous</a>";
           }
           html += "<span>page " + _this.current_page + " of " + total_pages + "</span>";
           if (!_this.current_page || _this.current_page === total_pages) {
             html += '<span class="sprite-icons-next-disabled">next</span>';
             html += '<span class="sprite-icons-last-disabled">last</span>';
           } else {
-            html += "<a href=\"" + (getUrl(_this.current_page + 1)) + "\" class=\"sprite-icons-next next\">next</a>";
-            html += "<a href=\"" + (getUrl(total_pages)) + "\" class=\"sprite-icons-last last\">last</a>";
+            html += "<a href=\"#\" class=\"sprite-icons-next next\">next</a>";
+            html += "<a href=\"#\" class=\"sprite-icons-last last\">last</a>";
           }
           html += "</td></tr>";
         }
