@@ -122,6 +122,29 @@ test('get data from array', function() {
 	equal(getRowValues(), 'Bell pepper;Capsicum annuum');
 });
 
+test('get data from callback', function() {
+	// setup
+	var $table1 = $('#table1');
+
+	function get_data(parameters, on_success) {
+		on_success(
+			[
+				['Avocado', 'Persea americana']
+			]
+		);
+	}
+
+	// 1. get data from callback
+	$table1.simple_datagrid({
+		onGetData: get_data
+	});
+
+	equal(
+		formatValues($table1.find('tbody td')),
+		'Avocado;Persea americana'
+	);
+});
+
 test('getSelectedRow', function() {
 	// setup
 	var $table1 = $('#table1');
