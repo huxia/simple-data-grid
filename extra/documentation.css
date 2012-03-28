@@ -70,10 +70,6 @@ h4 {
 	border-bottom: solid 2px #333;
 }
 
-.syntaxhighlighter {
-	margin-bottom: 1.5em;
-}
-
-.syntaxhighlighter .container {
-	padding: 1em;
+pre {
+	padding: 0;
 }
