@@ -25,20 +25,11 @@ limitations under the License.
   };
 
   buildUrl = function(url, query_parameters) {
-    var is_first, key, result, value;
-    result = url;
-    is_first = true;
-    for (key in query_parameters) {
-      value = query_parameters[key];
-      if (is_first) {
-        result += '?';
-        is_first = false;
-      } else {
-        result += '&';
-      }
-      result += "" + key + "=" + value;
+    if (query_parameters) {
+      return url + '?' + $.param(query_parameters);
+    } else {
+      return url;
     }
-    return result;
   };
 
   this.SimpleDataGrid = {

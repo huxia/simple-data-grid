@@ -21,19 +21,10 @@ slugify = (string) ->
     return string.replace(/\s+/g,'-').replace(/[^a-zA-Z0-9\-]/g,'').toLowerCase()
 
 buildUrl = (url, query_parameters) ->
-    result = url
-
-    is_first = true
-    for key, value of query_parameters
-        if is_first
-            result += '?'
-            is_first = false
-        else
-            result += '&'
-
-        result += "#{ key }=#{ value }"
-
-    return result
+    if query_parameters
+        return url + '?' + $.param(query_parameters)
+    else
+        return url
 
 @SimpleDataGrid =
     slugify: slugify
