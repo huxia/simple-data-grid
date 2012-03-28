@@ -222,6 +222,34 @@
 					});
 				</script>
 
+				<h3>Example 1a: get the data from the server</h3>
+				<p>
+					In example 1 the data is defined in a javascript array. We can also get the data from the server via ajax.
+					<br>
+					The result is in <a href="examples/example1a.html">example1a.html</a>.
+					<br><br>
+					Define a table with a <strong>data-url</strong> property:
+				</p>
+
+<pre><code>&lt;table id="example1a" data-url="extra/fruits.json"&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th>Name&lt;/th&gt;
+      &lt;th>Latin name&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+&lt;/table&gt;</code></pre>
+
+				<p>
+					Initialize the grid:
+				</p>
+
+<pre><code>&lt;script&gt;
+  $(function() {
+    $('#example1a').simple_datagrid();
+  });
+&lt;/script&gt;</code></pre>
+
 				<h2 id="api">Api</h2>
 				<h3 id="api-columns">Defining columns</h3>
 				<p>

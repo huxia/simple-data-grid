@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Example 1</title>
+
+	<link rel="stylesheet" href="../simple.datagrid.css">
+
+	<script src="../extra/jquery-1.7.1.min.js"></script>
+	<script src="../extra/jquery-ui1.9m6.min.js"></script>
+
+	<script src="../simple.datagrid.js"></script>
+
+</head>
+<body>
+	<p>
+		NB. This example does not work on the local filesystem.
+	</p>
+	<table id="example1a" data-url="fruits.json">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Latin name</th>
+			</tr>
+		</thead>
+	</table>
+
+	<script>
+		$(function() {
+			$('#example1a').simple_datagrid();
+		});
+	</script>
+
+</body>
