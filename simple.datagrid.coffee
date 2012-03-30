@@ -79,6 +79,9 @@ $.widget("ui.simple_datagrid", {
     getColumns: ->
         return @columns
 
+    setCurrentPage: (page) ->
+        @current_page = page
+
     _generateColumnData: ->
         generateFromThElements = =>
             $th_elements = @element.find('th')
