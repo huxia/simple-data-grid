@@ -288,9 +288,12 @@ $.widget("ui.simple_datagrid", {
                 $tr.data('row', row)
                 @$tbody.append($tr)
 
-        fillFooter = (total_pages) =>
+        fillFooter = (total_pages, row_count) =>
             if not total_pages or total_pages == 1
-                html = ''
+                if row_count == 0
+                    html = "<tr><td colspan=\"#{ @columns.length }\">No rows</td></tr>"
+                else
+                    html = ''
             else
                 html = "<tr><td class=\"paginator\" colspan=\"#{ @columns.length }\">"
 
@@ -351,7 +354,7 @@ $.widget("ui.simple_datagrid", {
         @total_pages = total_pages
 
         fillRows(rows)
-        fillFooter(total_pages)
+        fillFooter(total_pages, rows.length)
         fillHeader()
 
     _handleClickFirstPage: (e) ->
