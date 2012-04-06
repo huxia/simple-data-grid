@@ -72,4 +72,9 @@ h4 {
 
 pre {
 	padding: 0;
+	border: 0;
+}
+
+pre.no-margin {
+	margin-bottom: 0;
 }
