@@ -67,7 +67,7 @@
 
 .simple-data-grid tfoot .paginator span,
 .simple-data-grid tfoot .paginator a {
-	margin-right: 0.5em;
+	margin: 0 0.5em;
 }
 
 .sprite-icons-last,
@@ -94,13 +94,14 @@
 .sprite-icons-next-disabled,
 .sprite-icons-up,
 .sprite-icons-down{background-image:url(icons.png);background-repeat:no-repeat}
-.sprite-icons-last{background-position:0px 0px;width:13px;height:9px;line-height:9px;}
-.sprite-icons-last-disabled{background-position:-13px 0px;width:13px;height:9px;line-height:9px;}
-.sprite-icons-first{background-position:0px -9px;width:13px;height:9px;line-height:9px;}
-.sprite-icons-first-disabled{background-position:-13px -9px;width:13px;height:9px;line-height:9px;}
-.sprite-icons-previous{background-position:-26px 0px;width:8px;height:11px;line-height:11px;}
-.sprite-icons-previous-disabled{background-position:0px -18px;width:8px;height:11px;line-height:11px;}
-.sprite-icons-next{background-position:-8px -18px;width:8px;height:11px;line-height:11px;}
-.sprite-icons-next-disabled{background-position:-16px -18px;width:8px;height:11px;line-height:11px;}
-.sprite-icons-up{background-position:-24px -18px;width:9px;height:10px;line-height:10px;}
-.sprite-icons-down{background-position:-34px 0px;width:9px;height:10px;line-height:10px;}
+.sprite-icons-last{background-position:0px 0px;width:15px;height:11px;line-height:11px;}
+.sprite-icons-last-disabled{background-position:-15px 0px;width:15px;height:11px;line-height:11px;}
+.sprite-icons-first{background-position:0px -11px;width:15px;height:11px;line-height:11px;}
+.sprite-icons-first-disabled{background-position:-15px -11px;width:15px;height:11px;line-height:11px;}
+.sprite-icons-previous{background-position:-30px 0px;width:8px;height:11px;line-height:11px;}
+.sprite-icons-previous-disabled{background-position:-30px -11px;width:8px;height:11px;line-height:11px;}
+.sprite-icons-next{background-position:0px -22px;width:8px;height:11px;line-height:11px;}
+.sprite-icons-next-disabled{background-position:-8px -22px;width:8px;height:11px; line-height:11px;}
+.sprite-icons-up{background-position:-16px -22px;width:9px;height:10px;line-height:10px;}
+.sprite-icons-down{background-position:-25px -22px;width:9px;height:10px;line-height:10px;}
+
