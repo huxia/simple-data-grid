@@ -189,4 +189,46 @@ test('header html', function() {
 	equal(keys.toArray().join(' '), 'name latin-name');
 });
 
+test('pagination', function() {
+    // setup
+	function getData(parameters, on_success) {
+		var total_pages = 3;
+		var rows_per_page = 5;
+
+		var rows = [];
+		var index = (parameters.page - 1) * rows_per_page + 1;
+		for (var i=0; i<5; i++) {
+			rows.push({
+				name: 'n' + index,
+				'latin-name': 'l' + index
+			});
+			index += 1;
+		}
+
+		on_success({
+			total_pages: total_pages,
+			rows: rows
+		});
+	}
+
+	// 1. init table
+	var $table1 = $('#table1');
+	$table1.simple_datagrid({
+		on_get_data: getData
+	});
+
+	equal(
+		formatValues($table1.find('tbody td')),
+		'n1;l1;n2;l2;n3;l3;n4;l4;n5;l5'
+	);
+
+	// 2. next page
+	$table1.find('.next').click();
+
+	equal(
+		formatValues($table1.find('tbody td')),
+		'n6;l6;n7;l7;n8;l8;n9;l9;n10;l10'
+	);
+});
+
 });
