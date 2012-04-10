@@ -37,7 +37,7 @@ SortOrder =
 
 $.widget("ui.simple_datagrid", {
     options:
-        onGetData: null
+        on_get_data: null
         order_by: null
         url: null
         data: null
@@ -207,7 +207,7 @@ $.widget("ui.simple_datagrid", {
                 query_parameters.sortorder = 'asc'
 
         getDataFromCallback = =>
-            @options.onGetData(
+            @options.on_get_data(
                 query_parameters,
                 $.proxy(@_fillGrid, this)
             )
@@ -226,7 +226,7 @@ $.widget("ui.simple_datagrid", {
         getDataFromArray = =>
             @_fillGrid(@options.data)
 
-        if @options.onGetData
+        if @options.on_get_data
             getDataFromCallback()
         else if @url
             getDataFromUrl()

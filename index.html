@@ -117,7 +117,7 @@
 						<script>
 							$(function() {
 								$('#demo-table').simple_datagrid({
-									onGetData: ExampleData.getData,
+									on_get_data: ExampleData.getData,
 									order_by: 'name'
 								});
 							});
@@ -391,13 +391,13 @@
 
 				<h4 id="api-data-callback">Define the data in a javascript callback</h4>
 				<p>
-					You can define the data in a javascript callback using the <strong>onGetData</strong> option.
+					You can define the data in a javascript callback using the <strong>on_get_data</strong> option.
 					<br>
 					The callback has the following signature: function(parameters, on_success). You can return the data by calling <strong>on_success</strong>:
 				</p>
 
 <pre id="code1"><code>$('table1').simple_datagrid({
-  onGetData: function(parameters, on_success) {
+  on_get_data: function(parameters, on_success) {
     on_success(
       [
         ["Avocado", "Persea americana"],

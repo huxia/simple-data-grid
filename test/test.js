@@ -136,7 +136,7 @@ test('get data from callback', function() {
 
 	// 1. get data from callback
 	$table1.simple_datagrid({
-		onGetData: get_data
+		on_get_data: get_data
 	});
 
 	equal(

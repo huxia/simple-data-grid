@@ -44,7 +44,7 @@ limitations under the License.
 
   $.widget("ui.simple_datagrid", {
     options: {
-      onGetData: null,
+      on_get_data: null,
       order_by: null,
       url: null,
       data: null
@@ -227,7 +227,7 @@ limitations under the License.
         }
       }
       getDataFromCallback = function() {
-        return _this.options.onGetData(query_parameters, $.proxy(_this._fillGrid, _this));
+        return _this.options.on_get_data(query_parameters, $.proxy(_this._fillGrid, _this));
       };
       getDataFromUrl = function() {
         var url;
@@ -244,7 +244,7 @@ limitations under the License.
       getDataFromArray = function() {
         return _this._fillGrid(_this.options.data);
       };
-      if (this.options.onGetData) {
+      if (this.options.on_get_data) {
         return getDataFromCallback();
       } else if (this.url) {
         return getDataFromUrl();
