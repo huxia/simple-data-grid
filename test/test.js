@@ -231,4 +231,76 @@ test('pagination', function() {
 	);
 });
 
+test('sorting', function() {
+	function get_data(parameters, on_success) {
+		var data = [];
+
+		if (parameters.order_by == 'name') {
+			if (parameters.sortorder == 'asc') {
+				data = [
+					['Avocado', 'Persea americana'],
+					['Bell pepper', 'Capsicum annuum'],
+					['Eggplant', 'Solanum melongena']
+				];
+			}
+			else if (parameters.sortorder == 'desc') {
+				data = [
+					['Eggplant', 'Solanum melongena'],
+					['Bell pepper', 'Capsicum annuum'],
+					['Avocado', 'Persea americana']
+				];
+			}
+		}
+		else if (parameters.order_by == 'latin-name') {
+			if (parameters.sortorder == 'asc') {
+				data = [
+					['Bell pepper', 'Capsicum annuum'],
+					['Avocado', 'Persea americana'],
+					['Eggplant', 'Solanum melongena']
+				];
+			}
+			else if (parameters.sortorder == 'desc') {
+				data = [
+					['Eggplant', 'Solanum melongena'],
+					['Avocado', 'Persea americana'],
+					['Bell pepper', 'Capsicum annuum']
+				];
+			}
+		}
+
+		on_success(data);
+	}
+
+	var $table1 = $('#table1');
+
+	function format_first_columns() {
+		var values = $table1.find('tbody tr').map(
+			function() {
+				return $(this).find('td:eq(0)').text();
+			}
+		);
+
+		return values.toArray().join(';');
+	}
+
+	// 1. init tree; order by name
+	$table1.simple_datagrid({
+		on_get_data: get_data,
+		order_by: 'name'
+	});
+	equal(format_first_columns(), 'Avocado;Bell pepper;Eggplant');
+
+	// 2. click on 'name' -> sort descending
+	$table1.find('th:eq(0) a').click();
+	equal(format_first_columns(), 'Eggplant;Bell pepper;Avocado');
+
+	// 3. click on 'latin-name; -> sort ascending
+	$table1.find('th:eq(1) a').click();
+	equal(format_first_columns(), 'Bell pepper;Avocado;Eggplant');
+
+	// 4. click on 'latin-name; -> sort descending
+	$table1.find('th:eq(1) a').click();
+	equal(format_first_columns(), 'Eggplant;Avocado;Bell pepper');
+});
+
 });
