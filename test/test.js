@@ -7,6 +7,12 @@ function formatValues($elements) {
 	return values.toArray().join(';');
 }
 
+function getRowValues($table) {
+	return formatValues(
+		$table.find('tbody td')
+	);
+}
+
 module('utils');
 
 test('slugify', function() {
@@ -91,23 +97,17 @@ test('get column data from options', function() {
 test('get data from array', function() {
 	var $table1 = $('#table1');
 
-	function getRowValues() {
-		return formatValues(
-			$table1.find('tbody td')
-		);
-	}
-
 	// 1. row is an array
 	$table1.simple_datagrid({
 		data: [
 			['Avocado', 'Persea americana']
 		]
 	});
-	equal(getRowValues(), 'Avocado;Persea americana');
+	equal(getRowValues($table1), 'Avocado;Persea americana');
 
 	// 2. make empty
 	$table1.simple_datagrid('loadData', []);
-	equal(getRowValues(), '');
+	equal(getRowValues($table1), '');
 
 	// 3. row is an object
 	$table1.simple_datagrid(
@@ -119,7 +119,7 @@ test('get data from array', function() {
 			}
 		]
 	);
-	equal(getRowValues(), 'Bell pepper;Capsicum annuum');
+	equal(getRowValues($table1), 'Bell pepper;Capsicum annuum');
 });
 
 test('get data from callback', function() {
@@ -301,6 +301,26 @@ test('sorting', function() {
 	// 4. click on 'latin-name; -> sort descending
 	$table1.find('th:eq(1) a').click();
 	equal(format_first_columns(), 'Eggplant;Avocado;Bell pepper');
+});
+
+test('reload', function() {
+	// setup
+	var $table1 = $('#table1');
+	$table1.simple_datagrid({
+		data: [
+			['Avocado', 'Persea americana']
+		]
+	});
+
+	equal(getRowValues($table1), 'Avocado;Persea americana');
+
+	// 1. empty html
+	$table1.find('tbody tr').detach();
+	equal(getRowValues($table1), '');
+
+	// 2. reload
+	$table1.simple_datagrid('reload');
+	equal(getRowValues($table1), 'Avocado;Persea americana');
 });
 
 });
