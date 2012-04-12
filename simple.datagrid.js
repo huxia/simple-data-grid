@@ -349,14 +349,14 @@ limitations under the License.
         }
         return _this.$tfoot.html(html);
       };
-      fillHeader = function() {
+      fillHeader = function(row_count) {
         var class_html, column, html, _i, _len, _ref;
         html = '<tr>';
         _ref = _this.columns;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           column = _ref[_i];
           html += "<th data-key=\"" + column.key + "\">";
-          if (!_this.order_by) {
+          if ((!_this.order_by) || (row_count === 0)) {
             html += column.title;
           } else {
             html += "<a href=\"#\">" + column.title;
@@ -388,7 +388,7 @@ limitations under the License.
       this.total_pages = total_pages;
       fillRows(rows);
       fillFooter(total_pages, rows.length);
-      return fillHeader();
+      return fillHeader(rows.length);
     },
     _handleClickFirstPage: function(e) {
       this._gotoPage(1);

@@ -317,12 +317,12 @@ $.widget("ui.simple_datagrid", {
 
             @$tfoot.html(html)
 
-        fillHeader = =>
+        fillHeader = (row_count) =>
             html = '<tr>'
             for column in @columns
                 html += "<th data-key=\"#{ column.key }\">"
 
-                if not @order_by
+                if (not @order_by) or (row_count == 0)
                     html += column.title
                 else
                     html += "<a href=\"#\">#{ column.title }"
@@ -355,7 +355,7 @@ $.widget("ui.simple_datagrid", {
 
         fillRows(rows)
         fillFooter(total_pages, rows.length)
-        fillHeader()
+        fillHeader(rows.length)
 
     _handleClickFirstPage: (e) ->
         @_gotoPage(1)
