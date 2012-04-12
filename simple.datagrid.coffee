@@ -389,6 +389,8 @@ $.widget("ui.simple_datagrid", {
                     @sort_order = SortOrder.DESCENDING
                 else
                     @sort_order = SortOrder.ASCENDING
+            else
+                @sort_order = SortOrder.ASCENDING
 
             @order_by = key
             @current_page = 1

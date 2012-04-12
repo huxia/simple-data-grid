@@ -423,6 +423,8 @@ limitations under the License.
           } else {
             this.sort_order = SortOrder.ASCENDING;
           }
+        } else {
+          this.sort_order = SortOrder.ASCENDING;
         }
         this.order_by = key;
         this.current_page = 1;
