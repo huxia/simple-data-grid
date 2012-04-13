@@ -351,4 +351,63 @@ test('setParameter', function() {
 	$table1.simple_datagrid('reload');
 });
 
+test('setCurrentPage', function() {
+	// setup
+	stop();
+	var step = 1;
+
+	function get_data(parameters, on_success) {
+		if (step == 2) {
+			equal(parameters.page, 2);
+		}
+		step += 1;
+
+		on_success([
+			['Avocado', 'Persea americana']
+		]);
+		start();
+	}
+
+	var $table1 = $('#table1');
+	$table1.simple_datagrid({
+		on_get_data: get_data
+	});
+
+	// 1. set current page an reload
+	$table1.simple_datagrid('setCurrentPage', 2);
+	$table1.simple_datagrid('reload');
+});
+
+test('table with existing elements', function() {
+	// Test with a table that already has rows and a footer.
+	// The existing elements must be overwritten.
+
+	// setup
+	var $table1 = $('#table1');
+	$table1.append('<tbody><tr><td>abc</td></tr></tbody');
+	$table1.append('<tfoot><tr><td>my footer</td></tfoot>');
+
+	// 1. init table
+	$table1.simple_datagrid({
+		data: [
+			['Avocado', 'Persea americana']
+		]
+	});
+
+	equal(getRowValues($table1), 'Avocado;Persea americana');
+	equal($table1.find('tfoot').children().length, 0);
+});
+
+test('table with empty head', function() {
+	// setup
+	var $table1 = $('#table1');
+	$table1.find('thead').remove();
+
+	// 1. init table
+	$table1.simple_datagrid({
+		columns: ['Column1'],
+		data: [['abc']]
+	});
+});
+
 });
