@@ -1,16 +1,16 @@
 $(function() {
 
 function formatValues($elements) {
-	var values = $elements.map(function() {
-		return $(this).text();
-	});
-	return values.toArray().join(';');
+    var values = $elements.map(function() {
+        return $(this).text();
+    });
+    return values.toArray().join(';');
 }
 
 function getRowValues($table) {
-	return formatValues(
-		$table.find('tbody td')
-	);
+    return formatValues(
+        $table.find('tbody td')
+    );
 }
 
 module('utils');
@@ -46,7 +46,7 @@ module('simple-data-grid', {
     },
 
     teardown: function() {
-        var $table1 = $('#table1')
+        var $table1 = $('#table1');
         $table1.simple_datagrid('destroy');
         $table1.remove();
     }
@@ -81,355 +81,370 @@ test('get column data from options', function() {
             {
                 title: 'Column2',
                 key: 'c2'
+            },
+            {
+                title: 'Column3'
             }
         ]
     });
 
     // check column data
     var columns = $('#table1').simple_datagrid('getColumns');
-    equal(columns.length, 2);
+    equal(columns.length, 3);
     equal(columns[0].title, 'Column1');
     equal(columns[0].key, 'column1');  // slug of name
     equal(columns[1].title, 'Column2');
     equal(columns[1].key, 'c2');   // defined in options
+    equal(columns[2].key, 'column3');
+    equal(columns[2].title, 'Column3');
 });
 
 test('get data from array', function() {
-	var $table1 = $('#table1');
+    var $table1 = $('#table1');
 
-	// 1. row is an array
-	$table1.simple_datagrid({
-		data: [
-			['Avocado', 'Persea americana']
-		]
-	});
-	equal(getRowValues($table1), 'Avocado;Persea americana');
+    // 1. row is an array
+    $table1.simple_datagrid({
+        data: [
+            ['Avocado', 'Persea americana']
+        ]
+    });
+    equal(getRowValues($table1), 'Avocado;Persea americana');
 
-	// 2. make empty
-	$table1.simple_datagrid('loadData', []);
-	equal(getRowValues($table1), '');
+    // 2. make empty
+    $table1.simple_datagrid('loadData', []);
+    equal(getRowValues($table1), '');
 
-	// 3. row is an object
-	$table1.simple_datagrid(
-		'loadData',
-		[
-			{
-				name: "Bell pepper",
-				'latin-name': "Capsicum annuum"
-			}
-		]
-	);
-	equal(getRowValues($table1), 'Bell pepper;Capsicum annuum');
+    // 3. row is an object
+    $table1.simple_datagrid(
+        'loadData',
+        [
+            {
+                name: "Bell pepper",
+                'latin-name': "Capsicum annuum"
+            }
+        ]
+    );
+    equal(getRowValues($table1), 'Bell pepper;Capsicum annuum');
 });
 
 test('get data from callback', function() {
-	// setup
-	var $table1 = $('#table1');
+    // setup
+    var $table1 = $('#table1');
 
-	function get_data(parameters, on_success) {
-		on_success(
-			[
-				['Avocado', 'Persea americana']
-			]
-		);
-	}
+    function get_data(parameters, on_success) {
+        on_success(
+            [
+                ['Avocado', 'Persea americana']
+            ]
+        );
+    }
 
-	// 1. get data from callback
-	$table1.simple_datagrid({
-		on_get_data: get_data
-	});
+    // 1. get data from callback
+    $table1.simple_datagrid({
+        on_get_data: get_data
+    });
 
-	equal(
-		formatValues($table1.find('tbody td')),
-		'Avocado;Persea americana'
-	);
+    equal(
+        formatValues($table1.find('tbody td')),
+        'Avocado;Persea americana'
+    );
 });
 
 test('getSelectedRow', function() {
-	// setup
-	var $table1 = $('#table1');
-	$table1.simple_datagrid({
-		data: [
-			{
-				name: 'Avocado',
-				'latin-name': 'Persea americana',
-				id: 200
-			},
-			{
-				name: 'Bell pepper',
-				'latin-name': 'Capsicum annuum',
-				id: 201
-			}
-		]
-	});
+    // setup
+    var $table1 = $('#table1');
+    $table1.simple_datagrid({
+        data: [
+            {
+                name: 'Avocado',
+                'latin-name': 'Persea americana',
+                id: 200
+            },
+            {
+                name: 'Bell pepper',
+                'latin-name': 'Capsicum annuum',
+                id: 201
+            }
+        ]
+    });
 
-	// 1. no selection
-	equal($table1.simple_datagrid('getSelectedRow'), null);
+    // 1. no selection
+    equal($table1.simple_datagrid('getSelectedRow'), null);
 
-	// 2. select second row
-	$table1.find('tbody tr:eq(1) td:first').click();
-	ok($('tbody tr:eq(1)').hasClass('selected'));
-	equal($table1.simple_datagrid('getSelectedRow').id, 201);
+    // 2. select second row
+    $table1.find('tbody tr:eq(1) td:first').click();
+    ok($('tbody tr:eq(1)').hasClass('selected'));
+    equal($table1.simple_datagrid('getSelectedRow').id, 201);
 });
 
 test('header html', function() {
-	// setup
-	var $table1 = $('#table1');
-	$table1.simple_datagrid();
+    // setup
+    var $table1 = $('#table1');
+    $table1.simple_datagrid();
 
-	// 1. check html
-	equal(
-		formatValues($table1.find('thead th')),
-		'Name;Latin name'
-	);
+    // 1. check html
+    equal(
+        formatValues($table1.find('thead th')),
+        'Name;Latin name'
+    );
 
-	var keys = $table1.find('thead th').map(function() {
-		return $(this).data('key');
-	});
-	equal(keys.toArray().join(' '), 'name latin-name');
+    var keys = $table1.find('thead th').map(function() {
+        return $(this).data('key');
+    });
+    equal(keys.toArray().join(' '), 'name latin-name');
 });
 
 test('pagination', function() {
     // setup
-	function getData(parameters, on_success) {
-		var total_pages = 3;
-		var rows_per_page = 5;
+    function getData(parameters, on_success) {
+        var total_pages = 3;
+        var rows_per_page = 5;
 
-		var rows = [];
-		var index = (parameters.page - 1) * rows_per_page + 1;
-		for (var i=0; i<5; i++) {
-			rows.push({
-				name: 'n' + index,
-				'latin-name': 'l' + index
-			});
-			index += 1;
-		}
+        var rows = [];
+        var index = (parameters.page - 1) * rows_per_page + 1;
+        for (var i=0; i<5; i++) {
+            rows.push({
+                name: 'n' + index,
+                'latin-name': 'l' + index
+            });
+            index += 1;
+        }
 
-		on_success({
-			total_pages: total_pages,
-			rows: rows
-		});
-	}
+        on_success({
+            total_pages: total_pages,
+            rows: rows
+        });
+    }
 
-	// 1. init table
-	var $table1 = $('#table1');
-	$table1.simple_datagrid({
-		on_get_data: getData
-	});
+    // 1. init table
+    var $table1 = $('#table1');
+    $table1.simple_datagrid({
+        on_get_data: getData
+    });
 
-	equal(
-		formatValues($table1.find('tbody td')),
-		'n1;l1;n2;l2;n3;l3;n4;l4;n5;l5'
-	);
+    equal(
+        formatValues($table1.find('tbody td')),
+        'n1;l1;n2;l2;n3;l3;n4;l4;n5;l5'
+    );
 
-	// 2. next page
-	$table1.find('.next').click();
+    // 2. next page
+    $table1.find('.next').click();
 
-	equal(
-		formatValues($table1.find('tbody td')),
-		'n6;l6;n7;l7;n8;l8;n9;l9;n10;l10'
-	);
+    equal(
+        formatValues($table1.find('tbody td')),
+        'n6;l6;n7;l7;n8;l8;n9;l9;n10;l10'
+    );
 });
 
 test('sorting', function() {
-	function get_data(parameters, on_success) {
-		var data = [];
+    function get_data(parameters, on_success) {
+        var data = [];
 
-		if (parameters.order_by == 'name') {
-			if (parameters.sortorder == 'asc') {
-				data = [
-					['Avocado', 'Persea americana'],
-					['Bell pepper', 'Capsicum annuum'],
-					['Eggplant', 'Solanum melongena']
-				];
-			}
-			else if (parameters.sortorder == 'desc') {
-				data = [
-					['Eggplant', 'Solanum melongena'],
-					['Bell pepper', 'Capsicum annuum'],
-					['Avocado', 'Persea americana']
-				];
-			}
-		}
-		else if (parameters.order_by == 'latin-name') {
-			if (parameters.sortorder == 'asc') {
-				data = [
-					['Bell pepper', 'Capsicum annuum'],
-					['Avocado', 'Persea americana'],
-					['Eggplant', 'Solanum melongena']
-				];
-			}
-			else if (parameters.sortorder == 'desc') {
-				data = [
-					['Eggplant', 'Solanum melongena'],
-					['Avocado', 'Persea americana'],
-					['Bell pepper', 'Capsicum annuum']
-				];
-			}
-		}
+        if (parameters.order_by == 'name') {
+            if (parameters.sortorder == 'asc') {
+                data = [
+                    ['Avocado', 'Persea americana'],
+                    ['Bell pepper', 'Capsicum annuum'],
+                    ['Eggplant', 'Solanum melongena']
+                ];
+            }
+            else if (parameters.sortorder == 'desc') {
+                data = [
+                    ['Eggplant', 'Solanum melongena'],
+                    ['Bell pepper', 'Capsicum annuum'],
+                    ['Avocado', 'Persea americana']
+                ];
+            }
+        }
+        else if (parameters.order_by == 'latin-name') {
+            if (parameters.sortorder == 'asc') {
+                data = [
+                    ['Bell pepper', 'Capsicum annuum'],
+                    ['Avocado', 'Persea americana'],
+                    ['Eggplant', 'Solanum melongena']
+                ];
+            }
+            else if (parameters.sortorder == 'desc') {
+                data = [
+                    ['Eggplant', 'Solanum melongena'],
+                    ['Avocado', 'Persea americana'],
+                    ['Bell pepper', 'Capsicum annuum']
+                ];
+            }
+        }
 
-		on_success(data);
-	}
+        on_success(data);
+    }
 
-	var $table1 = $('#table1');
+    var $table1 = $('#table1');
 
-	function format_first_columns() {
-		var values = $table1.find('tbody tr').map(
-			function() {
-				return $(this).find('td:eq(0)').text();
-			}
-		);
+    function format_first_columns() {
+        var values = $table1.find('tbody tr').map(
+            function() {
+                return $(this).find('td:eq(0)').text();
+            }
+        );
 
-		return values.toArray().join(';');
-	}
+        return values.toArray().join(';');
+    }
 
-	// 1. init tree; order by name
-	$table1.simple_datagrid({
-		on_get_data: get_data,
-		order_by: 'name'
-	});
-	equal(format_first_columns(), 'Avocado;Bell pepper;Eggplant');
+    // 1. init tree; order by name
+    $table1.simple_datagrid({
+        on_get_data: get_data,
+        order_by: 'name'
+    });
+    equal(format_first_columns(), 'Avocado;Bell pepper;Eggplant');
 
-	// 2. click on 'name' -> sort descending
-	$table1.find('th:eq(0) a').click();
-	equal(format_first_columns(), 'Eggplant;Bell pepper;Avocado');
+    // 2. click on 'name' -> sort descending
+    $table1.find('th:eq(0) a').click();
+    equal(format_first_columns(), 'Eggplant;Bell pepper;Avocado');
 
-	// 3. click on 'latin-name; -> sort ascending
-	$table1.find('th:eq(1) a').click();
-	equal(format_first_columns(), 'Bell pepper;Avocado;Eggplant');
+    // 3. click on 'latin-name; -> sort ascending
+    $table1.find('th:eq(1) a').click();
+    equal(format_first_columns(), 'Bell pepper;Avocado;Eggplant');
 
-	// 4. click on 'latin-name; -> sort descending
-	$table1.find('th:eq(1) a').click();
-	equal(format_first_columns(), 'Eggplant;Avocado;Bell pepper');
+    // 4. click on 'latin-name; -> sort descending
+    $table1.find('th:eq(1) a').click();
+    equal(format_first_columns(), 'Eggplant;Avocado;Bell pepper');
 });
 
 test('reload', function() {
-	// setup
-	var $table1 = $('#table1');
-	$table1.simple_datagrid({
-		data: [
-			['Avocado', 'Persea americana']
-		]
-	});
+    // setup
+    var $table1 = $('#table1');
+    $table1.simple_datagrid({
+        data: [
+            ['Avocado', 'Persea americana']
+        ]
+    });
 
-	equal(getRowValues($table1), 'Avocado;Persea americana');
+    equal(getRowValues($table1), 'Avocado;Persea americana');
 
-	// 1. empty html
-	$table1.find('tbody tr').detach();
-	equal(getRowValues($table1), '');
+    // 1. empty html
+    $table1.find('tbody tr').detach();
+    equal(getRowValues($table1), '');
 
-	// 2. reload
-	$table1.simple_datagrid('reload');
-	equal(getRowValues($table1), 'Avocado;Persea americana');
+    // 2. reload
+    $table1.simple_datagrid('reload');
+    equal(getRowValues($table1), 'Avocado;Persea americana');
 });
 
 test('setParameter', function() {
-	// setup
-	stop();
+    // setup
+    stop();
 
-	var step = 1;
+    var step = 1;
 
-	function get_data(parameters, on_success) {
-		if (step == 2) {
-			equal(parameters.my_param, 'abc');
-		}
-		step += 1;
+    function get_data(parameters, on_success) {
+        if (step == 2) {
+            equal(parameters.my_param, 'abc');
+        }
+        step += 1;
 
-		on_success([
-			['Avocado', 'Persea americana']
-		]);
-		start();
-	}
-	
-	var $table1 = $('#table1');
-	$table1.simple_datagrid({
-		on_get_data: get_data
-	});
+        on_success([
+            ['Avocado', 'Persea americana']
+        ]);
+        start();
+    }
+    
+    var $table1 = $('#table1');
+    $table1.simple_datagrid({
+        on_get_data: get_data
+    });
 
-	// 1. set parameter and reload
-	$table1.simple_datagrid('setParameter', 'my_param', 'abc');
-	$table1.simple_datagrid('reload');
+    // 1. set parameter and reload
+    $table1.simple_datagrid('setParameter', 'my_param', 'abc');
+    $table1.simple_datagrid('reload');
 });
 
 test('setCurrentPage', function() {
-	// setup
-	stop();
-	var step = 1;
+    // setup
+    stop();
+    var step = 1;
 
-	function get_data(parameters, on_success) {
-		if (step == 2) {
-			equal(parameters.page, 2);
-		}
-		step += 1;
+    function get_data(parameters, on_success) {
+        if (step == 2) {
+            equal(parameters.page, 2);
+        }
+        step += 1;
 
-		on_success([
-			['Avocado', 'Persea americana']
-		]);
-		start();
-	}
+        on_success([
+            ['Avocado', 'Persea americana']
+        ]);
+        start();
+    }
 
-	var $table1 = $('#table1');
-	$table1.simple_datagrid({
-		on_get_data: get_data
-	});
+    var $table1 = $('#table1');
+    $table1.simple_datagrid({
+        on_get_data: get_data
+    });
 
-	// 1. set current page an reload
-	$table1.simple_datagrid('setCurrentPage', 2);
-	$table1.simple_datagrid('reload');
+    // 1. set current page an reload
+    $table1.simple_datagrid('setCurrentPage', 2);
+    $table1.simple_datagrid('reload');
 });
 
 test('table with existing elements', function() {
-	// Test with a table that already has rows and a footer.
-	// The existing elements must be overwritten.
+    // Test with a table that already has rows and a footer.
+    // The existing elements must be overwritten.
 
-	// setup
-	var $table1 = $('#table1');
-	$table1.append('<tbody><tr><td>abc</td></tr></tbody');
-	$table1.append('<tfoot><tr><td>my footer</td></tfoot>');
+    // setup
+    var $table1 = $('#table1');
+    $table1.append('<tbody><tr><td>abc</td></tr></tbody');
+    $table1.append('<tfoot><tr><td>my footer</td></tfoot>');
 
-	// 1. init table
-	$table1.simple_datagrid({
-		data: [
-			['Avocado', 'Persea americana']
-		]
-	});
+    // 1. init table
+    $table1.simple_datagrid({
+        data: [
+            ['Avocado', 'Persea americana']
+        ]
+    });
 
-	equal(getRowValues($table1), 'Avocado;Persea americana');
-	equal($table1.find('tfoot').children().length, 0);
+    equal(getRowValues($table1), 'Avocado;Persea americana');
+    equal($table1.find('tfoot').children().length, 0);
 });
 
 test('table with empty head', function() {
-	// setup
-	var $table1 = $('#table1');
-	$table1.find('thead').remove();
+    // setup
+    var $table1 = $('#table1');
+    $table1.find('thead').remove();
 
-	// 1. init table
-	$table1.simple_datagrid({
-		columns: ['Column1'],
-		data: [['abc']]
-	});
+    // 1. init table
+    $table1.simple_datagrid({
+        columns: ['Column1'],
+        data: [['abc']]
+    });
 });
 
 test('on_generate', function() {
-	// Test the 'on_generate' option of a column
-	var $table1 = $('#table1');
+    // Test the 'on_generate' option of a column
+    var $table1 = $('#table1');
 
-	// 1. init table
-	$table1.simple_datagrid({
-		columns: [
-			{
-				title: 'Fruit',
-				on_generate: function(value, row) {
-					return '_' + value + '_';
-				}
-			}
-		],
-		data: [
-			['Avocado']
-		]
-	});
+    // 1. init table
+    $table1.simple_datagrid({
+        columns: [
+            {
+                title: 'Fruit',
+                on_generate: function(value, row) {
+                    return '_' + value + '_';
+                }
+            }
+        ],
+        data: [
+            ['Avocado']
+        ]
+    });
 
-	equal(getRowValues($table1), '_Avocado_');
+    equal(getRowValues($table1), '_Avocado_');
+
+    // 2. load data in object
+    $table1.simple_datagrid(
+        'loadData',
+        [
+            {fruit: 'Tomato'}
+        ]
+    );
+
+    equal(getRowValues($table1), '_Tomato_');
 });
 
 });
