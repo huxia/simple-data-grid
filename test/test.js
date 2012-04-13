@@ -121,10 +121,13 @@ test('get data from array', function() {
             {
                 name: "Bell pepper",
                 'latin-name': "Capsicum annuum"
+            },
+            {
+                name: 'Tomatillo'  // no latin-name
             }
         ]
     );
-    equal(getRowValues($table1), 'Bell pepper;Capsicum annuum');
+    equal(getRowValues($table1), 'Bell pepper;Capsicum annuum;Tomatillo;');
 });
 
 test('get data from callback', function() {
