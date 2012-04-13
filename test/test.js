@@ -410,4 +410,26 @@ test('table with empty head', function() {
 	});
 });
 
+test('on_generate', function() {
+	// Test the 'on_generate' option of a column
+	var $table1 = $('#table1');
+
+	// 1. init table
+	$table1.simple_datagrid({
+		columns: [
+			{
+				title: 'Fruit',
+				on_generate: function(value, row) {
+					return '_' + value + '_';
+				}
+			}
+		],
+		data: [
+			['Avocado']
+		]
+	});
+
+	equal(getRowValues($table1), '_Avocado_');
+});
+
 });
