@@ -234,9 +234,24 @@ test('pagination', function() {
     $table1.find('.next').click();
 
     equal(
-        formatValues($table1.find('tbody td')),
+        getRowValues($table1),
         'n6;l6;n7;l7;n8;l8;n9;l9;n10;l10'
     );
+
+    // 3. last page
+    $table1.find('.last').click();
+
+    equal(
+        getRowValues($table1),
+        'n11;l11;n12;l12;n13;l13;n14;l14;n15;l15'
+    );
+
+    // 4. first page
+    $table1.find('.first').click();
+
+    // 5. previous page
+    $table1.find('.next').click();
+    $table1.find('.previous').click();
 });
 
 test('sorting', function() {
@@ -302,13 +317,16 @@ test('sorting', function() {
     $table1.find('th:eq(0) a').click();
     equal(format_first_columns(), 'Eggplant;Bell pepper;Avocado');
 
-    // 3. click on 'latin-name; -> sort ascending
+    // 3. click on 'latin-name' -> sort ascending
     $table1.find('th:eq(1) a').click();
     equal(format_first_columns(), 'Bell pepper;Avocado;Eggplant');
 
-    // 4. click on 'latin-name; -> sort descending
+    // 4. click on 'latin-name' -> sort descending
     $table1.find('th:eq(1) a').click();
     equal(format_first_columns(), 'Eggplant;Avocado;Bell pepper');
+
+    // 5. click on 'latin-name' -> sort ascending
+    $table1.find('th:eq(1) a').click();
 });
 
 test('reload', function() {
