@@ -323,4 +323,32 @@ test('reload', function() {
 	equal(getRowValues($table1), 'Avocado;Persea americana');
 });
 
+test('setParameter', function() {
+	// setup
+	stop();
+
+	var step = 1;
+
+	function get_data(parameters, on_success) {
+		if (step == 2) {
+			equal(parameters.my_param, 'abc');
+		}
+		step += 1;
+
+		on_success([
+			['Avocado', 'Persea americana']
+		]);
+		start();
+	}
+	
+	var $table1 = $('#table1');
+	$table1.simple_datagrid({
+		on_get_data: get_data
+	});
+
+	// 1. set parameter and reload
+	$table1.simple_datagrid('setParameter', 'my_param', 'abc');
+	$table1.simple_datagrid('reload');
+});
+
 });
