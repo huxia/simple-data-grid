@@ -104,7 +104,7 @@ $.widget("ui.simple_datagrid", {
                 if typeof column == 'object'
                     column_info = {
                         title: column.title,
-                        key: column.key,
+                        key: column.key or slugify(column.title),
                         on_generate: column.on_generate
                     }
                 else
@@ -158,7 +158,9 @@ $.widget("ui.simple_datagrid", {
 
     _removeDomElements: ->
         @element.removeClass('simple-data-grid')
-        @$tbody.remove()
+        if @$tbody
+            @$tbody.remove()
+
         @$tbody = null
 
     _bindEvents: ->

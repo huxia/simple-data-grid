@@ -118,7 +118,7 @@ limitations under the License.
           if (typeof column === 'object') {
             column_info = {
               title: column.title,
-              key: column.key,
+              key: column.key || slugify(column.title),
               on_generate: column.on_generate
             };
           } else {
@@ -177,7 +177,9 @@ limitations under the License.
     },
     _removeDomElements: function() {
       this.element.removeClass('simple-data-grid');
-      this.$tbody.remove();
+      if (this.$tbody) {
+        this.$tbody.remove();
+      }
       return this.$tbody = null;
     },
     _bindEvents: function() {
