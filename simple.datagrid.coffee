@@ -359,6 +359,9 @@ $.widget("ui.simple_datagrid", {
         fillFooter(total_pages, rows.length)
         fillHeader(rows.length)
 
+        event = $.Event('datagrid.load_data')
+        @element.trigger(event)
+
     _handleClickFirstPage: (e) ->
         @_gotoPage(1)
         return false

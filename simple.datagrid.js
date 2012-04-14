@@ -261,7 +261,7 @@ limitations under the License.
       }
     },
     _fillGrid: function(data) {
-      var addRowFromArray, addRowFromObject, fillFooter, fillHeader, fillRows, generateTr, rows, total_pages,
+      var addRowFromArray, addRowFromObject, event, fillFooter, fillHeader, fillRows, generateTr, rows, total_pages,
         _this = this;
       addRowFromObject = function(row) {
         var column, html, value, _i, _len, _ref;
@@ -390,7 +390,9 @@ limitations under the License.
       this.total_pages = total_pages;
       fillRows(rows);
       fillFooter(total_pages, rows.length);
-      return fillHeader(rows.length);
+      fillHeader(rows.length);
+      event = $.Event('datagrid.load_data');
+      return this.element.trigger(event);
     },
     _handleClickFirstPage: function(e) {
       this._gotoPage(1);
