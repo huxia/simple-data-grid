@@ -128,6 +128,9 @@ test('get data from array', function() {
         ]
     );
     equal(getRowValues($table1), 'Bell pepper;Capsicum annuum;Tomatillo;');
+
+    // 4. invalid data
+    $table1.simple_datagrid('loadData', '');
 });
 
 test('get data from callback', function() {
@@ -150,6 +153,69 @@ test('get data from callback', function() {
     equal(
         formatValues($table1.find('tbody td')),
         'Avocado;Persea americana'
+    );
+});
+
+test('get data from ajax', function() {
+    // setup
+    stop();
+
+    var $table1 = $('#table1');
+    $table1.attr('data-url', '/api/fruits/');
+
+    $.mockjax({
+        url: '*',
+        responseText: [
+            ["Winter melon", "Benincasa hispida"]
+        ]
+    });
+
+    // 1. init table
+    $table1.simple_datagrid();
+
+    $table1.bind(
+        'datagrid.load_data', function() {
+            start();
+
+            equal(
+                getRowValues($table1),
+                'Winter melon;Benincasa hispida'
+            );
+
+            $.mockjaxClear();
+        }
+    );
+});
+
+test('get data from ajax; define url in options', function() {
+    // setup
+    stop();
+
+    var $table1 = $('#table1');
+
+    $.mockjax({
+        url: '*',
+        responseText: [
+            ["Cucumber", "Cucumis sativus"]
+        ]
+    });
+
+    // 1. init table
+    $table1.simple_datagrid({
+        url: '/api/fruits/'
+    });
+
+    $table1.bind(
+        'datagrid.load_data', function() {
+            start();
+
+            equal(
+                getRowValues($table1),
+                'Cucumber;Cucumis sativus'
+            );
+
+            $.mockjaxClear();
+        }
     );
 });
 
@@ -178,6 +244,12 @@ test('getSelectedRow', function() {
     $table1.find('tbody tr:eq(1) td:first').click();
     ok($('tbody tr:eq(1)').hasClass('selected'));
     equal($table1.simple_datagrid('getSelectedRow').id, 201);
+
+    // 2. select first row
+    $table1.find('tbody tr:eq(0) td:first').click();
+    ok($('tbody tr:eq(0)').hasClass('selected'));
+    ok(! $('tbody tr:eq(1)').hasClass('selected'));
+    equal($table1.simple_datagrid('getSelectedRow').id, 200);
 });
 
 test('header html', function() {
