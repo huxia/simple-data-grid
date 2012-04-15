@@ -18,40 +18,172 @@ limitations under the License.
 
 
 (function() {
-  var $, SortOrder, buildUrl, slugify;
+  var $, SimpleDataGrid, SimpleWidget, SortOrder, buildUrl, slugify,
+    __slice = [].slice,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
 
   $ = this.jQuery;
 
-  slugify = function(string) {
-    return string.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9\-]/g, '').toLowerCase();
-  };
+  SimpleWidget = (function() {
 
-  buildUrl = function(url, query_parameters) {
-    if (query_parameters) {
-      return url + '?' + $.param(query_parameters);
-    } else {
-      return url;
+    SimpleWidget.name = 'SimpleWidget';
+
+    SimpleWidget.prototype.defaults = {};
+
+    function SimpleWidget(el, options) {
+      this.$el = $(el);
+      this.options = $.extend({}, this.defaults, options);
+      this._init();
     }
+
+    SimpleWidget.prototype.destroy = function() {
+      return this._deinit();
+    };
+
+    SimpleWidget.prototype._init = function() {
+      return null;
+    };
+
+    SimpleWidget.prototype._deinit = function() {
+      return null;
+    };
+
+    return SimpleWidget;
+
+  })();
+
+  SimpleWidget.register = function(widget_class, widget_name) {
+    var callFunction, createWidget, destroyWidget, getDataKey;
+    getDataKey = function() {
+      return "simple_widget_" + widget_name;
+    };
+    createWidget = function($el, options) {
+      var data_key;
+      data_key = getDataKey();
+      $el.each(function() {
+        var widget;
+        widget = new widget_class(this, options);
+        if (!$.data(this, data_key)) {
+          return $.data(this, data_key, widget);
+        }
+      });
+      return $el;
+    };
+    destroyWidget = function($el) {
+      var data_key;
+      data_key = getDataKey();
+      return $el.each(function() {
+        var widget;
+        widget = $.data(this, data_key);
+        if (widget && (widget instanceof SimpleWidget)) {
+          widget.destroy();
+        }
+        return $.removeData(this, data_key);
+      });
+    };
+    callFunction = function($el, function_name, args) {
+      var result;
+      result = null;
+      $el.each(function() {
+        var widget, widget_function;
+        widget = $.data(this, getDataKey());
+        if (widget && (widget instanceof SimpleWidget)) {
+          widget_function = widget[function_name];
+          if (widget_function && (typeof widget_function === 'function')) {
+            return result = widget_function.apply(widget, args);
+          }
+        }
+      });
+      return result;
+    };
+    return $.fn[widget_name] = function() {
+      var $el, args, argument1, function_name, options;
+      argument1 = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+      $el = this;
+      if (argument1 === void 0 || typeof argument1 === 'object') {
+        options = argument1;
+        return createWidget($el, options);
+      } else if (typeof argument1 === 'string' && argument1[0] !== '_') {
+        function_name = argument1;
+        if (function_name === 'destroy') {
+          return destroyWidget($el);
+        } else {
+          return callFunction($el, function_name, args);
+        }
+      }
+    };
   };
 
-  this.SimpleDataGrid = {
-    slugify: slugify,
-    buildUrl: buildUrl
-  };
+  this.SimpleWidget = SimpleWidget;
 
-  SortOrder = {
-    ASCENDING: 1,
-    DESCENDING: 2
-  };
+  /*
+  Copyright 2012 Marco Braak
+  
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+  
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  */
 
-  $.widget("ui.simple_datagrid", {
-    options: {
+
+  $ = this.jQuery;
+
+  SimpleWidget = this.SimpleWidget;
+
+  SimpleDataGrid = (function(_super) {
+
+    __extends(SimpleDataGrid, _super);
+
+    SimpleDataGrid.name = 'SimpleDataGrid';
+
+    function SimpleDataGrid() {
+      return SimpleDataGrid.__super__.constructor.apply(this, arguments);
+    }
+
+    SimpleDataGrid.prototype.defaults = {
       on_get_data: null,
       order_by: null,
       url: null,
       data: null
-    },
-    _create: function() {
+    };
+
+    SimpleDataGrid.prototype.loadData = function(data) {
+      return this._fillGrid(data);
+    };
+
+    SimpleDataGrid.prototype.getColumns = function() {
+      return this.columns;
+    };
+
+    SimpleDataGrid.prototype.getSelectedRow = function() {
+      if (this.$selected_row) {
+        return this.$selected_row.data('row');
+      } else {
+        return null;
+      }
+    };
+
+    SimpleDataGrid.prototype.reload = function() {
+      return this._loadData();
+    };
+
+    SimpleDataGrid.prototype.setParameter = function(key, value) {
+      return this.parameters[key] = value;
+    };
+
+    SimpleDataGrid.prototype.setCurrentPage = function(page) {
+      return this.current_page = page;
+    };
+
+    SimpleDataGrid.prototype._init = function() {
       this.url = this._getBaseUrl();
       this.$selected_row = null;
       this.current_page = 1;
@@ -62,40 +194,37 @@ limitations under the License.
       this._createDomElements();
       this._bindEvents();
       return this._loadData();
-    },
-    destroy: function() {
+    };
+
+    SimpleDataGrid.prototype._deinit = function() {
       this._removeDomElements();
       this._removeEvents();
-      return $.Widget.prototype.destroy.call(this);
-    },
-    getSelectedRow: function() {
-      if (this.$selected_row) {
-        return this.$selected_row.data('row');
+      this.columns = [];
+      this.options = {};
+      this.parameters = {};
+      this.order_by = null;
+      this.sort_order = SortOrder.ASCENDING;
+      this.$selected_row = null;
+      this.current_page = 1;
+      return this.url = null;
+    };
+
+    SimpleDataGrid.prototype._getBaseUrl = function() {
+      var url;
+      url = this.options.url;
+      if (url) {
+        return url;
       } else {
-        return null;
+        return this.$el.data('url');
       }
-    },
-    reload: function() {
-      return this._loadData();
-    },
-    loadData: function(data) {
-      return this._fillGrid(data);
-    },
-    setParameter: function(key, value) {
-      return this.parameters[key] = value;
-    },
-    getColumns: function() {
-      return this.columns;
-    },
-    setCurrentPage: function(page) {
-      return this.current_page = page;
-    },
-    _generateColumnData: function() {
+    };
+
+    SimpleDataGrid.prototype._generateColumnData = function() {
       var generateFromOptions, generateFromThElements,
         _this = this;
       generateFromThElements = function() {
         var $th_elements;
-        $th_elements = _this.element.find('th');
+        $th_elements = _this.$el.find('th');
         _this.columns = [];
         return $th_elements.each(function(i, th) {
           var $th, key, title;
@@ -136,89 +265,74 @@ limitations under the License.
       } else {
         return generateFromThElements();
       }
-    },
-    _createDomElements: function() {
+    };
+
+    SimpleDataGrid.prototype._createDomElements = function() {
       var initBody, initFoot, initHead, initTable,
         _this = this;
       initTable = function() {
-        return _this.element.addClass('simple-data-grid');
+        return _this.$el.addClass('simple-data-grid');
       };
       initBody = function() {
-        _this.$tbody = _this.element.find('tbody');
+        _this.$tbody = _this.$el.find('tbody');
         if (_this.$tbody.length) {
           return _this.$tbody.empty();
         } else {
           _this.$tbody = $('<tbody></tbody>');
-          return _this.element.append(_this.$tbody);
+          return _this.$el.append(_this.$tbody);
         }
       };
       initFoot = function() {
-        _this.$tfoot = _this.element.find('tfoot');
+        _this.$tfoot = _this.$el.find('tfoot');
         if (_this.$tfoot.length) {
           return _this.$tfoot.empty();
         } else {
           _this.$tfoot = $('<tfoot></tfoot>');
-          return _this.element.append(_this.$tfoot);
+          return _this.$el.append(_this.$tfoot);
         }
       };
       initHead = function() {
-        _this.$thead = _this.element.find('thead');
+        _this.$thead = _this.$el.find('thead');
         if (_this.$thead.length) {
           return _this.$thead.empty();
         } else {
           _this.$thead = $('<thead></thead>');
-          return _this.element.append(_this.$thead);
+          return _this.$el.append(_this.$thead);
         }
       };
       initTable();
       initHead();
       initBody();
       return initFoot();
-    },
-    _removeDomElements: function() {
-      this.element.removeClass('simple-data-grid');
+    };
+
+    SimpleDataGrid.prototype._removeDomElements = function() {
+      this.$el.removeClass('simple-data-grid');
       if (this.$tbody) {
         this.$tbody.remove();
       }
       return this.$tbody = null;
-    },
-    _bindEvents: function() {
-      this.element.delegate('tbody tr', 'click', $.proxy(this._clickRow, this));
-      this.element.delegate('thead th a', 'click', $.proxy(this._clickHeader, this));
-      this.element.delegate('.paginator .first', 'click', $.proxy(this._handleClickFirstPage, this));
-      this.element.delegate('.paginator .previous', 'click', $.proxy(this._handleClickPreviousPage, this));
-      this.element.delegate('.paginator .next', 'click', $.proxy(this._handleClickNextPage, this));
-      return this.element.delegate('.paginator .last', 'click', $.proxy(this._handleClickLastPage, this));
-    },
-    _removeEvents: function() {
-      this.element.undelegate('tbody tr', 'click');
-      this.element.undelegate('tbody thead th a', 'click');
-      this.element.undelegate('.paginator .first', 'click');
-      this.element.undelegate('.paginator .previous', 'click');
-      this.element.undelegate('.paginator .next', 'click');
-      return this.element.undelegate('.paginator .last', 'click');
-    },
-    _getBaseUrl: function() {
-      var url;
-      url = this.options.url;
-      if (url) {
-        return url;
-      } else {
-        return this.element.data('url');
-      }
-    },
-    _clickRow: function(e) {
-      var $tr, event;
-      if (this.$selected_row) {
-        this.$selected_row.removeClass('selected');
-      }
-      $tr = $(e.target).closest('tr');
-      $tr.addClass('selected');
-      this.$selected_row = $tr;
-      event = $.Event('datagrid.select');
-      return this.element.trigger(event);
-    },
-    _loadData: function() {
+    };
+
+    SimpleDataGrid.prototype._bindEvents = function() {
+      this.$el.delegate('tbody tr', 'click', $.proxy(this._clickRow, this));
+      this.$el.delegate('thead th a', 'click', $.proxy(this._clickHeader, this));
+      this.$el.delegate('.paginator .first', 'click', $.proxy(this._handleClickFirstPage, this));
+      this.$el.delegate('.paginator .previous', 'click', $.proxy(this._handleClickPreviousPage, this));
+      this.$el.delegate('.paginator .next', 'click', $.proxy(this._handleClickNextPage, this));
+      return this.$el.delegate('.paginator .last', 'click', $.proxy(this._handleClickLastPage, this));
+    };
+
+    SimpleDataGrid.prototype._removeEvents = function() {
+      this.$el.undelegate('tbody tr', 'click');
+      this.$el.undelegate('tbody thead th a', 'click');
+      this.$el.undelegate('.paginator .first', 'click');
+      this.$el.undelegate('.paginator .previous', 'click');
+      this.$el.undelegate('.paginator .next', 'click');
+      return this.$el.undelegate('.paginator .last', 'click');
+    };
+
+    SimpleDataGrid.prototype._loadData = function() {
       var getDataFromArray, getDataFromCallback, getDataFromUrl, query_parameters,
         _this = this;
       query_parameters = $.extend({}, this.parameters, {
@@ -259,8 +373,9 @@ limitations under the License.
       } else {
         return this._fillGrid([]);
       }
-    },
-    _fillGrid: function(data) {
+    };
+
+    SimpleDataGrid.prototype._fillGrid = function(data) {
       var addRowFromArray, addRowFromObject, event, fillFooter, fillHeader, fillRows, generateTr, rows, total_pages,
         _this = this;
       addRowFromObject = function(row) {
@@ -392,31 +507,49 @@ limitations under the License.
       fillFooter(total_pages, rows.length);
       fillHeader(rows.length);
       event = $.Event('datagrid.load_data');
-      return this.element.trigger(event);
-    },
-    _handleClickFirstPage: function(e) {
+      return this.$el.trigger(event);
+    };
+
+    SimpleDataGrid.prototype._clickRow = function(e) {
+      var $tr, event;
+      if (this.$selected_row) {
+        this.$selected_row.removeClass('selected');
+      }
+      $tr = $(e.target).closest('tr');
+      $tr.addClass('selected');
+      this.$selected_row = $tr;
+      event = $.Event('datagrid.select');
+      return this.$el.trigger(event);
+    };
+
+    SimpleDataGrid.prototype._handleClickFirstPage = function(e) {
       this._gotoPage(1);
       return false;
-    },
-    _handleClickPreviousPage: function(e) {
+    };
+
+    SimpleDataGrid.prototype._handleClickPreviousPage = function(e) {
       this._gotoPage(this.current_page - 1);
       return false;
-    },
-    _handleClickNextPage: function(e) {
+    };
+
+    SimpleDataGrid.prototype._handleClickNextPage = function(e) {
       this._gotoPage(this.current_page + 1);
       return false;
-    },
-    _handleClickLastPage: function(e) {
+    };
+
+    SimpleDataGrid.prototype._handleClickLastPage = function(e) {
       this._gotoPage(this.total_pages);
       return false;
-    },
-    _gotoPage: function(page) {
+    };
+
+    SimpleDataGrid.prototype._gotoPage = function(page) {
       if (page <= this.total_pages) {
         this.current_page = page;
         return this._loadData();
       }
-    },
-    _clickHeader: function(e) {
+    };
+
+    SimpleDataGrid.prototype._clickHeader = function(e) {
       var $th, key;
       $th = $(e.target).closest('th');
       if ($th.length) {
@@ -435,7 +568,35 @@ limitations under the License.
         this._loadData();
       }
       return false;
+    };
+
+    return SimpleDataGrid;
+
+  })(SimpleWidget);
+
+  SimpleWidget.register(SimpleDataGrid, 'simple_datagrid');
+
+  slugify = function(string) {
+    return string.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9\-]/g, '').toLowerCase();
+  };
+
+  buildUrl = function(url, query_parameters) {
+    if (query_parameters) {
+      return url + '?' + $.param(query_parameters);
+    } else {
+      return url;
     }
-  });
+  };
+
+  this.SimpleDataGrid = SimpleDataGrid;
+
+  SimpleDataGrid.slugify = slugify;
+
+  SimpleDataGrid.buildUrl = buildUrl;
+
+  SortOrder = {
+    ASCENDING: 1,
+    DESCENDING: 2
+  };
 
 }).call(this);

@@ -16,33 +16,38 @@ limitations under the License.
 
 $ = @jQuery
 
-
-slugify = (string) ->
-    return string.replace(/\s+/g,'-').replace(/[^a-zA-Z0-9\-]/g,'').toLowerCase()
-
-buildUrl = (url, query_parameters) ->
-    if query_parameters
-        return url + '?' + $.param(query_parameters)
-    else
-        return url
-
-@SimpleDataGrid =
-    slugify: slugify
-    buildUrl: buildUrl
-
-SortOrder =
-    ASCENDING: 1
-    DESCENDING: 2
+SimpleWidget = @SimpleWidget
 
 
-$.widget("ui.simple_datagrid", {
-    options:
+class SimpleDataGrid extends SimpleWidget
+    defaults:
         on_get_data: null
         order_by: null
         url: null
         data: null
 
-    _create: ->
+    loadData: (data) ->
+        @_fillGrid(data)
+
+    getColumns: ->
+        return @columns
+
+    getSelectedRow: ->
+        if @$selected_row
+            return @$selected_row.data('row')
+        else
+            return null
+
+    reload: ->
+        @_loadData()
+
+    setParameter: (key, value) ->
+        @parameters[key] = value
+
+    setCurrentPage: (page) ->
+        @current_page = page
+
+    _init: ->
         @url = @_getBaseUrl()
         @$selected_row = null
         @current_page = 1
@@ -55,36 +60,29 @@ $.widget("ui.simple_datagrid", {
         @_bindEvents()
         @_loadData()
 
-    destroy: ->
+    _deinit: ->
         @_removeDomElements()
         @_removeEvents()
 
-        $.Widget.prototype.destroy.call(this)
+        @columns = []
+        @options = {}
+        @parameters = {}
+        @order_by = null
+        @sort_order = SortOrder.ASCENDING
+        @$selected_row = null
+        @current_page = 1
+        @url = null
 
-    getSelectedRow: ->
-        if @$selected_row
-            return @$selected_row.data('row')
+    _getBaseUrl: ->
+        url = @options.url
+        if url
+            return url
         else
-            return null
-
-    reload: ->
-        @_loadData()
-
-    loadData: (data) ->
-        @_fillGrid(data)
-
-    setParameter: (key, value) ->
-        @parameters[key] = value
-
-    getColumns: ->
-        return @columns
-
-    setCurrentPage: (page) ->
-        @current_page = page
+            return @$el.data('url')
 
     _generateColumnData: ->
         generateFromThElements = =>
-            $th_elements = @element.find('th')
+            $th_elements = @$el.find('th')
             @columns = []
             $th_elements.each(
                 (i, th) =>
@@ -122,34 +120,34 @@ $.widget("ui.simple_datagrid", {
 
     _createDomElements: ->
         initTable = =>
-            @element.addClass('simple-data-grid')
+            @$el.addClass('simple-data-grid')
 
         initBody = =>
-            @$tbody = @element.find('tbody')
+            @$tbody = @$el.find('tbody')
 
             if @$tbody.length
                 @$tbody.empty()
             else
                 @$tbody = $('<tbody></tbody>')
-                @element.append(@$tbody)
+                @$el.append(@$tbody)
 
         initFoot = =>
-            @$tfoot = @element.find('tfoot')
+            @$tfoot = @$el.find('tfoot')
 
             if @$tfoot.length
                 @$tfoot.empty()
             else
                 @$tfoot = $('<tfoot></tfoot>')
-                @element.append(@$tfoot)
+                @$el.append(@$tfoot)
 
         initHead = =>
-            @$thead = @element.find('thead')
+            @$thead = @$el.find('thead')
 
             if @$thead.length
                 @$thead.empty()
             else
                 @$thead = $('<thead></thead>')
-                @element.append(@$thead)
+                @$el.append(@$thead)
 
         initTable()
         initHead()
@@ -157,45 +155,27 @@ $.widget("ui.simple_datagrid", {
         initFoot()
 
     _removeDomElements: ->
-        @element.removeClass('simple-data-grid')
+        @$el.removeClass('simple-data-grid')
         if @$tbody
             @$tbody.remove()
 
         @$tbody = null
 
     _bindEvents: ->
-        @element.delegate('tbody tr', 'click', $.proxy(this._clickRow, this))
-        @element.delegate('thead th a', 'click', $.proxy(this._clickHeader, this))
-        @element.delegate('.paginator .first', 'click', $.proxy(this._handleClickFirstPage, this))
-        @element.delegate('.paginator .previous', 'click', $.proxy(this._handleClickPreviousPage, this))
-        @element.delegate('.paginator .next', 'click', $.proxy(this._handleClickNextPage, this))
-        @element.delegate('.paginator .last', 'click', $.proxy(this._handleClickLastPage, this))
+        @$el.delegate('tbody tr', 'click', $.proxy(this._clickRow, this))
+        @$el.delegate('thead th a', 'click', $.proxy(this._clickHeader, this))
+        @$el.delegate('.paginator .first', 'click', $.proxy(this._handleClickFirstPage, this))
+        @$el.delegate('.paginator .previous', 'click', $.proxy(this._handleClickPreviousPage, this))
+        @$el.delegate('.paginator .next', 'click', $.proxy(this._handleClickNextPage, this))
+        @$el.delegate('.paginator .last', 'click', $.proxy(this._handleClickLastPage, this))
 
     _removeEvents: ->
-        @element.undelegate('tbody tr', 'click')
-        @element.undelegate('tbody thead th a', 'click')
-        @element.undelegate('.paginator .first', 'click')
-        @element.undelegate('.paginator .previous', 'click')
-        @element.undelegate('.paginator .next', 'click')
-        @element.undelegate('.paginator .last', 'click')
-
-    _getBaseUrl: ->
-        url = @options.url
-        if url
-            return url
-        else
-            return @element.data('url')
-
-    _clickRow: (e) ->
-        if @$selected_row
-            @$selected_row.removeClass('selected')
-
-        $tr = $(e.target).closest('tr')
-        $tr.addClass('selected')
-        @$selected_row = $tr
-
-        event = $.Event('datagrid.select')
-        @element.trigger(event)
+        @$el.undelegate('tbody tr', 'click')
+        @$el.undelegate('tbody thead th a', 'click')
+        @$el.undelegate('.paginator .first', 'click')
+        @$el.undelegate('.paginator .previous', 'click')
+        @$el.undelegate('.paginator .next', 'click')
+        @$el.undelegate('.paginator .last', 'click')
 
     _loadData: ->
         query_parameters = $.extend({}, @parameters, {page: @current_page})
@@ -360,7 +340,18 @@ $.widget("ui.simple_datagrid", {
         fillHeader(rows.length)
 
         event = $.Event('datagrid.load_data')
-        @element.trigger(event)
+        @$el.trigger(event)
+
+    _clickRow: (e) ->
+        if @$selected_row
+            @$selected_row.removeClass('selected')
+
+        $tr = $(e.target).closest('tr')
+        $tr.addClass('selected')
+        @$selected_row = $tr
+
+        event = $.Event('datagrid.select')
+        @$el.trigger(event)
 
     _handleClickFirstPage: (e) ->
         @_gotoPage(1)
@@ -402,4 +393,23 @@ $.widget("ui.simple_datagrid", {
             @_loadData()
 
         return false
-})
+
+SimpleWidget.register(SimpleDataGrid, 'simple_datagrid')
+
+
+slugify = (string) ->
+    return string.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9\-]/g, '').toLowerCase()
+
+buildUrl = (url, query_parameters) ->
+    if query_parameters
+        return url + '?' + $.param(query_parameters)
+    else
+        return url
+
+@SimpleDataGrid = SimpleDataGrid
+SimpleDataGrid.slugify = slugify
+SimpleDataGrid.buildUrl = buildUrl
+
+SortOrder =
+    ASCENDING: 1
+    DESCENDING: 2

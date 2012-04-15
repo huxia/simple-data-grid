@@ -1,2 +1,2 @@
 # Build and watch coffeescript
-coffee -w -c simple.datagrid.coffee
+coffee -w -j simple.datagrid.js -c simple.widget.coffee simple.datagrid.coffee
