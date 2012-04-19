@@ -354,10 +354,15 @@ limitations under the License.
         url = buildUrl(_this.url, query_parameters);
         return $.ajax({
           url: url,
-          success: function(result) {
+          success: function(response) {
+            var result;
+            if ($.isArray(response)) {
+              result = response;
+            } else {
+              result = $.parseJSON(response);
+            }
             return _this._fillGrid(result);
           },
-          datatType: 'json',
           cache: false
         });
       };

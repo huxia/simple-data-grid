@@ -199,9 +199,13 @@ class SimpleDataGrid extends SimpleWidget
 
             $.ajax(
                 url: url,
-                success: (result) =>
+                success: (response) =>
+                    if $.isArray(response)
+                        result = response
+                    else
+                        result = $.parseJSON(response)
+
                     @_fillGrid(result)
-                , datatType: 'json',
                 cache: false
             )
 
