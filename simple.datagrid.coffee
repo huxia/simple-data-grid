@@ -231,7 +231,10 @@ class SimpleDataGrid extends SimpleWidget
                     if column.on_generate
                         value = column.on_generate(value, row)
                 else
-                    value = ''
+                    if column.on_generate
+                        value = column.on_generate(null, row)
+                    else
+                        value = ''
 
                 html += "<td>#{ value }</td>"
 
