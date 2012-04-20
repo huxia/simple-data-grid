@@ -152,7 +152,8 @@ limitations under the License.
       on_get_data: null,
       order_by: null,
       url: null,
-      data: null
+      data: null,
+      on_generate_paginator: null
     };
 
     SimpleDataGrid.prototype.loadData = function(data) {
@@ -320,7 +321,7 @@ limitations under the License.
       this.$el.delegate('.paginator .first', 'click', $.proxy(this._handleClickFirstPage, this));
       this.$el.delegate('.paginator .previous', 'click', $.proxy(this._handleClickPreviousPage, this));
       this.$el.delegate('.paginator .next', 'click', $.proxy(this._handleClickNextPage, this));
-      return this.$el.delegate('.paginator .last', 'click', $.proxy(this._handleClickLastPage, this));
+      return this.$el.delegate('.paginator .last', 'click', $.proxy(this._handleClickLastPage, this), this.$el.delegate('.paginator .page', 'click', $.proxy(this._handleClickPage, this)));
     };
 
     SimpleDataGrid.prototype._removeEvents = function() {
@@ -329,7 +330,8 @@ limitations under the License.
       this.$el.undelegate('.paginator .first', 'click');
       this.$el.undelegate('.paginator .previous', 'click');
       this.$el.undelegate('.paginator .next', 'click');
-      return this.$el.undelegate('.paginator .last', 'click');
+      this.$el.undelegate('.paginator .last', 'click');
+      return this.$el.undelegate('.paginator .page', 'click');
     };
 
     SimpleDataGrid.prototype._loadData = function() {
@@ -381,7 +383,7 @@ limitations under the License.
     };
 
     SimpleDataGrid.prototype._fillGrid = function(data) {
-      var addRowFromArray, addRowFromObject, event, fillFooter, fillHeader, fillRows, generateTr, rows, total_pages,
+      var addRowFromArray, addRowFromObject, event, fillFooter, fillHeader, fillPaginator, fillRows, generateTr, rows, total_pages,
         _this = this;
       addRowFromObject = function(row) {
         var column, html, value, _i, _len, _ref;
@@ -456,24 +458,34 @@ limitations under the License.
           }
         } else {
           html = "<tr><td class=\"paginator\" colspan=\"" + _this.columns.length + "\">";
-          if (!_this.current_page || _this.current_page === 1) {
-            html += '<span class="sprite-icons-first-disabled">first</span>';
-            html += '<span class="sprite-icons-previous-disabled">previous</span>';
+          if (_this.options.on_generate_paginator) {
+            html += _this.options.on_generate_paginator(_this.current_page, total_pages);
           } else {
-            html += "<a href=\"#\" class=\"sprite-icons-first first\">first</a>";
-            html += "<a href=\"#\" class=\"sprite-icons-previous previous\">previous</a>";
-          }
-          html += "<span>page " + _this.current_page + " of " + total_pages + "</span>";
-          if (!_this.current_page || _this.current_page === total_pages) {
-            html += '<span class="sprite-icons-next-disabled">next</span>';
-            html += '<span class="sprite-icons-last-disabled">last</span>';
-          } else {
-            html += "<a href=\"#\" class=\"sprite-icons-next next\">next</a>";
-            html += "<a href=\"#\" class=\"sprite-icons-last last\">last</a>";
+            html += fillPaginator(_this.current_page, total_pages);
           }
           html += "</td></tr>";
         }
         return _this.$tfoot.html(html);
+      };
+      fillPaginator = function(current_page, total_pages) {
+        var html;
+        html = '';
+        if (!_this.current_page || _this.current_page === 1) {
+          html += '<span class="sprite-icons-first-disabled">first</span>';
+          html += '<span class="sprite-icons-previous-disabled">previous</span>';
+        } else {
+          html += "<a href=\"#\" class=\"sprite-icons-first first\">first</a>";
+          html += "<a href=\"#\" class=\"sprite-icons-previous previous\">previous</a>";
+        }
+        html += "<span>page " + _this.current_page + " of " + total_pages + "</span>";
+        if (!_this.current_page || _this.current_page === total_pages) {
+          html += '<span class="sprite-icons-next-disabled">next</span>';
+          html += '<span class="sprite-icons-last-disabled">last</span>';
+        } else {
+          html += "<a href=\"#\" class=\"sprite-icons-next next\">next</a>";
+          html += "<a href=\"#\" class=\"sprite-icons-last last\">last</a>";
+        }
+        return html;
       };
       fillHeader = function(row_count) {
         var class_html, column, html, _i, _len, _ref;
@@ -548,6 +560,14 @@ limitations under the License.
 
     SimpleDataGrid.prototype._handleClickLastPage = function(e) {
       this._gotoPage(this.total_pages);
+      return false;
+    };
+
+    SimpleDataGrid.prototype._handleClickPage = function(e) {
+      var $link, page;
+      $link = $(e.target);
+      page = $link.data('page');
+      this._gotoPage(page);
       return false;
     };
 

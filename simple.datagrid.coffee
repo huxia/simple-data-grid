@@ -25,6 +25,7 @@ class SimpleDataGrid extends SimpleWidget
         order_by: null
         url: null
         data: null
+        on_generate_paginator: null
 
     loadData: (data) ->
         @_fillGrid(data)
@@ -167,7 +168,8 @@ class SimpleDataGrid extends SimpleWidget
         @$el.delegate('.paginator .first', 'click', $.proxy(this._handleClickFirstPage, this))
         @$el.delegate('.paginator .previous', 'click', $.proxy(this._handleClickPreviousPage, this))
         @$el.delegate('.paginator .next', 'click', $.proxy(this._handleClickNextPage, this))
-        @$el.delegate('.paginator .last', 'click', $.proxy(this._handleClickLastPage, this))
+        @$el.delegate('.paginator .last', 'click', $.proxy(this._handleClickLastPage, this)
+        @$el.delegate('.paginator .page', 'click', $.proxy(this._handleClickPage, this)))
 
     _removeEvents: ->
         @$el.undelegate('tbody tr', 'click')
@@ -176,6 +178,7 @@ class SimpleDataGrid extends SimpleWidget
         @$el.undelegate('.paginator .previous', 'click')
         @$el.undelegate('.paginator .next', 'click')
         @$el.undelegate('.paginator .last', 'click')
+        @$el.undelegate('.paginator .page', 'click')
 
     _loadData: ->
         query_parameters = $.extend({}, @parameters, {page: @current_page})
@@ -286,25 +289,35 @@ class SimpleDataGrid extends SimpleWidget
             else
                 html = "<tr><td class=\"paginator\" colspan=\"#{ @columns.length }\">"
 
-                if not @current_page or @current_page == 1
-                    html += '<span class="sprite-icons-first-disabled">first</span>'
-                    html += '<span class="sprite-icons-previous-disabled">previous</span>'
+                if @options.on_generate_paginator
+                    html += @options.on_generate_paginator(@current_page, total_pages)
                 else
-                    html += "<a href=\"#\" class=\"sprite-icons-first first\">first</a>"
-                    html += "<a href=\"#\" class=\"sprite-icons-previous previous\">previous</a>"
-
-                html += "<span>page #{ @current_page } of #{ total_pages }</span>"
-
-                if not @current_page or @current_page == total_pages
-                    html += '<span class="sprite-icons-next-disabled">next</span>'
-                    html += '<span class="sprite-icons-last-disabled">last</span>'
-                else
-                    html += "<a href=\"#\" class=\"sprite-icons-next next\">next</a>"
-                    html += "<a href=\"#\" class=\"sprite-icons-last last\">last</a>"
+                    html += fillPaginator(@current_page, total_pages)
 
                 html += "</td></tr>"
 
             @$tfoot.html(html)
+
+        fillPaginator = (current_page, total_pages) =>
+            html = ''
+
+            if not @current_page or @current_page == 1
+                html += '<span class="sprite-icons-first-disabled">first</span>'
+                html += '<span class="sprite-icons-previous-disabled">previous</span>'
+            else
+                html += "<a href=\"#\" class=\"sprite-icons-first first\">first</a>"
+                html += "<a href=\"#\" class=\"sprite-icons-previous previous\">previous</a>"
+
+            html += "<span>page #{ @current_page } of #{ total_pages }</span>"
+
+            if not @current_page or @current_page == total_pages
+                html += '<span class="sprite-icons-next-disabled">next</span>'
+                html += '<span class="sprite-icons-last-disabled">last</span>'
+            else
+                html += "<a href=\"#\" class=\"sprite-icons-next next\">next</a>"
+                html += "<a href=\"#\" class=\"sprite-icons-last last\">last</a>"
+
+            return html
 
         fillHeader = (row_count) =>
             html = '<tr>'
@@ -374,6 +387,12 @@ class SimpleDataGrid extends SimpleWidget
 
     _handleClickLastPage: (e) ->
         @_gotoPage(@total_pages)
+        return false
+
+    _handleClickPage: (e) ->
+        $link = $(e.target)
+        page = $link.data('page')
+        @_gotoPage(page)
         return false
 
     _gotoPage: (page) ->
