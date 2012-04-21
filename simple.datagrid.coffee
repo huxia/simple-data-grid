@@ -19,6 +19,31 @@ $ = @jQuery
 SimpleWidget = @SimpleWidget
 
 
+min = (value1, value2) ->
+    if value1 < value2
+        return value1
+    else
+        return value2
+
+max = (value1, value2) ->
+    if value1 > value2
+        return value1
+    else
+        return value2
+
+range = (start, stop) ->
+    len = stop - start
+    array = new Array(len)
+
+    i = 0
+    while i < len
+        array[i] = start
+        start += 1
+        i += 1
+
+    return array
+
+
 class SimpleDataGrid extends SimpleWidget
     defaults:
         on_get_data: null
@@ -113,6 +138,7 @@ class SimpleDataGrid extends SimpleWidget
                     }
 
                 @columns.push(column_info)
+            return null
 
         if @options.columns
             generateFromOptions()
@@ -165,19 +191,11 @@ class SimpleDataGrid extends SimpleWidget
     _bindEvents: ->
         @$el.delegate('tbody tr', 'click', $.proxy(this._clickRow, this))
         @$el.delegate('thead th a', 'click', $.proxy(this._clickHeader, this))
-        @$el.delegate('.paginator .first', 'click', $.proxy(this._handleClickFirstPage, this))
-        @$el.delegate('.paginator .previous', 'click', $.proxy(this._handleClickPreviousPage, this))
-        @$el.delegate('.paginator .next', 'click', $.proxy(this._handleClickNextPage, this))
-        @$el.delegate('.paginator .last', 'click', $.proxy(this._handleClickLastPage, this)
-        @$el.delegate('.paginator .page', 'click', $.proxy(this._handleClickPage, this)))
+        @$el.delegate('.paginator .page', 'click', $.proxy(this._handleClickPage, this))
 
     _removeEvents: ->
         @$el.undelegate('tbody tr', 'click')
         @$el.undelegate('tbody thead th a', 'click')
-        @$el.undelegate('.paginator .first', 'click')
-        @$el.undelegate('.paginator .previous', 'click')
-        @$el.undelegate('.paginator .next', 'click')
-        @$el.undelegate('.paginator .last', 'click')
         @$el.undelegate('.paginator .page', 'click')
 
     _loadData: ->
@@ -279,6 +297,7 @@ class SimpleDataGrid extends SimpleWidget
                 $tr = $(html)
                 $tr.data('row', row)
                 @$tbody.append($tr)
+            return null
 
         fillFooter = (total_pages, row_count) =>
             if not total_pages or total_pages == 1
@@ -300,22 +319,26 @@ class SimpleDataGrid extends SimpleWidget
 
         fillPaginator = (current_page, total_pages) =>
             html = ''
+            pages = @_getPages(current_page, total_pages)
 
-            if not @current_page or @current_page == 1
-                html += '<span class="sprite-icons-first-disabled">first</span>'
-                html += '<span class="sprite-icons-previous-disabled">previous</span>'
+            if current_page > 1
+                html += "<a href=\"#\" data-page=\"#{current_page - 1}\" class=\"page\">&lsaquo;&lsaquo; previous</a>"
             else
-                html += "<a href=\"#\" class=\"sprite-icons-first first\">first</a>"
-                html += "<a href=\"#\" class=\"sprite-icons-previous previous\">previous</a>"
+                html += "<span>&lsaquo;&lsaquo; previous</a>"
 
-            html += "<span>page #{ @current_page } of #{ total_pages }</span>"
+            for page in pages
+                if not page
+                    html += '...'
+                else
+                    if page == current_page
+                        html += "<span>#{ page }</span>"
+                    else
+                        html += "<a href=\"#\" data-page=\"#{ page }\" class=\"page\">#{ page }</a>"
 
-            if not @current_page or @current_page == total_pages
-                html += '<span class="sprite-icons-next-disabled">next</span>'
-                html += '<span class="sprite-icons-last-disabled">last</span>'
+            if current_page < total_pages
+                html += "<a href=\"#\" data-page=\"#{ current_page + 1 }\" class=\"page\">next &rsaquo;&rsaquo;</a>"
             else
-                html += "<a href=\"#\" class=\"sprite-icons-next next\">next</a>"
-                html += "<a href=\"#\" class=\"sprite-icons-last last\">last</a>"
+                html += "<span>next &rsaquo;&rsaquo;</span>"
 
             return html
 
@@ -373,22 +396,6 @@ class SimpleDataGrid extends SimpleWidget
         event = $.Event('datagrid.select')
         @$el.trigger(event)
 
-    _handleClickFirstPage: (e) ->
-        @_gotoPage(1)
-        return false
-
-    _handleClickPreviousPage: (e) ->
-        @_gotoPage(@current_page - 1)
-        return false
-
-    _handleClickNextPage: (e) ->
-        @_gotoPage(@current_page + 1)
-        return false
-
-    _handleClickLastPage: (e) ->
-        @_gotoPage(@total_pages)
-        return false
-
     _handleClickPage: (e) ->
         $link = $(e.target)
         page = $link.data('page')
@@ -419,6 +426,44 @@ class SimpleDataGrid extends SimpleWidget
             @_loadData()
 
         return false
+
+    _getPages: (current_page, total_pages, page_window=4) ->
+        first_end = min(page_window, total_pages)
+        last_start = max(1, (total_pages - page_window) + 1)
+
+        current_start = max(1, current_page - page_window)
+        current_end = min(total_pages, current_page + page_window)
+
+        if first_end >= current_start
+            current_start = 1
+            first_range = []
+        else
+            first_range = range(1, first_end + 1)
+
+        if current_end >= last_start
+            current_end = total_pages
+            last_range = []
+        else
+            last_range = range(last_start, total_pages + 1)
+
+        current_range = range(current_start, current_end + 1)
+
+        first_gap = current_start - first_end
+        if first_gap == 2
+            first_range.push(first_end + 1)
+        else if first_gap > 2
+            first_range.push(0)
+
+        last_gap = last_start - current_end
+        if last_gap == 2
+            current_range.push(current_end + 1)
+        else if last_gap > 2
+            current_range.push(0)
+
+        return first_range.concat(current_range, last_range)
+
+    testGetPages: (current_page, total_pages, page_window=4) ->
+        return @_getPages(current_page, total_pages, page_window)
 
 SimpleWidget.register(SimpleDataGrid, 'simple_datagrid')
 

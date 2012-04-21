@@ -18,7 +18,7 @@ limitations under the License.
 
 
 (function() {
-  var $, SimpleDataGrid, SimpleWidget, SortOrder, buildUrl, slugify,
+  var $, SimpleDataGrid, SimpleWidget, SortOrder, buildUrl, max, min, range, slugify,
     __slice = [].slice,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
@@ -138,6 +138,35 @@ limitations under the License.
 
   SimpleWidget = this.SimpleWidget;
 
+  min = function(value1, value2) {
+    if (value1 < value2) {
+      return value1;
+    } else {
+      return value2;
+    }
+  };
+
+  max = function(value1, value2) {
+    if (value1 > value2) {
+      return value1;
+    } else {
+      return value2;
+    }
+  };
+
+  range = function(start, stop) {
+    var array, i, len;
+    len = stop - start;
+    array = new Array(len);
+    i = 0;
+    while (i < len) {
+      array[i] = start;
+      start += 1;
+      i += 1;
+    }
+    return array;
+  };
+
   SimpleDataGrid = (function(_super) {
 
     __extends(SimpleDataGrid, _super);
@@ -239,10 +268,9 @@ limitations under the License.
         });
       };
       generateFromOptions = function() {
-        var column, column_info, _i, _len, _ref, _results;
+        var column, column_info, _i, _len, _ref;
         _this.columns = [];
         _ref = _this.options.columns;
-        _results = [];
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           column = _ref[_i];
           if (typeof column === 'object') {
@@ -257,9 +285,9 @@ limitations under the License.
               key: slugify(column)
             };
           }
-          _results.push(_this.columns.push(column_info));
+          _this.columns.push(column_info);
         }
-        return _results;
+        return null;
       };
       if (this.options.columns) {
         return generateFromOptions();
@@ -318,19 +346,12 @@ limitations under the License.
     SimpleDataGrid.prototype._bindEvents = function() {
       this.$el.delegate('tbody tr', 'click', $.proxy(this._clickRow, this));
       this.$el.delegate('thead th a', 'click', $.proxy(this._clickHeader, this));
-      this.$el.delegate('.paginator .first', 'click', $.proxy(this._handleClickFirstPage, this));
-      this.$el.delegate('.paginator .previous', 'click', $.proxy(this._handleClickPreviousPage, this));
-      this.$el.delegate('.paginator .next', 'click', $.proxy(this._handleClickNextPage, this));
-      return this.$el.delegate('.paginator .last', 'click', $.proxy(this._handleClickLastPage, this), this.$el.delegate('.paginator .page', 'click', $.proxy(this._handleClickPage, this)));
+      return this.$el.delegate('.paginator .page', 'click', $.proxy(this._handleClickPage, this));
     };
 
     SimpleDataGrid.prototype._removeEvents = function() {
       this.$el.undelegate('tbody tr', 'click');
       this.$el.undelegate('tbody thead th a', 'click');
-      this.$el.undelegate('.paginator .first', 'click');
-      this.$el.undelegate('.paginator .previous', 'click');
-      this.$el.undelegate('.paginator .next', 'click');
-      this.$el.undelegate('.paginator .last', 'click');
       return this.$el.undelegate('.paginator .page', 'click');
     };
 
@@ -430,9 +451,8 @@ limitations under the License.
         return "<tr" + data_string + ">";
       };
       fillRows = function(rows) {
-        var $tr, html, row, _i, _len, _results;
+        var $tr, html, row, _i, _len;
         _this.$tbody.empty();
-        _results = [];
         for (_i = 0, _len = rows.length; _i < _len; _i++) {
           row = rows[_i];
           html = generateTr(row);
@@ -444,9 +464,9 @@ limitations under the License.
           html += '</tr>';
           $tr = $(html);
           $tr.data('row', row);
-          _results.push(_this.$tbody.append($tr));
+          _this.$tbody.append($tr);
         }
-        return _results;
+        return null;
       };
       fillFooter = function(total_pages, row_count) {
         var html;
@@ -468,22 +488,30 @@ limitations under the License.
         return _this.$tfoot.html(html);
       };
       fillPaginator = function(current_page, total_pages) {
-        var html;
+        var html, page, pages, _i, _len;
         html = '';
-        if (!_this.current_page || _this.current_page === 1) {
-          html += '<span class="sprite-icons-first-disabled">first</span>';
-          html += '<span class="sprite-icons-previous-disabled">previous</span>';
+        pages = _this._getPages(current_page, total_pages);
+        if (current_page > 1) {
+          html += "<a href=\"#\" data-page=\"" + (current_page - 1) + "\" class=\"page\">&lsaquo;&lsaquo; previous</a>";
         } else {
-          html += "<a href=\"#\" class=\"sprite-icons-first first\">first</a>";
-          html += "<a href=\"#\" class=\"sprite-icons-previous previous\">previous</a>";
+          html += "<span>&lsaquo;&lsaquo; previous</a>";
         }
-        html += "<span>page " + _this.current_page + " of " + total_pages + "</span>";
-        if (!_this.current_page || _this.current_page === total_pages) {
-          html += '<span class="sprite-icons-next-disabled">next</span>';
-          html += '<span class="sprite-icons-last-disabled">last</span>';
+        for (_i = 0, _len = pages.length; _i < _len; _i++) {
+          page = pages[_i];
+          if (!page) {
+            html += '...';
+          } else {
+            if (page === current_page) {
+              html += "<span>" + page + "</span>";
+            } else {
+              html += "<a href=\"#\" data-page=\"" + page + "\" class=\"page\">" + page + "</a>";
+            }
+          }
+        }
+        if (current_page < total_pages) {
+          html += "<a href=\"#\" data-page=\"" + (current_page + 1) + "\" class=\"page\">next &rsaquo;&rsaquo;</a>";
         } else {
-          html += "<a href=\"#\" class=\"sprite-icons-next next\">next</a>";
-          html += "<a href=\"#\" class=\"sprite-icons-last last\">last</a>";
+          html += "<span>next &rsaquo;&rsaquo;</span>";
         }
         return html;
       };
@@ -543,26 +571,6 @@ limitations under the License.
       return this.$el.trigger(event);
     };
 
-    SimpleDataGrid.prototype._handleClickFirstPage = function(e) {
-      this._gotoPage(1);
-      return false;
-    };
-
-    SimpleDataGrid.prototype._handleClickPreviousPage = function(e) {
-      this._gotoPage(this.current_page - 1);
-      return false;
-    };
-
-    SimpleDataGrid.prototype._handleClickNextPage = function(e) {
-      this._gotoPage(this.current_page + 1);
-      return false;
-    };
-
-    SimpleDataGrid.prototype._handleClickLastPage = function(e) {
-      this._gotoPage(this.total_pages);
-      return false;
-    };
-
     SimpleDataGrid.prototype._handleClickPage = function(e) {
       var $link, page;
       $link = $(e.target);
@@ -597,6 +605,50 @@ limitations under the License.
         this._loadData();
       }
       return false;
+    };
+
+    SimpleDataGrid.prototype._getPages = function(current_page, total_pages, page_window) {
+      var current_end, current_range, current_start, first_end, first_gap, first_range, last_gap, last_range, last_start;
+      if (page_window == null) {
+        page_window = 4;
+      }
+      first_end = min(page_window, total_pages);
+      last_start = max(1, (total_pages - page_window) + 1);
+      current_start = max(1, current_page - page_window);
+      current_end = min(total_pages, current_page + page_window);
+      if (first_end >= current_start) {
+        current_start = 1;
+        first_range = [];
+      } else {
+        first_range = range(1, first_end + 1);
+      }
+      if (current_end >= last_start) {
+        current_end = total_pages;
+        last_range = [];
+      } else {
+        last_range = range(last_start, total_pages + 1);
+      }
+      current_range = range(current_start, current_end + 1);
+      first_gap = current_start - first_end;
+      if (first_gap === 2) {
+        first_range.push(first_end + 1);
+      } else if (first_gap > 2) {
+        first_range.push(0);
+      }
+      last_gap = last_start - current_end;
+      if (last_gap === 2) {
+        current_range.push(current_end + 1);
+      } else if (last_gap > 2) {
+        current_range.push(0);
+      }
+      return first_range.concat(current_range, last_range);
+    };
+
+    SimpleDataGrid.prototype.testGetPages = function(current_page, total_pages, page_window) {
+      if (page_window == null) {
+        page_window = 4;
+      }
+      return this._getPages(current_page, total_pages, page_window);
     };
 
     return SimpleDataGrid;

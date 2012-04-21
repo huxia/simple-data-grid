@@ -303,27 +303,12 @@ test('pagination', function() {
     );
 
     // 2. next page
-    $table1.find('.next').click();
+    $table1.find('.page:eq(0)').click();
 
     equal(
         getRowValues($table1),
         'n6;l6;n7;l7;n8;l8;n9;l9;n10;l10'
     );
-
-    // 3. last page
-    $table1.find('.last').click();
-
-    equal(
-        getRowValues($table1),
-        'n11;l11;n12;l12;n13;l13;n14;l14;n15;l15'
-    );
-
-    // 4. first page
-    $table1.find('.first').click();
-
-    // 5. previous page
-    $table1.find('.next').click();
-    $table1.find('.previous').click();
 });
 
 test('sorting', function() {
@@ -538,6 +523,29 @@ test('on_generate', function() {
     );
 
     equal(getRowValues($table1), '_Tomato_');
+});
+
+test('getPages', function() {
+    // setup
+    var $table1 = $('#table1');
+    $table1.simple_datagrid();
+
+    function getPages(current_page, total_pages) {
+        return $table1.simple_datagrid('testGetPages', current_page, total_pages, 2);
+    }
+
+    // 1. get pages
+    deepEqual(getPages(1, 1), [1]);
+    deepEqual(getPages(1, 2), [1, 2]);
+    deepEqual(getPages(1, 100), [1, 2, 3, 0, 99, 100]);
+    deepEqual(getPages(100, 100), [1, 2, 0, 98, 99, 100]);
+    deepEqual(getPages(50, 100), [1, 2, 0, 48, 49, 50, 51, 52, 0, 99, 100]);
+    deepEqual(getPages(5, 100), [1, 2, 3, 4, 5, 6, 7, 0, 99, 100]);
+    deepEqual(getPages(6, 100), [1, 2, 3, 4, 5, 6, 7, 8, 0, 99, 100]);
+    deepEqual(getPages(7, 100), [1, 2, 0, 5, 6, 7, 8, 9, 0, 99, 100]);
+    deepEqual(getPages(96, 100), [1, 2, 0, 94, 95, 96, 97, 98, 99, 100]);
+    deepEqual(getPages(95, 100), [1, 2, 0, 93, 94, 95, 96, 97, 98, 99, 100]);
+    deepEqual(getPages(94, 100), [1, 2, 0, 92, 93, 94, 95, 96, 0, 99, 100]);
 });
 
 });
