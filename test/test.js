@@ -506,6 +506,11 @@ test('table with empty head', function() {
         columns: ['Column1'],
         data: [['abc']]
     });
+
+    equal(
+        $table1.find('thead th').text(),
+        'Column1'
+    );
 });
 
 test('on_generate', function() {
