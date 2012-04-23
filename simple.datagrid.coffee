@@ -221,7 +221,7 @@ class SimpleDataGrid extends SimpleWidget
             $.ajax(
                 url: url,
                 success: (response) =>
-                    if $.isArray(response)
+                    if $.isArray(response) or typeof response == 'object'
                         result = response
                     else
                         result = $.parseJSON(response)

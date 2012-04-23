@@ -379,7 +379,7 @@ limitations under the License.
           url: url,
           success: function(response) {
             var result;
-            if ($.isArray(response)) {
+            if ($.isArray(response) || typeof response === 'object') {
               result = response;
             } else {
               result = $.parseJSON(response);
