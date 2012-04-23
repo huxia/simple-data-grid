@@ -181,8 +181,7 @@ limitations under the License.
       on_get_data: null,
       order_by: null,
       url: null,
-      data: null,
-      on_generate_paginator: null
+      data: null
     };
 
     SimpleDataGrid.prototype.loadData = function(data) {
@@ -478,11 +477,7 @@ limitations under the License.
           }
         } else {
           html = "<tr><td class=\"paginator\" colspan=\"" + _this.columns.length + "\">";
-          if (_this.options.on_generate_paginator) {
-            html += _this.options.on_generate_paginator(_this.current_page, total_pages);
-          } else {
-            html += fillPaginator(_this.current_page, total_pages);
-          }
+          html += fillPaginator(_this.current_page, total_pages);
           html += "</td></tr>";
         }
         return _this.$tfoot.html(html);
@@ -494,7 +489,7 @@ limitations under the License.
         if (current_page > 1) {
           html += "<a href=\"#\" data-page=\"" + (current_page - 1) + "\" class=\"page\">&lsaquo;&lsaquo; previous</a>";
         } else {
-          html += "<span>&lsaquo;&lsaquo; previous</a>";
+          html += "<span>&lsaquo;&lsaquo; previous</span>";
         }
         for (_i = 0, _len = pages.length; _i < _len; _i++) {
           page = pages[_i];
@@ -502,7 +497,7 @@ limitations under the License.
             html += '...';
           } else {
             if (page === current_page) {
-              html += "<span>" + page + "</span>";
+              html += "<span class=\"current\">" + page + "</span>";
             } else {
               html += "<a href=\"#\" data-page=\"" + page + "\" class=\"page\">" + page + "</a>";
             }

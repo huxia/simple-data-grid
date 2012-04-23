@@ -50,7 +50,6 @@ class SimpleDataGrid extends SimpleWidget
         order_by: null
         url: null
         data: null
-        on_generate_paginator: null
 
     loadData: (data) ->
         @_fillGrid(data)
@@ -307,12 +306,7 @@ class SimpleDataGrid extends SimpleWidget
                     html = ''
             else
                 html = "<tr><td class=\"paginator\" colspan=\"#{ @columns.length }\">"
-
-                if @options.on_generate_paginator
-                    html += @options.on_generate_paginator(@current_page, total_pages)
-                else
-                    html += fillPaginator(@current_page, total_pages)
-
+                html += fillPaginator(@current_page, total_pages)
                 html += "</td></tr>"
 
             @$tfoot.html(html)
@@ -324,14 +318,14 @@ class SimpleDataGrid extends SimpleWidget
             if current_page > 1
                 html += "<a href=\"#\" data-page=\"#{current_page - 1}\" class=\"page\">&lsaquo;&lsaquo; previous</a>"
             else
-                html += "<span>&lsaquo;&lsaquo; previous</a>"
+                html += "<span>&lsaquo;&lsaquo; previous</span>"
 
             for page in pages
                 if not page
                     html += '...'
                 else
                     if page == current_page
-                        html += "<span>#{ page }</span>"
+                        html += "<span class=\"current\">#{ page }</span>"
                     else
                         html += "<a href=\"#\" data-page=\"#{ page }\" class=\"page\">#{ page }</a>"
 
