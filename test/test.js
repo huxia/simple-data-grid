@@ -272,12 +272,12 @@ test('header html', function() {
 test('pagination', function() {
     // setup
     function getData(parameters, on_success) {
-        var total_pages = 3;
+        var total_pages = 100;
         var rows_per_page = 5;
 
         var rows = [];
         var index = (parameters.page - 1) * rows_per_page + 1;
-        for (var i=0; i<5; i++) {
+        for (var i=0; i<rows_per_page; i++) {
             rows.push({
                 name: 'n' + index,
                 'latin-name': 'l' + index
@@ -302,12 +302,27 @@ test('pagination', function() {
         'n1;l1;n2;l2;n3;l3;n4;l4;n5;l5'
     );
 
-    // 2. next page
-    $table1.find('.page:eq(0)').click();
+    equal(
+        $table1.find('.paginator').text(),
+        '‹‹ previous12345...979899100next ››'
+    );
+    equal(
+        $table1.find('.paginator a.page').text(),
+        '2345979899100next ››'
+    );
 
+    // 2. next page
+    $table1.find('.paginator .page:last').click();
     equal(
         getRowValues($table1),
         'n6;l6;n7;l7;n8;l8;n9;l9;n10;l10'
+    );
+
+    // 3. last page
+    $('#table1').find('.paginator .page:eq(9)').click();
+    equal(
+        getRowValues($('#table1')),
+        'n496;l496;n497;l497;n498;l498;n499;l499;n500;l500'
     );
 });
 

@@ -640,9 +640,6 @@ limitations under the License.
     };
 
     SimpleDataGrid.prototype.testGetPages = function(current_page, total_pages, page_window) {
-      if (page_window == null) {
-        page_window = 4;
-      }
       return this._getPages(current_page, total_pages, page_window);
     };
 

@@ -456,7 +456,7 @@ class SimpleDataGrid extends SimpleWidget
 
         return first_range.concat(current_range, last_range)
 
-    testGetPages: (current_page, total_pages, page_window=4) ->
+    testGetPages: (current_page, total_pages, page_window) ->
         return @_getPages(current_page, total_pages, page_window)
 
 SimpleWidget.register(SimpleDataGrid, 'simple_datagrid')
