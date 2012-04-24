@@ -165,9 +165,7 @@ test('get data from ajax', function() {
 
     $.mockjax({
         url: '*',
-        responseText: [
-            ["Winter melon", "Benincasa hispida"]
-        ]
+        responseText: '[["Winter melon", "Benincasa hispida"]]'
     });
 
     // 1. init table
@@ -525,6 +523,12 @@ test('on_generate', function() {
                 on_generate: function(value, row) {
                     return '_' + value + '_';
                 }
+            },
+            {
+                title: 'Latin name',
+                on_generate: function(value, row) {
+                    return '+' + value + '+';
+                }
             }
         ],
         data: [
@@ -534,7 +538,7 @@ test('on_generate', function() {
 
     equal(getRowValues($table1), '_Avocado_');
 
-    // 2. load data in object
+    // 2. load data; record is object
     $table1.simple_datagrid(
         'loadData',
         [
@@ -542,7 +546,18 @@ test('on_generate', function() {
         ]
     );
 
-    equal(getRowValues($table1), '_Tomato_');
+    equal(getRowValues($table1), '_Tomato_;++');
+
+    // 3. load data; record is array
+    $table1.simple_datagrid(
+        'loadData',
+        [
+            ['Sweet pepper']
+        ]
+    );
+
+
+    equal(getRowValues($table1), '_Sweet pepper_');
 });
 
 test('getPages', function() {

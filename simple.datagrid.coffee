@@ -73,6 +73,8 @@ class SimpleDataGrid extends SimpleWidget
         @current_page = page
 
     _init: ->
+        super()
+
         @url = @_getBaseUrl()
         @$selected_row = null
         @current_page = 1
@@ -97,6 +99,8 @@ class SimpleDataGrid extends SimpleWidget
         @$selected_row = null
         @current_page = 1
         @url = null
+
+        super()
 
     _getBaseUrl: ->
         url = @options.url
@@ -252,7 +256,7 @@ class SimpleDataGrid extends SimpleWidget
                         value = column.on_generate(value, row)
                 else
                     if column.on_generate
-                        value = column.on_generate(null, row)
+                        value = column.on_generate('', row)
                     else
                         value = ''
 

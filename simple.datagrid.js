@@ -213,6 +213,7 @@ limitations under the License.
     };
 
     SimpleDataGrid.prototype._init = function() {
+      SimpleDataGrid.__super__._init.call(this);
       this.url = this._getBaseUrl();
       this.$selected_row = null;
       this.current_page = 1;
@@ -235,7 +236,8 @@ limitations under the License.
       this.sort_order = SortOrder.ASCENDING;
       this.$selected_row = null;
       this.current_page = 1;
-      return this.url = null;
+      this.url = null;
+      return SimpleDataGrid.__super__._deinit.call(this);
     };
 
     SimpleDataGrid.prototype._getBaseUrl = function() {
@@ -418,7 +420,7 @@ limitations under the License.
             }
           } else {
             if (column.on_generate) {
-              value = column.on_generate(null, row);
+              value = column.on_generate('', row);
             } else {
               value = '';
             }
