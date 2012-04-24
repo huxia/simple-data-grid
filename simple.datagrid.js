@@ -181,7 +181,8 @@ limitations under the License.
       on_get_data: null,
       order_by: null,
       url: null,
-      data: null
+      data: null,
+      paginator: null
     };
 
     SimpleDataGrid.prototype.loadData = function(data) {
@@ -609,11 +610,9 @@ limitations under the License.
       return false;
     };
 
-    SimpleDataGrid.prototype._getPages = function(current_page, total_pages, page_window) {
-      var current_end, current_range, current_start, first_end, first_gap, first_range, last_gap, last_range, last_start;
-      if (page_window == null) {
-        page_window = 4;
-      }
+    SimpleDataGrid.prototype._getPages = function(current_page, total_pages) {
+      var current_end, current_range, current_start, first_end, first_gap, first_range, last_gap, last_range, last_start, page_window;
+      page_window = this._getPageWindow();
       first_end = min(page_window, total_pages);
       last_start = max(1, (total_pages - page_window) + 1);
       current_start = max(1, current_page - page_window);
@@ -646,8 +645,16 @@ limitations under the License.
       return first_range.concat(current_range, last_range);
     };
 
-    SimpleDataGrid.prototype.testGetPages = function(current_page, total_pages, page_window) {
-      return this._getPages(current_page, total_pages, page_window);
+    SimpleDataGrid.prototype.testGetPages = function(current_page, total_pages) {
+      return this._getPages(current_page, total_pages);
+    };
+
+    SimpleDataGrid.prototype._getPageWindow = function() {
+      if (this.options.paginator && this.options.paginator.page_window) {
+        return this.options.paginator.page_window;
+      } else {
+        return 4;
+      }
     };
 
     return SimpleDataGrid;

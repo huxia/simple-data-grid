@@ -50,6 +50,7 @@ class SimpleDataGrid extends SimpleWidget
         order_by: null
         url: null
         data: null
+        paginator: null
 
     loadData: (data) ->
         @_fillGrid(data)
@@ -428,7 +429,9 @@ class SimpleDataGrid extends SimpleWidget
 
         return false
 
-    _getPages: (current_page, total_pages, page_window=4) ->
+    _getPages: (current_page, total_pages) ->
+        page_window = @_getPageWindow()
+
         first_end = min(page_window, total_pages)
         last_start = max(1, (total_pages - page_window) + 1)
 
@@ -463,8 +466,14 @@ class SimpleDataGrid extends SimpleWidget
 
         return first_range.concat(current_range, last_range)
 
-    testGetPages: (current_page, total_pages, page_window) ->
-        return @_getPages(current_page, total_pages, page_window)
+    testGetPages: (current_page, total_pages) ->
+        return @_getPages(current_page, total_pages)
+
+    _getPageWindow: ->
+        if @options.paginator and @options.paginator.page_window
+            return @options.paginator.page_window
+        else
+            return 4
 
 SimpleWidget.register(SimpleDataGrid, 'simple_datagrid')
 

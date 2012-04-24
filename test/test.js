@@ -568,7 +568,11 @@ test('on_generate', function() {
 test('getPages', function() {
     // setup
     var $table1 = $('#table1');
-    $table1.simple_datagrid();
+    $table1.simple_datagrid({
+        paginator: {
+            page_window: 2
+        }
+    });
 
     function getPages(current_page, total_pages) {
         return $table1.simple_datagrid('testGetPages', current_page, total_pages, 2);
