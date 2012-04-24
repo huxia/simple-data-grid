@@ -527,7 +527,12 @@ test('on_generate', function() {
             {
                 title: 'Latin name',
                 on_generate: function(value, row) {
-                    return '+' + value + '+';
+                    if (! value) {
+                        return '[empty]';
+                    }
+                    else {
+                        return value;
+                    }
                 }
             }
         ],
@@ -536,7 +541,7 @@ test('on_generate', function() {
         ]
     });
 
-    equal(getRowValues($table1), '_Avocado_');
+    equal(getRowValues($table1), '_Avocado_;[empty]');
 
     // 2. load data; record is object
     $table1.simple_datagrid(
@@ -546,7 +551,7 @@ test('on_generate', function() {
         ]
     );
 
-    equal(getRowValues($table1), '_Tomato_;++');
+    equal(getRowValues($table1), '_Tomato_;[empty]');
 
     // 3. load data; record is array
     $table1.simple_datagrid(
@@ -557,7 +562,7 @@ test('on_generate', function() {
     );
 
 
-    equal(getRowValues($table1), '_Sweet pepper_');
+    equal(getRowValues($table1), '_Sweet pepper_;[empty]');
 });
 
 test('getPages', function() {

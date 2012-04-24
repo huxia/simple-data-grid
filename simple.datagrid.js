@@ -430,11 +430,16 @@ limitations under the License.
         return html;
       };
       addRowFromArray = function(row) {
-        var column, html, i, value, _i, _len;
+        var column, html, i, value, _i, _len, _ref;
         html = '';
-        for (i = _i = 0, _len = row.length; _i < _len; i = ++_i) {
-          value = row[i];
-          column = _this.columns[i];
+        _ref = _this.columns;
+        for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
+          column = _ref[i];
+          if (i < row.length) {
+            value = row[i];
+          } else {
+            value = '';
+          }
           if (column.on_generate) {
             value = column.on_generate(value, row);
           }

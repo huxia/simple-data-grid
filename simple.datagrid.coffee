@@ -267,8 +267,11 @@ class SimpleDataGrid extends SimpleWidget
         addRowFromArray = (row) =>
             html = ''
 
-            for value, i in row
-                column = @columns[i]
+            for column, i in @columns
+                if i < row.length
+                    value = row[i]
+                else
+                    value = ''
 
                 if column.on_generate
                     value = column.on_generate(value, row)
