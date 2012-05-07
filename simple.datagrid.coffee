@@ -73,6 +73,16 @@ class SimpleDataGrid extends SimpleWidget
     setCurrentPage: (page) ->
         @current_page = page
 
+    addColumn: (column, index) ->
+        column_info = @_createColumnInfo(column)
+
+        if index?
+            @columns.splice(index, 0, column_info);
+        else
+            @columns.push(column_info)
+ 
+        return column_info
+
     _init: ->
         super()
 
@@ -129,25 +139,28 @@ class SimpleDataGrid extends SimpleWidget
         generateFromOptions = =>
             @columns = []
             for column in @options.columns
-                if typeof column == 'object'
-                    column_info = {
-                        title: column.title,
-                        key: column.key or slugify(column.title),
-                        on_generate: column.on_generate
-                    }
-                else
-                    column_info = {
-                        title: column,
-                        key: slugify(column)
-                    }
-
-                @columns.push(column_info)
+                @columns.push(
+                    @_createColumnInfo(column)
+                )
             return null
 
         if @options.columns
             generateFromOptions()
         else
             generateFromThElements()
+
+    _createColumnInfo: (column) ->
+        if typeof column == 'object'
+            return {
+                title: column.title,
+                key: column.key or slugify(column.title),
+                on_generate: column.on_generate
+            }
+        else
+            return {
+                title: column,
+                key: slugify(column)
+            }
 
     _createDomElements: ->
         initTable = =>

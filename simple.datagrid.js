@@ -213,6 +213,17 @@ limitations under the License.
       return this.current_page = page;
     };
 
+    SimpleDataGrid.prototype.addColumn = function(column, index) {
+      var column_info;
+      column_info = this._createColumnInfo(column);
+      if (index != null) {
+        this.columns.splice(index, 0, column_info);
+      } else {
+        this.columns.push(column_info);
+      }
+      return column_info;
+    };
+
     SimpleDataGrid.prototype._init = function() {
       SimpleDataGrid.__super__._init.call(this);
       this.url = this._getBaseUrl();
@@ -270,24 +281,12 @@ limitations under the License.
         });
       };
       generateFromOptions = function() {
-        var column, column_info, _i, _len, _ref;
+        var column, _i, _len, _ref;
         _this.columns = [];
         _ref = _this.options.columns;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           column = _ref[_i];
-          if (typeof column === 'object') {
-            column_info = {
-              title: column.title,
-              key: column.key || slugify(column.title),
-              on_generate: column.on_generate
-            };
-          } else {
-            column_info = {
-              title: column,
-              key: slugify(column)
-            };
-          }
-          _this.columns.push(column_info);
+          _this.columns.push(_this._createColumnInfo(column));
         }
         return null;
       };
@@ -295,6 +294,21 @@ limitations under the License.
         return generateFromOptions();
       } else {
         return generateFromThElements();
+      }
+    };
+
+    SimpleDataGrid.prototype._createColumnInfo = function(column) {
+      if (typeof column === 'object') {
+        return {
+          title: column.title,
+          key: column.key || slugify(column.title),
+          on_generate: column.on_generate
+        };
+      } else {
+        return {
+          title: column,
+          key: slugify(column)
+        };
       }
     };
 

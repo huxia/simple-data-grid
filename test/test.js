@@ -592,4 +592,33 @@ test('getPages', function() {
     deepEqual(getPages(94, 100), [1, 2, 0, 92, 93, 94, 95, 96, 0, 99, 100]);
 });
 
+test('addColumn', function() {
+    // setup
+    var $table1 = $('#table1');
+    $table1.simple_datagrid();
+
+    function formatColumnNames() {
+        var columns = $table1.simple_datagrid('getColumns');
+        var values = $.map(columns, function(column) {
+            return column.key;
+        });
+        return values.join(';');
+    }
+
+    // check initial columns
+    equal(formatColumnNames(), 'name;latin-name');
+
+    // 1. add column at the end
+    $table1.simple_datagrid('addColumn', 'col end');
+    equal(formatColumnNames(), 'name;latin-name;col-end');
+
+    // 2. add column after 'name'
+    $table1.simple_datagrid('addColumn', 'col2', 1);
+    equal(formatColumnNames(), 'name;col2;latin-name;col-end');
+
+    // 2. add column at beginning
+    $table1.simple_datagrid('addColumn', 'col1', 0);
+    equal(formatColumnNames(), 'col1;name;col2;latin-name;col-end');
+});
+
 });
