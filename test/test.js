@@ -73,6 +73,7 @@ test('get column data from <th> elements', function() {
 
 test('get column data from options', function() {
     var $table1 = $('#table1');
+    $table1.find('thead').remove();
 
     // init widget
     $table1.simple_datagrid({
@@ -514,6 +515,7 @@ test('table with empty head', function() {
 test('on_generate', function() {
     // Test the 'on_generate' option of a column
     var $table1 = $('#table1');
+    $table1.find('thead').remove();
 
     // 1. init table
     $table1.simple_datagrid({

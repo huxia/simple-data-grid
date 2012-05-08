@@ -121,9 +121,23 @@ class SimpleDataGrid extends SimpleWidget
             return @$el.data('url')
 
     _generateColumnData: ->
+        column_map = {}
+
+        updateColumn = (info) =>
+            column = column_map[info.key]
+
+            for key, value of info
+                column[key] = value
+
+        addColumn = (info) =>
+            if info.key of column_map
+                updateColumn(info)
+            else
+                @columns.push(info)
+                column_map[info.key] = info
+
         generateFromThElements = =>
             $th_elements = @$el.find('th')
-            @columns = []
             $th_elements.each(
                 (i, th) =>
                     $th = $(th)
@@ -131,23 +145,22 @@ class SimpleDataGrid extends SimpleWidget
                     title = $th.text()
                     key = $th.data('key') or slugify(title)
 
-                    @columns.push(
+                    addColumn(
                         {title: title, key: key}
                     )
             )
 
         generateFromOptions = =>
-            @columns = []
             for column in @options.columns
-                @columns.push(
-                    @_createColumnInfo(column)
-                )
+                column_info = @_createColumnInfo(column)
+                addColumn(column_info)
+
             return null
 
+        @columns = []
+        generateFromThElements()
         if @options.columns
             generateFromOptions()
-        else
-            generateFromThElements()
 
     _createColumnInfo: (column) ->
         if typeof column == 'object'

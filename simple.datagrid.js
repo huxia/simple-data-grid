@@ -263,37 +263,55 @@ limitations under the License.
     };
 
     SimpleDataGrid.prototype._generateColumnData = function() {
-      var generateFromOptions, generateFromThElements,
+      var addColumn, column_map, generateFromOptions, generateFromThElements, updateColumn,
         _this = this;
+      column_map = {};
+      updateColumn = function(info) {
+        var column, key, value, _results;
+        column = column_map[info.key];
+        _results = [];
+        for (key in info) {
+          value = info[key];
+          _results.push(column[key] = value);
+        }
+        return _results;
+      };
+      addColumn = function(info) {
+        if (info.key in column_map) {
+          return updateColumn(info);
+        } else {
+          _this.columns.push(info);
+          return column_map[info.key] = info;
+        }
+      };
       generateFromThElements = function() {
         var $th_elements;
         $th_elements = _this.$el.find('th');
-        _this.columns = [];
         return $th_elements.each(function(i, th) {
           var $th, key, title;
           $th = $(th);
           title = $th.text();
           key = $th.data('key') || slugify(title);
-          return _this.columns.push({
+          return addColumn({
             title: title,
             key: key
           });
         });
       };
       generateFromOptions = function() {
-        var column, _i, _len, _ref;
-        _this.columns = [];
+        var column, column_info, _i, _len, _ref;
         _ref = _this.options.columns;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           column = _ref[_i];
-          _this.columns.push(_this._createColumnInfo(column));
+          column_info = _this._createColumnInfo(column);
+          addColumn(column_info);
         }
         return null;
       };
+      this.columns = [];
+      generateFromThElements();
       if (this.options.columns) {
         return generateFromOptions();
-      } else {
-        return generateFromThElements();
       }
     };
 
