@@ -221,12 +221,12 @@ class SimpleDataGrid extends SimpleWidget
     _bindEvents: ->
         @$el.delegate('tbody tr', 'click', $.proxy(this._clickRow, this))
         @$el.delegate('thead th a', 'click', $.proxy(this._clickHeader, this))
-        @$el.delegate('.paginator .page', 'click', $.proxy(this._handleClickPage, this))
+        @$el.delegate('.pagination a', 'click', $.proxy(this._handleClickPage, this))
 
     _removeEvents: ->
         @$el.undelegate('tbody tr', 'click')
         @$el.undelegate('tbody thead th a', 'click')
-        @$el.undelegate('.paginator .page', 'click')
+        @$el.undelegate('.pagination a', 'click')
 
     _loadData: ->
         query_parameters = $.extend({}, @parameters, {page: @current_page})
@@ -339,35 +339,36 @@ class SimpleDataGrid extends SimpleWidget
                 else
                     html = ''
             else
-                html = "<tr><td class=\"paginator\" colspan=\"#{ @columns.length }\">"
+                html = "<tr><td class=\"pagination\" colspan=\"#{ @columns.length }\">"
                 html += fillPaginator(@current_page, total_pages)
                 html += "</td></tr>"
 
             @$tfoot.html(html)
 
         fillPaginator = (current_page, total_pages) =>
-            html = ''
+            html = '<ul>'
             pages = @_getPages(current_page, total_pages)
 
             if current_page > 1
-                html += "<a href=\"#\" data-page=\"#{current_page - 1}\" class=\"page\">&lsaquo;&lsaquo; previous</a>"
+                html += "<li><a href=\"#\" data-page=\"#{current_page - 1}\">&lsaquo;&lsaquo; previous</a></li>"
             else
-                html += "<span>&lsaquo;&lsaquo; previous</span>"
+                html += "<li class=\"disabled\"><a href=\"#\">&lsaquo;&lsaquo; previous</a></li>"
 
             for page in pages
                 if not page
                     html += '...'
                 else
                     if page == current_page
-                        html += "<span class=\"current\">#{ page }</span>"
+                        html += "<li class=\"active\"><a>#{ page }</a></li>"
                     else
-                        html += "<a href=\"#\" data-page=\"#{ page }\" class=\"page\">#{ page }</a>"
+                        html += "<li><a href=\"#\" data-page=\"#{ page }\">#{ page }</a></li>"
 
             if current_page < total_pages
-                html += "<a href=\"#\" data-page=\"#{ current_page + 1 }\" class=\"page\">next &rsaquo;&rsaquo;</a>"
+                html += "<li><a href=\"#\" data-page=\"#{ current_page + 1 }\">next &rsaquo;&rsaquo;</a></li>"
             else
-                html += "<span>next &rsaquo;&rsaquo;</span>"
+                html += "<li class=\"disabled\"><a>next &rsaquo;&rsaquo;</a></li>"
 
+            html += '</ul>'
             return html
 
         fillHeader = (row_count) =>

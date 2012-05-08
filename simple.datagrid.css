@@ -64,14 +64,29 @@
 	padding: 0.5em;
 }
 
-.simple-data-grid tfoot .paginator {
-	text-align: center;
+.simple-data-grid tfoot .pagination {
 	background: #eaeaea;
 }
 
-.simple-data-grid tfoot .paginator span,
-.simple-data-grid tfoot .paginator a {
-	margin: 0 0.5em;
+.simple-data-grid tfoot .pagination ul {
+	list-style: none;
+}
+
+.simple-data-grid tfoot .pagination li {
+	float: left;
+}
+
+.simple-data-grid tfoot .pagination a {
+	padding: 0 0.5em;
+}
+
+.simple-data-grid tfoot .pagination li.disabled a,
+.simple-data-grid tfoot .pagination li.disabled a:hover,
+.simple-data-grid tfoot .pagination li.active a,
+.simple-data-grid tfoot .pagination li.active a:hover {
+	cursor: default;
+	text-decoration: none;
+	color: #000;
 }
 
 .sprite-icons-up,
