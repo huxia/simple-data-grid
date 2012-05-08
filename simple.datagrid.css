@@ -96,6 +96,6 @@
 }
 
 .sprite-icons-up,
-.sprite-icons-down{background-image:url(icons.png);background-repeat:no-repeat}
+.sprite-icons-down{background-image:url(simple-data-grid-icons.png);background-repeat:no-repeat}
 .sprite-icons-up{background-position:0px 0px;width:9px;height:6px;line-height:6px;}
 .sprite-icons-down{background-position:-9px 0px;width:9px;height:6px;line-height:6px;}
