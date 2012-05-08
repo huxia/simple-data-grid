@@ -302,23 +302,19 @@ test('pagination', function() {
     );
 
     equal(
-        $table1.find('.paginator').text(),
+        $table1.find('.pagination').text(),
         '‹‹ previous12345...979899100next ››'
-    );
-    equal(
-        $table1.find('.paginator a.page').text(),
-        '2345979899100next ››'
     );
 
     // 2. next page
-    $table1.find('.paginator .page:last').click();
+    $table1.find('.pagination a:last').click();
     equal(
         getRowValues($table1),
         'n6;l6;n7;l7;n8;l8;n9;l9;n10;l10'
     );
 
     // 3. last page
-    $('#table1').find('.paginator .page:eq(9)').click();
+    $('#table1').find('.pagination a:eq(10)').click();
     equal(
         getRowValues($('#table1')),
         'n496;l496;n497;l497;n498;l498;n499;l499;n500;l500'
