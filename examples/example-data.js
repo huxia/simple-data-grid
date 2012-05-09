@@ -6,7 +6,7 @@ ExampleData.getData = function(parameters, on_success) {
 	var start_index = (page - 1) * rows_per_page;
 
 	var total_pages = 1;
-	var data = ExampleData.fruits
+	var data = ExampleData.fruits;
 	if (data.length != 0) {
 		total_pages = parseInt((data.length - 1) / rows_per_page) + 1;
 	}

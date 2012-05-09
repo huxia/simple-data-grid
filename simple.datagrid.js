@@ -534,7 +534,7 @@ limitations under the License.
         for (_i = 0, _len = pages.length; _i < _len; _i++) {
           page = pages[_i];
           if (!page) {
-            html += '...';
+            html += '<li>...</li>';
           } else {
             if (page === current_page) {
               html += "<li class=\"active\"><a>" + page + "</a></li>";
