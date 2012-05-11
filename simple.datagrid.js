@@ -604,6 +604,7 @@ limitations under the License.
       $tr.addClass('selected');
       this.$selected_row = $tr;
       event = $.Event('datagrid.select');
+      event.row = $tr.data('row');
       return this.$el.trigger(event);
     };
 

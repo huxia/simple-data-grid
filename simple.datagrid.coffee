@@ -423,6 +423,7 @@ class SimpleDataGrid extends SimpleWidget
         @$selected_row = $tr
 
         event = $.Event('datagrid.select')
+        event.row = $tr.data('row')
         @$el.trigger(event)
 
     _handleClickPage: (e) ->
