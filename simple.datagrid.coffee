@@ -231,8 +231,9 @@ class SimpleDataGrid extends SimpleWidget
     _loadData: ->
         query_parameters = $.extend({}, @parameters, {page: @current_page})
 
-        if @order_by
-            query_parameters.order_by = @order_by
+        order_by = @_getOrderByColumn()
+        if order_by
+            query_parameters.order_by = order_by
 
             if @sort_order == SortOrder.DESCENDING
                 query_parameters.sortorder = 'desc'
@@ -372,16 +373,18 @@ class SimpleDataGrid extends SimpleWidget
             return html
 
         fillHeader = (row_count) =>
+            order_by = @_getOrderByColumn()
+
             html = '<tr>'
             for column in @columns
                 html += "<th data-key=\"#{ column.key }\">"
 
-                if (not @order_by) or (row_count == 0)
+                if (not order_by) or (row_count == 0)
                     html += column.title
                 else
                     html += "<a href=\"#\">#{ column.title }"
 
-                    if column.key == @order_by
+                    if column.key == order_by
                         class_html = "sort "
                         if @sort_order == SortOrder.DESCENDING
                             class_html += "asc sprite-icons-down"
@@ -502,6 +505,16 @@ class SimpleDataGrid extends SimpleWidget
             return @options.paginator.page_window
         else
             return 4
+
+    _getOrderByColumn: ->
+        if not @order_by
+            return null
+        else if @order_by != true
+            return @order_by
+        else if @columns.length
+            return @columns[0].key
+        else
+            return null
 
 SimpleWidget.register(SimpleDataGrid, 'simple_datagrid')
 

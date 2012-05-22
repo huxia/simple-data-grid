@@ -390,13 +390,14 @@ limitations under the License.
     };
 
     SimpleDataGrid.prototype._loadData = function() {
-      var getDataFromArray, getDataFromCallback, getDataFromUrl, query_parameters,
+      var getDataFromArray, getDataFromCallback, getDataFromUrl, order_by, query_parameters,
         _this = this;
       query_parameters = $.extend({}, this.parameters, {
         page: this.current_page
       });
-      if (this.order_by) {
-        query_parameters.order_by = this.order_by;
+      order_by = this._getOrderByColumn();
+      if (order_by) {
+        query_parameters.order_by = order_by;
         if (this.sort_order === SortOrder.DESCENDING) {
           query_parameters.sortorder = 'desc';
         } else {
@@ -552,17 +553,18 @@ limitations under the License.
         return html;
       };
       fillHeader = function(row_count) {
-        var class_html, column, html, _i, _len, _ref;
+        var class_html, column, html, order_by, _i, _len, _ref;
+        order_by = _this._getOrderByColumn();
         html = '<tr>';
         _ref = _this.columns;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           column = _ref[_i];
           html += "<th data-key=\"" + column.key + "\">";
-          if ((!_this.order_by) || (row_count === 0)) {
+          if ((!order_by) || (row_count === 0)) {
             html += column.title;
           } else {
             html += "<a href=\"#\">" + column.title;
-            if (column.key === _this.order_by) {
+            if (column.key === order_by) {
               class_html = "sort ";
               if (_this.sort_order === SortOrder.DESCENDING) {
                 class_html += "asc sprite-icons-down";
@@ -688,6 +690,18 @@ limitations under the License.
         return this.options.paginator.page_window;
       } else {
         return 4;
+      }
+    };
+
+    SimpleDataGrid.prototype._getOrderByColumn = function() {
+      if (!this.order_by) {
+        return null;
+      } else if (this.order_by !== true) {
+        return this.order_by;
+      } else if (this.columns.length) {
+        return this.columns[0].key;
+      } else {
+        return null;
       }
     };
 
