@@ -41,66 +41,66 @@ ExampleData.getData = function(parameters, on_success) {
 };
 
 ExampleData.fruits = [{
-    "latin-name": "Persea americana",
+    "latin_name": "Persea americana",
     "name": "Avocado"
 },
 {
-    "latin-name": "Capsicum annuum",
+    "latin_name": "Capsicum annuum",
     "name": "Bell pepper"
 },
 {
-    "latin-name": "Momordica charantia",
+    "latin_name": "Momordica charantia",
     "name": "Bitter melon"
 },
 {
-    "latin-name": "Cucurbita pepo",
+    "latin_name": "Cucurbita pepo",
     "name": "Courgette"
 },
 {
-    "latin-name": "Cucumis sativus",
+    "latin_name": "Cucumis sativus",
     "name": "Cucumber"
 },
 {
-    "latin-name": "Coccinia grandis",
+    "latin_name": "Coccinia grandis",
     "name": "Ivy Gourd"
 },
 {
-    "latin-name": "Solanum melongena",
+    "latin_name": "Solanum melongena",
     "name": "Eggplant"
 },
 {
-    "latin-name": "Cucurbita spp.",
+    "latin_name": "Cucurbita spp.",
     "name": "Pumpkin"
 },
 {
-    "latin-name": "Zea mays",
+    "latin_name": "Zea mays",
     "name": "Sweet corn"
 },
 {
-    "latin-name": "Capsicum annuum Grossum group",
+    "latin_name": "Capsicum annuum Grossum group",
     "name": "Sweet pepper"
 },
 {
-    "latin-name": "Praecitrullus fistulosus",
+    "latin_name": "Praecitrullus fistulosus",
     "name": "Tinda"
 },
 {
-    "latin-name": "Physalis philadelphica",
+    "latin_name": "Physalis philadelphica",
     "name": "Tomatillo"
 },
 {
-    "latin-name": "Solanum lycopersicum var",
+    "latin_name": "Solanum lycopersicum var",
     "name": "Tomato"
 },
 {
-    "latin-name": "Benincasa hispida",
+    "latin_name": "Benincasa hispida",
     "name": "Winter melon"
 },
 {
-    "latin-name": "Cucumis anguria",
+    "latin_name": "Cucumis anguria",
     "name": "West Indian gherkin"
 },
 {
-    "latin-name": "Cucurbita pepo",
+    "latin_name": "Cucurbita pepo",
     "name": "Zucchini"
 }];

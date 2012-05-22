@@ -712,7 +712,7 @@ limitations under the License.
   SimpleWidget.register(SimpleDataGrid, 'simple_datagrid');
 
   slugify = function(string) {
-    return string.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9\-]/g, '').toLowerCase();
+    return string.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9\_]/g, '').toLowerCase();
   };
 
   buildUrl = function(url, query_parameters) {

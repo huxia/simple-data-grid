@@ -21,9 +21,11 @@ test('slugify', function() {
     equal(slugify(''), '');
     equal(slugify('abc'), 'abc');
     equal(slugify('Abc'), 'abc');
-    equal(slugify('abc def'), 'abc-def');
+    equal(slugify('abc def'), 'abc_def');
     equal(slugify('123'), '123');
     equal(slugify('abc#def'), 'abcdef');
+    equal(slugify('abc-def'), 'abcdef');
+    equal(slugify('abc_def'), 'abc_def');
 });
 
 test('buildUrl', function() {
@@ -68,7 +70,7 @@ test('get column data from <th> elements', function() {
     equal(columns[0].title, 'Name');
     equal(columns[0].key, 'name1');  // from data-key
     equal(columns[1].title, 'Latin name');
-    equal(columns[1].key, 'latin-name');  // slug of 'Latin name'
+    equal(columns[1].key, 'latin_name');  // slug of 'Latin name'
 });
 
 test('get column data from options', function() {
@@ -121,7 +123,7 @@ test('get data from array', function() {
         [
             {
                 name: "Bell pepper",
-                'latin-name': "Capsicum annuum"
+                'latin_name': "Capsicum annuum"
             },
             {
                 name: 'Tomatillo'  // no latin-name
@@ -225,12 +227,12 @@ test('getSelectedRow', function() {
         data: [
             {
                 name: 'Avocado',
-                'latin-name': 'Persea americana',
+                'latin_name': 'Persea americana',
                 id: 200
             },
             {
                 name: 'Bell pepper',
-                'latin-name': 'Capsicum annuum',
+                'latin_name': 'Capsicum annuum',
                 id: 201
             }
         ]
@@ -265,7 +267,7 @@ test('header html', function() {
     var keys = $table1.find('thead th').map(function() {
         return $(this).data('key');
     });
-    equal(keys.toArray().join(' '), 'name latin-name');
+    equal(keys.toArray().join(' '), 'name latin_name');
 });
 
 test('pagination', function() {
@@ -279,7 +281,7 @@ test('pagination', function() {
         for (var i=0; i<rows_per_page; i++) {
             rows.push({
                 name: 'n' + index,
-                'latin-name': 'l' + index
+                'latin_name': 'l' + index
             });
             index += 1;
         }
@@ -341,7 +343,7 @@ test('sorting', function() {
                 ];
             }
         }
-        else if (parameters.order_by == 'latin-name') {
+        else if (parameters.order_by == 'latin_name') {
             if (parameters.sortorder == 'asc') {
                 data = [
                     ['Bell pepper', 'Capsicum annuum'],
@@ -604,19 +606,19 @@ test('addColumn', function() {
     }
 
     // check initial columns
-    equal(formatColumnNames(), 'name;latin-name');
+    equal(formatColumnNames(), 'name;latin_name');
 
     // 1. add column at the end
     $table1.simple_datagrid('addColumn', 'col end');
-    equal(formatColumnNames(), 'name;latin-name;col-end');
+    equal(formatColumnNames(), 'name;latin_name;col_end');
 
     // 2. add column after 'name'
     $table1.simple_datagrid('addColumn', 'col2', 1);
-    equal(formatColumnNames(), 'name;col2;latin-name;col-end');
+    equal(formatColumnNames(), 'name;col2;latin_name;col_end');
 
     // 2. add column at beginning
     $table1.simple_datagrid('addColumn', 'col1', 0);
-    equal(formatColumnNames(), 'col1;name;col2;latin-name;col-end');
+    equal(formatColumnNames(), 'col1;name;col2;latin_name;col_end');
 });
 
 });
