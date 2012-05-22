@@ -267,14 +267,13 @@ limitations under the License.
         _this = this;
       column_map = {};
       updateColumn = function(info) {
-        var column, key, value, _results;
+        var column, key, value;
         column = column_map[info.key];
-        _results = [];
         for (key in info) {
           value = info[key];
-          _results.push(column[key] = value);
+          column[key] = value;
         }
-        return _results;
+        return null;
       };
       addColumn = function(info) {
         if (info.key in column_map) {

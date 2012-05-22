@@ -128,6 +128,7 @@ class SimpleDataGrid extends SimpleWidget
 
             for key, value of info
                 column[key] = value
+            return null
 
         addColumn = (info) =>
             if info.key of column_map
