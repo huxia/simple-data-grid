@@ -74,10 +74,29 @@ test('get column data from <th> elements', function() {
 });
 
 test('get column data from options', function() {
+    // setup
     var $table1 = $('#table1');
+
+    // 1. Init columns in javascript; this updates the existing columns
+    $table1.simple_datagrid({
+        columns: [
+            {
+                key: 'latin_name',
+                title: 'Latin'
+            }
+        ]
+    });
+
+    var columns = $table1.simple_datagrid('getColumns');
+    equal(columns.length, 2);
+    equal(columns[1].key, 'latin_name');
+    equal(columns[1].title, 'Latin');
+
+    $table1.simple_datagrid('destroy');
+
+    // 2. Init columns in javascript; first remove thead
     $table1.find('thead').remove();
 
-    // init widget
     $table1.simple_datagrid({
         columns: [
             'Column1',
@@ -92,7 +111,7 @@ test('get column data from options', function() {
     });
 
     // check column data
-    var columns = $('#table1').simple_datagrid('getColumns');
+    columns = $('#table1').simple_datagrid('getColumns');
     equal(columns.length, 3);
     equal(columns[0].title, 'Column1');
     equal(columns[0].key, 'column1');  // slug of name
