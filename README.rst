@@ -1,3 +1,6 @@
+.. image:: https://secure.travis-ci.org/mbraak/simple-data-grid.png?branch=master
+  :target: http://travis-ci.org/mbraak/simple-data-grid
+
 Simple data grid
 ================
 
