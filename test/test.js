@@ -23,8 +23,7 @@ test('slugify', function() {
     equal(slugify('Abc'), 'abc');
     equal(slugify('abc def'), 'abc_def');
     equal(slugify('123'), '123');
-    equal(slugify('abc#def'), 'abcdef');
-    equal(slugify('abc-def'), 'abcdef');
+    equal(slugify('abc-def'), 'abc_def');
     equal(slugify('abc_def'), 'abc_def');
 });
 

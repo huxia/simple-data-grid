@@ -521,7 +521,7 @@ SimpleWidget.register(SimpleDataGrid, 'simple_datagrid')
 
 
 slugify = (string) ->
-    return string.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9\_]/g, '').toLowerCase()
+    return string.replace(/[-\s]+/g, '_').replace(/[^a-zA-Z0-9\_]/g, '').toLowerCase()
 
 buildUrl = (url, query_parameters) ->
     if query_parameters
