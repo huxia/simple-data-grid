@@ -527,9 +527,9 @@ limitations under the License.
         html = '<ul>';
         pages = _this._getPages(current_page, total_pages);
         if (current_page > 1) {
-          html += "<li><a href=\"#\" data-page=\"" + (current_page - 1) + "\">&lsaquo;&lsaquo; previous</a></li>";
+          html += "<li><a href=\"#\" data-page=\"" + (current_page - 1) + "\">&lsaquo;&lsaquo;&nbsp;previous</a></li>";
         } else {
-          html += "<li class=\"disabled\"><a href=\"#\">&lsaquo;&lsaquo; previous</a></li>";
+          html += "<li class=\"disabled\"><a href=\"#\">&lsaquo;&lsaquo;&nbsp;previous</a></li>";
         }
         for (_i = 0, _len = pages.length; _i < _len; _i++) {
           page = pages[_i];
@@ -544,9 +544,9 @@ limitations under the License.
           }
         }
         if (current_page < total_pages) {
-          html += "<li><a href=\"#\" data-page=\"" + (current_page + 1) + "\">next &rsaquo;&rsaquo;</a></li>";
+          html += "<li><a href=\"#\" data-page=\"" + (current_page + 1) + "\">next&nbsp;&rsaquo;&rsaquo;</a></li>";
         } else {
-          html += "<li class=\"disabled\"><a>next &rsaquo;&rsaquo;</a></li>";
+          html += "<li class=\"disabled\"><a>next&nbsp;&rsaquo;&rsaquo;</a></li>";
         }
         html += '</ul>';
         return html;
