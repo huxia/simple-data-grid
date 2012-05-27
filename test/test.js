@@ -322,11 +322,6 @@ test('pagination', function() {
         'n1;l1;n2;l2;n3;l3;n4;l4;n5;l5'
     );
 
-    equal(
-        $table1.find('.pagination').text(),
-        '‹‹ previous12345...979899100next ››'
-    );
-
     // 2. next page
     $table1.find('.pagination a:last').click();
     equal(
