@@ -51,6 +51,7 @@ class SimpleDataGrid extends SimpleWidget
         url: null
         data: null
         paginator: null
+        on_generate_tr: null
 
     loadData: (data) ->
         @_fillGrid(data)
@@ -331,6 +332,10 @@ class SimpleDataGrid extends SimpleWidget
                 html += '</tr>'
                 $tr = $(html)
                 $tr.data('row', row)
+
+                if @options.on_generate_tr
+                    @options.on_generate_tr($tr, row)
+
                 @$tbody.append($tr)
             return null
 

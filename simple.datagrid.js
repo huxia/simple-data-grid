@@ -182,7 +182,8 @@ limitations under the License.
       order_by: null,
       url: null,
       data: null,
-      paginator: null
+      paginator: null,
+      on_generate_tr: null
     };
 
     SimpleDataGrid.prototype.loadData = function(data) {
@@ -503,6 +504,9 @@ limitations under the License.
           html += '</tr>';
           $tr = $(html);
           $tr.data('row', row);
+          if (_this.options.on_generate_tr) {
+            _this.options.on_generate_tr($tr, row);
+          }
           _this.$tbody.append($tr);
         }
         return null;
