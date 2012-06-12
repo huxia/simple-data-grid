@@ -558,7 +558,7 @@ limitations under the License.
         _ref = _this.columns;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           column = _ref[_i];
-          html += "<th data-key=\"" + column.key + "\">";
+          html += "<th data-key=\"" + column.key + "\" class=\"column_" + column.key + "\">";
           if ((!order_by) || (row_count === 0)) {
             html += column.title;
           } else {

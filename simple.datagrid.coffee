@@ -378,7 +378,7 @@ class SimpleDataGrid extends SimpleWidget
 
             html = '<tr>'
             for column in @columns
-                html += "<th data-key=\"#{ column.key }\">"
+                html += "<th data-key=\"#{ column.key }\" class=\"column_#{ column.key }\">"
 
                 if (not order_by) or (row_count == 0)
                     html += column.title
