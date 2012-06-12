@@ -459,7 +459,7 @@ limitations under the License.
               value = '';
             }
           }
-          html += "<td>" + value + "</td>";
+          html += "<td class=\"column_" + column.key + "\">" + value + "</td>";
         }
         return html;
       };
@@ -477,7 +477,7 @@ limitations under the License.
           if (column.on_generate) {
             value = column.on_generate(value, row);
           }
-          html += "<td>" + value + "</td>";
+          html += "<td class=\"column_" + column.key + "\">" + value + "</td>";
         }
         return html;
       };

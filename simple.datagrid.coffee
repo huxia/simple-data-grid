@@ -290,7 +290,7 @@ class SimpleDataGrid extends SimpleWidget
                     else
                         value = ''
 
-                html += "<td>#{ value }</td>"
+                html += "<td class=\"column_#{ column.key }\">#{ value }</td>"
 
             return html
 
@@ -306,7 +306,7 @@ class SimpleDataGrid extends SimpleWidget
                 if column.on_generate
                     value = column.on_generate(value, row)
 
-                html += "<td>#{ value }</td>"
+                html += "<td class=\"column_#{ column.key }\">#{ value }</td>"
 
             return html
 
