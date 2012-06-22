@@ -78,11 +78,23 @@ class SimpleDataGrid extends SimpleWidget
         column_info = @_createColumnInfo(column)
 
         if index?
-            @columns.splice(index, 0, column_info);
+            @columns.splice(index, 0, column_info)
         else
             @columns.push(column_info)
  
         return column_info
+
+    removeColumn: (column_key) ->
+        getColumnIndex = =>
+            for column, i in @columns
+                if column.key == column_key
+                    return i
+
+            return null
+
+        column_index = getColumnIndex()
+        if column_index != null
+            @columns.splice(column_index, 1)
 
     _init: ->
         super()

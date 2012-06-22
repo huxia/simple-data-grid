@@ -225,6 +225,26 @@ limitations under the License.
       return column_info;
     };
 
+    SimpleDataGrid.prototype.removeColumn = function(column_key) {
+      var column_index, getColumnIndex,
+        _this = this;
+      getColumnIndex = function() {
+        var column, i, _i, _len, _ref;
+        _ref = _this.columns;
+        for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
+          column = _ref[i];
+          if (column.key === column_key) {
+            return i;
+          }
+        }
+        return null;
+      };
+      column_index = getColumnIndex();
+      if (column_index !== null) {
+        return this.columns.splice(column_index, 1);
+      }
+    };
+
     SimpleDataGrid.prototype._init = function() {
       SimpleDataGrid.__super__._init.call(this);
       this.url = this._getBaseUrl();

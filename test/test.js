@@ -13,6 +13,14 @@ function getRowValues($table) {
     );
 }
 
+function formatColumnNames($table) {
+    var columns = $table.simple_datagrid('getColumns');
+    var values = $.map(columns, function(column) {
+        return column.key;
+    });
+    return values.join(';');
+}
+
 module('utils');
 
 test('slugify', function() {
@@ -610,28 +618,31 @@ test('addColumn', function() {
     var $table1 = $('#table1');
     $table1.simple_datagrid();
 
-    function formatColumnNames() {
-        var columns = $table1.simple_datagrid('getColumns');
-        var values = $.map(columns, function(column) {
-            return column.key;
-        });
-        return values.join(';');
-    }
-
     // check initial columns
-    equal(formatColumnNames(), 'name;latin_name');
+    equal(formatColumnNames($table1), 'name;latin_name');
 
     // 1. add column at the end
     $table1.simple_datagrid('addColumn', 'col end');
-    equal(formatColumnNames(), 'name;latin_name;col_end');
+    equal(formatColumnNames($table1), 'name;latin_name;col_end');
 
     // 2. add column after 'name'
     $table1.simple_datagrid('addColumn', 'col2', 1);
-    equal(formatColumnNames(), 'name;col2;latin_name;col_end');
+    equal(formatColumnNames($table1), 'name;col2;latin_name;col_end');
 
     // 2. add column at beginning
     $table1.simple_datagrid('addColumn', 'col1', 0);
-    equal(formatColumnNames(), 'col1;name;col2;latin_name;col_end');
+    equal(formatColumnNames($table1), 'col1;name;col2;latin_name;col_end');
+});
+
+test('removeColumn', function() {
+    // setup
+    var $table1 = $('#table1');
+    $table1.simple_datagrid();
+
+    // -- remove column
+    $table1.simple_datagrid('removeColumn', 'name');
+
+    equal(formatColumnNames($table1), 'latin_name');
 });
 
 });
