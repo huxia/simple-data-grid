@@ -52,6 +52,7 @@ class SimpleDataGrid extends SimpleWidget
         data: null
         paginator: null
         on_generate_tr: null
+        on_generate_footer: null
 
     loadData: (data) ->
         @_fillGrid(data)
@@ -233,9 +234,9 @@ class SimpleDataGrid extends SimpleWidget
         @$tbody = null
 
     _bindEvents: ->
-        @$el.delegate('tbody tr', 'click', $.proxy(this._clickRow, this))
-        @$el.delegate('thead th a', 'click', $.proxy(this._clickHeader, this))
-        @$el.delegate('.pagination a', 'click', $.proxy(this._handleClickPage, this))
+        @$el.delegate('tbody tr', 'click', $.proxy(@_clickRow, this))
+        @$el.delegate('thead th a', 'click', $.proxy(@_clickHeader, this))
+        @$el.delegate('.pagination a', 'click', $.proxy(@_handleClickPage, this))
 
     _removeEvents: ->
         @$el.undelegate('tbody tr', 'click')
@@ -364,6 +365,9 @@ class SimpleDataGrid extends SimpleWidget
 
             @$tfoot.html(html)
 
+            if @options.on_generate_footer
+                @options.on_generate_footer(@$tfoot, total_pages, row_count)
+
         fillPaginator = (current_page, total_pages) =>
             html = '<ul>'
             pages = @_getPages(current_page, total_pages)
@@ -449,10 +453,13 @@ class SimpleDataGrid extends SimpleWidget
         @$el.trigger(event)
 
     _handleClickPage: (e) ->
-        $link = $(e.target)
-        page = $link.data('page')
-        @_gotoPage(page)
-        return false
+        page = $(e.target).data('page')
+
+        if page
+            @_gotoPage(page)
+            return false
+        else
+            return true
 
     _gotoPage: (page) ->
         if page <= @total_pages
