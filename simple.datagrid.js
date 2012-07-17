@@ -659,7 +659,7 @@ limitations under the License.
       $th = $(e.target).closest('th');
       if ($th.length) {
         key = $th.data('key');
-        if (key === this.order_by) {
+        if (key === this._getOrderByColumn()) {
           if (this.sort_order === SortOrder.ASCENDING) {
             this.sort_order = SortOrder.DESCENDING;
           } else {

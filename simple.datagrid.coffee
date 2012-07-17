@@ -472,7 +472,7 @@ class SimpleDataGrid extends SimpleWidget
         if $th.length
             key = $th.data('key')
 
-            if key == @order_by
+            if key == @_getOrderByColumn()
                 if @sort_order == SortOrder.ASCENDING
                     @sort_order = SortOrder.DESCENDING
                 else
