@@ -66,12 +66,16 @@
 
 .simple-data-grid tfoot .pagination {
     background: #eaeaea;
+    text-align: center;
 }
 
 .simple-data-grid tfoot .pagination ul {
     list-style: none;
     margin: 0;
     padding: 0;
+    float: none;
+    display: inline-block;
+    overflow: hidden;
 }
 
 .simple-data-grid tfoot .pagination li {
