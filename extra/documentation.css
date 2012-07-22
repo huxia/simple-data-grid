@@ -45,15 +45,15 @@ h1 {
 }
 
 h2 {
-    margin: 0.5em 0 0.3em 0;
+    margin: 0.7em 0 0.3em 0;
 }
 
 h3 {
-    margin: 0.5em 0 0.3em 0;
+    margin: 0.7em 0 0.3em 0;
 }
 
 h4 {
-    margin: 1em 0 0.5em 0;
+    margin: 1.2em 0 0.5em 0;
 }
 
 #demo-table {
@@ -76,8 +76,18 @@ h4 {
 pre {
     padding: 0;
     border: 0;
+    margin: 2em 0;
 }
 
 pre.no-margin {
-    margin-bottom: 0;
+    margin: 0;
+}
+
+#table2 {
+    margin: 1em 0 2em 0;
+    border: solid 1px #333;
+}
+
+#table2 tbody tr:last-child {
+    border-bottom: solid 1px #333;
 }
