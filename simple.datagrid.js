@@ -176,7 +176,6 @@ limitations under the License.
     }
 
     SimpleDataGrid.prototype.defaults = {
-      on_get_data: null,
       order_by: null,
       url: null,
       data: null,
@@ -409,7 +408,7 @@ limitations under the License.
     };
 
     SimpleDataGrid.prototype._loadData = function() {
-      var getDataFromArray, getDataFromCallback, getDataFromUrl, order_by, query_parameters,
+      var getDataFromArray, getDataFromUrl, order_by, query_parameters,
         _this = this;
       query_parameters = $.extend({}, this.parameters, {
         page: this.current_page
@@ -423,9 +422,6 @@ limitations under the License.
           query_parameters.sortorder = 'asc';
         }
       }
-      getDataFromCallback = function() {
-        return _this.options.on_get_data(query_parameters, $.proxy(_this._fillGrid, _this));
-      };
       getDataFromUrl = function() {
         var url;
         url = buildUrl(_this.url, query_parameters);
@@ -446,9 +442,7 @@ limitations under the License.
       getDataFromArray = function() {
         return _this._fillGrid(_this.options.data);
       };
-      if (this.options.on_get_data) {
-        return getDataFromCallback();
-      } else if (this.url) {
+      if (this.url) {
         return getDataFromUrl();
       } else if (this.options.data) {
         return getDataFromArray();

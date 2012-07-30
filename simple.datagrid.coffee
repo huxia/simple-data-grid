@@ -46,7 +46,6 @@ range = (start, stop) ->
 
 class SimpleDataGrid extends SimpleWidget
     defaults:
-        on_get_data: null
         order_by: null
         url: null
         data: null
@@ -255,12 +254,6 @@ class SimpleDataGrid extends SimpleWidget
             else
                 query_parameters.sortorder = 'asc'
 
-        getDataFromCallback = =>
-            @options.on_get_data(
-                query_parameters,
-                $.proxy(@_fillGrid, this)
-            )
-
         getDataFromUrl = =>
             url = buildUrl(@url, query_parameters)
 
@@ -279,9 +272,7 @@ class SimpleDataGrid extends SimpleWidget
         getDataFromArray = =>
             @_fillGrid(@options.data)
 
-        if @options.on_get_data
-            getDataFromCallback()
-        else if @url
+        if @url
             getDataFromUrl()
         else if @options.data
             getDataFromArray()

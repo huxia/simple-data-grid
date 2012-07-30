@@ -11,8 +11,10 @@
 
     <script src="extra/jquery-1.7.2.min.js"></script>
     <script src="simple.datagrid.js"></script>
+    <script src="extra/jsuri-1.1.1.js"></script>
     <script src="examples/example-data.js"></script>
     <script src="extra/highlight/highlight.pack.js"></script>
+    <script src="extra/jquery.mockjax.js"></script>
 </head>
 <body>
 
@@ -108,7 +110,7 @@
                 <h2 id="demo">Demo</h2>
                 <div class="row-fluid">
                     <div class="span4">
-                        <table id="demo-table">
+                        <table id="demo-table" data-url="/fruits/">
                             <thead>
                                 <tr>
                                     <th>Name</th>
@@ -117,9 +119,13 @@
                             </thead>
                         </table>
                         <script>
+                            $.mockjax({
+                                url: '*',
+                                response: ExampleData.handleMockjaxResponse,
+                                responseTime: 0
+                            });
                             $(function() {
                                 $('#demo-table').simple_datagrid({
-                                    on_get_data: ExampleData.getData,
                                     order_by: true
                                 });
                             });

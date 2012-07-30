@@ -1,8 +1,12 @@
 ExampleData = {};
 
-ExampleData.getData = function(parameters, on_success) {
+ExampleData.handleMockjaxResponse = function(settings) {
+    var uri = new Uri(settings.url);
+    var page = uri.getQueryParamValue('page') || 1;
+    var order_by = uri.getQueryParamValue('order_by');
+    var sortorder = uri.getQueryParamValue('sortorder');
+
 	var rows_per_page = 5;
-	var page = parameters.page || 1;
 	var start_index = (page - 1) * rows_per_page;
 
 	var total_pages = 1;
@@ -11,12 +15,12 @@ ExampleData.getData = function(parameters, on_success) {
 		total_pages = parseInt((data.length - 1) / rows_per_page) + 1;
 	}
 
-	if (parameters.order_by) {
+	if (order_by) {
 		data.sort(function(left, right) {
-			var a = left[parameters.order_by];
-			var b = right[parameters.order_by];
+			var a = left[order_by];
+			var b = right[order_by];
 
-			if (parameters.sortorder == 'desc') {
+			if (sortorder == 'desc') {
 				var c = b;
 				b = a;
 				a = c;
@@ -34,10 +38,11 @@ ExampleData.getData = function(parameters, on_success) {
 		});
 	}
 
-	on_success({
+	var result = {
 		total_pages: total_pages,
 		rows: data.slice(start_index, start_index + rows_per_page)
-	});
+	};
+    this.responseText = result;
 };
 
 ExampleData.fruits = [{
