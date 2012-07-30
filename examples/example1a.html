@@ -1,31 +1,37 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<meta charset="utf-8">
-	<title>Example 1</title>
+    <meta charset="utf-8">
+    <title>Example 1</title>
 
-	<link rel="stylesheet" href="../simple.datagrid.css">
+    <link rel="stylesheet" href="../simple.datagrid.css">
 
-	<script src="../extra/jquery-1.7.2.min.js"></script>
-	<script src="../simple.datagrid.js"></script>
+    <script src="../extra/jquery-1.7.2.min.js"></script>
+    <script src="../simple.datagrid.js"></script>
+    <script src="../extra/jquery.mockjax.js"></script>
+    <script src="example-data.js"></script>
 </head>
 <body>
-	<p>
-		NB. This example does not work on the local filesystem.
-	</p>
-	<table id="example1a" data-url="fruits.json">
-		<thead>
-			<tr>
-				<th>Name</th>
-				<th>Latin name</th>
-			</tr>
-		</thead>
-	</table>
+    <table id="example1a" data-url="/fruits">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Latin name</th>
+            </tr>
+        </thead>
+    </table>
 
-	<script>
-		$(function() {
-			$('#example1a').simple_datagrid();
-		});
-	</script>
+    <script>
+        $.mockjax({
+            url: '*',
+            response: function(options) {
+                this.responseText = ExampleData.fruits;
+            }
+        });
+
+        $(function() {
+            $('#example1a').simple_datagrid();
+        });
+    </script>
 
 </body>

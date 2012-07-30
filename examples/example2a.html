@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Example 1</title>
+
+    <link rel="stylesheet" href="../simple.datagrid.css">
+
+    <script src="../extra/jquery-1.7.2.min.js"></script>
+    <script src="../extra/jquery.mockjax.js"></script>
+    <script src="../simple.datagrid.js"></script>
+    <script src="example-data.js"></script>
+    <style>
+        table {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <table id="grid" data-url="/fruits/">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Latin name</th>
+            </tr>
+        </thead>
+    </table>
+
+    <script>
+        $(function() {
+            $.mockjax({
+                url: '*',
+                response: function(settings) {
+                    var page = parseInt(
+                        settings.url.replace('/fruits/?page=', '')
+                    );
+
+                    var self = this;
+                    ExampleData.getData({page: page}, function(result) {
+                        self.responseText = result;
+                    });
+                }
+            });
+
+            $('#grid').simple_datagrid();
+        });
+    </script>
+
+</body>
