@@ -43,7 +43,7 @@ test('buildUrl', function() {
 });
 
 module('simple-data-grid', {
-    setup: function() {
+    setup: function(e) {
         $('body').append(
             '<table id="table1">'+
             '  <thead>'+
@@ -58,6 +58,8 @@ module('simple-data-grid', {
         var $table1 = $('#table1');
         $table1.simple_datagrid('destroy');
         $table1.remove();
+
+        $.mockjaxClear();
     }
 });
 
@@ -162,33 +164,8 @@ test('get data from array', function() {
     $table1.simple_datagrid('loadData', '');
 });
 
-test('get data from callback', function() {
-    // setup
-    var $table1 = $('#table1');
-
-    function get_data(parameters, on_success) {
-        on_success(
-            [
-                ['Avocado', 'Persea americana']
-            ]
-        );
-    }
-
-    // 1. get data from callback
-    $table1.simple_datagrid({
-        on_get_data: get_data
-    });
-
-    equal(
-        formatValues($table1.find('tbody td')),
-        'Avocado;Persea americana'
-    );
-});
-
 test('get data from ajax', function() {
     // setup
-    stop();
-
     var $table1 = $('#table1');
     $table1.attr('data-url', '/api/fruits/');
 
@@ -197,27 +174,23 @@ test('get data from ajax', function() {
         responseText: '[["Winter melon", "Benincasa hispida"]]'
     });
 
-    // 1. init table
-    $table1.simple_datagrid();
-
     $table1.bind(
         'datagrid.load_data', function() {
             start();
-
             equal(
                 getRowValues($table1),
                 'Winter melon;Benincasa hispida'
             );
-
-            $.mockjaxClear();
         }
     );
+
+    // -- init table
+    $table1.simple_datagrid();
+    stop();
 });
 
 test('get data from ajax; define url in options', function() {
     // setup
-    stop();
-
     var $table1 = $('#table1');
 
     $.mockjax({
@@ -225,11 +198,6 @@ test('get data from ajax; define url in options', function() {
         responseText: [
             ["Cucumber", "Cucumis sativus"]
         ]
-    });
-
-    // 1. init table
-    $table1.simple_datagrid({
-        url: '/api/fruits/'
     });
 
     $table1.bind(
@@ -240,10 +208,14 @@ test('get data from ajax; define url in options', function() {
                 getRowValues($table1),
                 'Cucumber;Cucumis sativus'
             );
-
-            $.mockjaxClear();
         }
     );
+
+    // -- init table
+    $table1.simple_datagrid({
+        url: '/api/fruits/'
+    });
+    stop();
 });
 
 test('getSelectedRow', function() {
@@ -297,13 +269,18 @@ test('header html', function() {
 });
 
 test('pagination', function() {
+    // todo: look for better definition of the test
+
     // setup
-    function getData(parameters, on_success) {
+    function getResponse(settings) {
+        var uri = new Uri(settings.url);
+        var page = uri.getQueryParamValue('page') || 1;
+
         var total_pages = 100;
         var rows_per_page = 5;
 
         var rows = [];
-        var index = (parameters.page - 1) * rows_per_page + 1;
+        var index = (page - 1) * rows_per_page + 1;
         for (var i=0; i<rows_per_page; i++) {
             rows.push({
                 name: 'n' + index,
@@ -312,51 +289,76 @@ test('pagination', function() {
             index += 1;
         }
 
-        on_success({
+        this.responseText = {
             total_pages: total_pages,
             rows: rows
-        });
+        };
     }
 
-    // 1. init table
-    var $table1 = $('#table1');
-    $table1.simple_datagrid({
-        on_get_data: getData
+    $.mockjax({
+        url: '*',
+        response: getResponse
     });
 
-    equal(
-        formatValues($table1.find('tbody td')),
-        'n1;l1;n2;l2;n3;l3;n4;l4;n5;l5'
+    var $table1 = $('#table1');
+    var load_count = 0;
+
+    $table1.bind(
+        'datagrid.load_data',
+        function() {
+            if (load_count == 0) {
+                equal(
+                    formatValues($table1.find('tbody td')),
+                    'n1;l1;n2;l2;n3;l3;n4;l4;n5;l5'
+                );
+
+                // -- next page
+                $table1.find('.pagination a:last').click();
+            }
+            else if (load_count == 1) {
+                equal(
+                    getRowValues($table1),
+                    'n6;l6;n7;l7;n8;l8;n9;l9;n10;l10'
+                );
+
+                // -- last page
+                $table1.find('.pagination a:eq(10)').click();
+            }
+            else if (load_count == 2) {
+                equal(
+                    getRowValues($('#table1')),
+                    'n496;l496;n497;l497;n498;l498;n499;l499;n500;l500'
+                );
+                start();
+            }
+
+            load_count += 1;
+        }
     );
 
-    // 2. next page
-    $table1.find('.pagination a:last').click();
-    equal(
-        getRowValues($table1),
-        'n6;l6;n7;l7;n8;l8;n9;l9;n10;l10'
-    );
-
-    // 3. last page
-    $('#table1').find('.pagination a:eq(10)').click();
-    equal(
-        getRowValues($('#table1')),
-        'n496;l496;n497;l497;n498;l498;n499;l499;n500;l500'
-    );
+    // -- init table    
+    $table1.simple_datagrid({ url: '/my_data/' });
+    stop();
 });
 
 test('sorting', function() {
-    function get_data(parameters, on_success) {
+    function getResponse(settings) {
+        var uri = new Uri(settings.url);
+        var page = uri.getQueryParamValue('page') || 1;
+        var order_by = uri.getQueryParamValue('order_by');
+        var sortorder = uri.getQueryParamValue('sortorder');
+
         var data = [];
 
-        if (parameters.order_by == 'name') {
-            if (parameters.sortorder == 'asc') {
+        if (order_by == 'name') {
+            if (sortorder == 'asc') {
                 data = [
                     ['Avocado', 'Persea americana'],
                     ['Bell pepper', 'Capsicum annuum'],
                     ['Eggplant', 'Solanum melongena']
                 ];
             }
-            else if (parameters.sortorder == 'desc') {
+            else if (sortorder == 'desc') {
                 data = [
                     ['Eggplant', 'Solanum melongena'],
                     ['Bell pepper', 'Capsicum annuum'],
@@ -364,15 +366,15 @@ test('sorting', function() {
                 ];
             }
         }
-        else if (parameters.order_by == 'latin_name') {
-            if (parameters.sortorder == 'asc') {
+        else if (order_by == 'latin_name') {
+            if (sortorder == 'asc') {
                 data = [
                     ['Bell pepper', 'Capsicum annuum'],
                     ['Avocado', 'Persea americana'],
                     ['Eggplant', 'Solanum melongena']
                 ];
             }
-            else if (parameters.sortorder == 'desc') {
+            else if (sortorder == 'desc') {
                 data = [
                     ['Eggplant', 'Solanum melongena'],
                     ['Avocado', 'Persea americana'],
@@ -381,7 +383,7 @@ test('sorting', function() {
             }
         }
 
-        on_success(data);
+        this.responseText = data;
     }
 
     var $table1 = $('#table1');
@@ -396,27 +398,54 @@ test('sorting', function() {
         return values.toArray().join(';');
     }
 
-    // 1. init tree; order by name
+    $.mockjax({
+        url: '*',
+        response: getResponse
+    });
+
+    var load_count = 0;
+
+    $table1.bind(
+        'datagrid.load_data',
+        function() {
+            if (load_count == 0) {
+                equal(format_first_columns(), 'Avocado;Bell pepper;Eggplant');
+
+                // -- click on 'name' -> sort descending
+                $table1.find('th:eq(0) a').click();
+            }
+            else if (load_count == 1) {
+                equal(format_first_columns(), 'Eggplant;Bell pepper;Avocado');
+
+                // -- click on 'latin-name' -> sort ascending
+                $table1.find('th:eq(1) a').click();
+            }
+            else if (load_count == 2) {
+                equal(format_first_columns(), 'Bell pepper;Avocado;Eggplant');
+
+                // -- click on 'latin-name' -> sort descending
+                $table1.find('th:eq(1) a').click();
+            }
+            else if (load_count == 3) {
+                equal(format_first_columns(), 'Eggplant;Avocado;Bell pepper');
+
+                // -- click on 'latin-name' -> sort ascending
+                $table1.find('th:eq(1) a').click();
+            }
+            else {
+                start();
+            }
+
+            load_count += 1;
+        }
+    );
+
+    // -- init tree; order by name
     $table1.simple_datagrid({
-        on_get_data: get_data,
+        url: '/fruits/',
         order_by: 'name'
     });
-    equal(format_first_columns(), 'Avocado;Bell pepper;Eggplant');
-
-    // 2. click on 'name' -> sort descending
-    $table1.find('th:eq(0) a').click();
-    equal(format_first_columns(), 'Eggplant;Bell pepper;Avocado');
-
-    // 3. click on 'latin-name' -> sort ascending
-    $table1.find('th:eq(1) a').click();
-    equal(format_first_columns(), 'Bell pepper;Avocado;Eggplant');
-
-    // 4. click on 'latin-name' -> sort descending
-    $table1.find('th:eq(1) a').click();
-    equal(format_first_columns(), 'Eggplant;Avocado;Bell pepper');
-
-    // 5. click on 'latin-name' -> sort ascending
-    $table1.find('th:eq(1) a').click();
+    stop();
 });
 
 test('reload', function() {
@@ -443,55 +472,106 @@ test('setParameter', function() {
     // setup
     stop();
 
-    var step = 1;
+    var response_count = 0;
 
-    function get_data(parameters, on_success) {
-        if (step == 2) {
-            equal(parameters.my_param, 'abc');
+    function getResponse(settings) {
+        var uri = new Uri(settings.url);
+        var my_param = uri.getQueryParamValue('my_param');
+
+        if (response_count == 0) {
+            equal(my_param, undefined);
         }
-        step += 1;
+        else if (response_count == 1) {
+            equal(my_param, 'abc');
+        }
 
-        on_success([
+        response_count += 1;
+
+        this.responseText = [
             ['Avocado', 'Persea americana']
-        ]);
-        start();
+        ];
     }
     
-    var $table1 = $('#table1');
-    $table1.simple_datagrid({
-        on_get_data: get_data
+    $.mockjax({
+        url: '*',
+        response: getResponse
     });
 
-    // 1. set parameter and reload
-    $table1.simple_datagrid('setParameter', 'my_param', 'abc');
-    $table1.simple_datagrid('reload');
+    var $table1 = $('#table1');
+
+    var load_count = 0
+
+    $table1.bind(
+        'datagrid.load_data',
+        function() {
+            if (load_count == 0) {
+                // -- set parameter and reload
+                $table1.simple_datagrid('setParameter', 'my_param', 'abc');
+                $table1.simple_datagrid('reload');
+            }
+            else if (load_count == 1) {
+                start();
+            }
+
+            load_count += 1;
+        }
+    );
+
+    $table1.simple_datagrid({
+        url: '/fruits/'
+    });
 });
 
 test('setCurrentPage', function() {
     // setup
     stop();
-    var step = 1;
 
-    function get_data(parameters, on_success) {
-        if (step == 2) {
-            equal(parameters.page, 2);
+    var response_count = 0;
+
+    function getResponse(settings) {
+        var uri = new Uri(settings.url);
+        var page = uri.getQueryParamValue('page');
+
+        if (response_count == 0) {
+            equal(page, 1);
         }
-        step += 1;
+        else if (response_count == 1) {
+            equal(page, 2);
+        }
 
-        on_success([
+        response_count += 1;
+
+        this.responseText = [
             ['Avocado', 'Persea americana']
-        ]);
-        start();
+        ];
     }
 
-    var $table1 = $('#table1');
-    $table1.simple_datagrid({
-        on_get_data: get_data
+    $.mockjax({
+        url: '*',
+        response: getResponse
     });
 
-    // 1. set current page an reload
-    $table1.simple_datagrid('setCurrentPage', 2);
-    $table1.simple_datagrid('reload');
+    var $table1 = $('#table1');
+
+    var load_count = 0
+
+    $table1.bind(
+        'datagrid.load_data',
+        function() {
+            if (load_count == 0) {
+                // -- set current page and reload
+                $table1.simple_datagrid('setCurrentPage', 2);
+                $table1.simple_datagrid('reload');
+            }
+            else if (load_count == 1) {
+                start();
+            }
+
+            load_count += 1;
+        }
+    );
+
+    $table1.simple_datagrid({ url: '/fruits/' });
 });
 
 test('table with existing elements', function() {
