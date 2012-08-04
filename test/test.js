@@ -301,44 +301,62 @@ test('pagination', function() {
     });
 
     var $table1 = $('#table1');
-    var load_count = 0;
 
-    $table1.bind(
-        'datagrid.load_data',
-        function() {
-            if (load_count == 0) {
+    // -- init table    
+    $table1.simple_datagrid({ url: '/my_data/' });
+
+    function runSteps($table, steps) {
+        stop();
+
+        var load_count = 0;
+
+        $table1.bind(
+            'datagrid.load_data',
+            function() {
+                var step_function = steps[load_count];
+                step_function();
+
+                load_count += 1;
+
+                if (load_count == steps.length) {
+                    start();
+                }
+            }
+        );
+    }
+
+    runSteps(
+        $table1,
+        [
+            function() {
+                // step 1: expect first page
                 equal(
                     formatValues($table1.find('tbody td')),
                     'n1;l1;n2;l2;n3;l3;n4;l4;n5;l5'
                 );
 
-                // -- next page
+                // go to next page
                 $table1.find('.pagination a:last').click();
-            }
-            else if (load_count == 1) {
+            },
+            function() {
+                // step 2: expect second page
                 equal(
                     getRowValues($table1),
                     'n6;l6;n7;l7;n8;l8;n9;l9;n10;l10'
                 );
 
-                // -- last page
+                // go to last page
                 $table1.find('.pagination a:eq(10)').click();
-            }
-            else if (load_count == 2) {
+            },
+            function() {
+                // expect last page
                 equal(
                     getRowValues($('#table1')),
                     'n496;l496;n497;l497;n498;l498;n499;l499;n500;l500'
                 );
-                start();
             }
-
-            load_count += 1;
-        }
+        ]
     );
-
-    // -- init table    
-    $table1.simple_datagrid({ url: '/my_data/' });
-    stop();
 });
 
 test('sorting', function() {
