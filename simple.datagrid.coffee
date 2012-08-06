@@ -159,9 +159,7 @@ class SimpleDataGrid extends SimpleWidget
                     title = $th.text()
                     key = $th.data('key') or slugify(title)
 
-                    addColumn(
-                        {title: title, key: key}
-                    )
+                    addColumn(title: title, key: key)
             )
 
         generateFromOptions = =>
@@ -234,7 +232,7 @@ class SimpleDataGrid extends SimpleWidget
 
     _bindEvents: ->
         @$el.delegate('tbody tr', 'click', $.proxy(@_clickRow, this))
-        @$el.delegate('thead th a', 'click', $.proxy(@_clickHeader, this))
+        @$el.delegate('thead tr.sorted', 'click', $.proxy(@_clickHeader, this))
         @$el.delegate('.pagination a', 'click', $.proxy(@_handleClickPage, this))
 
     _removeEvents: ->
@@ -387,12 +385,17 @@ class SimpleDataGrid extends SimpleWidget
 
         fillHeader = (row_count) =>
             order_by = @_getOrderByColumn()
+            is_sorted = order_by and (row_count != 0)
 
-            html = '<tr>'
+            if is_sorted
+                html = '<tr class="sorted">'
+            else
+                html = '<tr>'
+
             for column in @columns
                 html += "<th data-key=\"#{ column.key }\" class=\"column_#{ column.key }\">"
 
-                if (not order_by) or (row_count == 0)
+                if not is_sorted
                     html += column.title
                 else
                     html += "<a href=\"#\">#{ column.title }"

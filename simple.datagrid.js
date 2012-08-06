@@ -397,7 +397,7 @@ limitations under the License.
 
     SimpleDataGrid.prototype._bindEvents = function() {
       this.$el.delegate('tbody tr', 'click', $.proxy(this._clickRow, this));
-      this.$el.delegate('thead th a', 'click', $.proxy(this._clickHeader, this));
+      this.$el.delegate('thead tr.sorted', 'click', $.proxy(this._clickHeader, this));
       return this.$el.delegate('.pagination a', 'click', $.proxy(this._handleClickPage, this));
     };
 
@@ -572,14 +572,19 @@ limitations under the License.
         return html;
       };
       fillHeader = function(row_count) {
-        var class_html, column, html, order_by, _i, _len, _ref;
+        var class_html, column, html, is_sorted, order_by, _i, _len, _ref;
         order_by = _this._getOrderByColumn();
-        html = '<tr>';
+        is_sorted = order_by && (row_count !== 0);
+        if (is_sorted) {
+          html = '<tr class="sorted">';
+        } else {
+          html = '<tr>';
+        }
         _ref = _this.columns;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           column = _ref[_i];
           html += "<th data-key=\"" + column.key + "\" class=\"column_" + column.key + "\">";
-          if ((!order_by) || (row_count === 0)) {
+          if (!is_sorted) {
             html += column.title;
           } else {
             html += "<a href=\"#\">" + column.title;

@@ -21,14 +21,14 @@
 .simple-data-grid thead th a {
     color: #000;
     text-decoration: none;
-    display: block;
-    position: relative;
 }
 
 .simple-data-grid thead th a .sort {
-    position: absolute;
-    right: 0;
-    top: 6px;
+    margin-left: 1em;
+}
+
+.simple-data-grid thead tr.sorted:hover {
+    cursor: pointer;
 }
 
 .simple-data-grid thead th:last-child {
@@ -103,5 +103,5 @@
 
 .sprite-icons-up,
 .sprite-icons-down{background-image:url(simple-data-grid-icons.png);background-repeat:no-repeat}
-.sprite-icons-up{background-position:0px 0px;width:9px;height:6px;line-height:6px;}
-.sprite-icons-down{background-position:-9px 0px;width:9px;height:6px;line-height:6px;}
+.sprite-icons-up{background-position:0px 0px;width:9px;height:8px;line-height:8px;}
+.sprite-icons-down{background-position:-9px 0px;width:9px;height:8px;line-height:8px;}
