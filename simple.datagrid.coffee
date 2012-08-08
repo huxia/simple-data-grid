@@ -96,10 +96,16 @@ class SimpleDataGrid extends SimpleWidget
         if column_index != null
             @columns.splice(column_index, 1)
 
+    url: (value) ->
+        if value
+            @_url = value
+
+        return @_url            
+
     _init: ->
         super()
 
-        @url = @_getBaseUrl()
+        @_url = @_getBaseUrl()
         @$selected_row = null
         @current_page = 1
         @parameters = {}
@@ -122,7 +128,7 @@ class SimpleDataGrid extends SimpleWidget
         @sort_order = SortOrder.ASCENDING
         @$selected_row = null
         @current_page = 1
-        @url = null
+        @_url = null
 
         super()
 
@@ -253,7 +259,7 @@ class SimpleDataGrid extends SimpleWidget
                 query_parameters.sortorder = 'asc'
 
         getDataFromUrl = =>
-            url = buildUrl(@url, query_parameters)
+            url = buildUrl(@_url, query_parameters)
 
             $.ajax(
                 url: url,
@@ -270,7 +276,7 @@ class SimpleDataGrid extends SimpleWidget
         getDataFromArray = =>
             @_fillGrid(@options.data)
 
-        if @url
+        if @_url
             getDataFromUrl()
         else if @options.data
             getDataFromArray()
