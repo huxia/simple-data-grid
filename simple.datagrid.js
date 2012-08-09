@@ -546,7 +546,7 @@ limitations under the License.
         }
         _this.$tfoot.html(html);
         if (_this.options.on_generate_footer) {
-          return _this.options.on_generate_footer(_this.$tfoot, total_pages, row_count);
+          return _this.options.on_generate_footer(_this.$tfoot, total_pages, row_count, _this.columns.length);
         }
       };
       fillPaginator = function(current_page, total_pages) {

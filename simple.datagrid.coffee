@@ -361,7 +361,7 @@ class SimpleDataGrid extends SimpleWidget
             @$tfoot.html(html)
 
             if @options.on_generate_footer
-                @options.on_generate_footer(@$tfoot, total_pages, row_count)
+                @options.on_generate_footer(@$tfoot, total_pages, row_count, @columns.length)
 
         fillPaginator = (current_page, total_pages) =>
             html = '<ul>'
