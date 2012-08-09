@@ -533,17 +533,16 @@ limitations under the License.
       };
       fillFooter = function(total_pages, row_count) {
         var html;
+        html = "<tr><td colspan=\"" + _this.columns.length + "\">";
         if (!total_pages || total_pages === 1) {
           if (row_count === 0) {
-            html = "<tr><td colspan=\"" + _this.columns.length + "\">No rows</td></tr>";
-          } else {
-            html = '';
+            html += "No rows";
           }
         } else {
           html = "<tr><td class=\"pagination\" colspan=\"" + _this.columns.length + "\">";
           html += fillPaginator(_this.current_page, total_pages);
-          html += "</td></tr>";
         }
+        html += "</td></tr>";
         _this.$tfoot.html(html);
         if (_this.options.on_generate_footer) {
           return _this.options.on_generate_footer(_this.$tfoot, total_pages, row_count);

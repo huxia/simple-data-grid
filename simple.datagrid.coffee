@@ -348,15 +348,16 @@ class SimpleDataGrid extends SimpleWidget
             return null
 
         fillFooter = (total_pages, row_count) =>
+            html = "<tr><td colspan=\"#{ @columns.length }\">"
+
             if not total_pages or total_pages == 1
                 if row_count == 0
-                    html = "<tr><td colspan=\"#{ @columns.length }\">No rows</td></tr>"
-                else
-                    html = ''
+                    html += "No rows"
             else
                 html = "<tr><td class=\"pagination\" colspan=\"#{ @columns.length }\">"
                 html += fillPaginator(@current_page, total_pages)
-                html += "</td></tr>"
+
+            html += "</td></tr>"
 
             @$tfoot.html(html)
 
