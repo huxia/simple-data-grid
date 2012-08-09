@@ -611,7 +611,7 @@ test('table with existing elements', function() {
     });
 
     equal(getRowValues($table1), 'Avocado;Persea americana');
-    equal($table1.find('tfoot').text(), '');
+    equal($table1.find('tfoot').children().length, 0);
 });
 
 test('table with empty head', function() {
