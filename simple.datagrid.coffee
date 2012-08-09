@@ -548,11 +548,37 @@ SimpleWidget.register(SimpleDataGrid, 'simple_datagrid')
 slugify = (string) ->
     return string.replace(/[-\s]+/g, '_').replace(/[^a-zA-Z0-9\_]/g, '').toLowerCase()
 
-buildUrl = (url, query_parameters) ->
-    if query_parameters
-        return url + '?' + $.param(query_parameters)
+parseQueryParameters = (query_string) ->
+    query_parameters = {}
+    parameter_strings = query_string.toString().split(/[&;]/)
+
+    for p in parameter_strings
+        if p != ""
+            keyval = p.split('=')
+            key = keyval[0]
+            value = keyval[1]
+            query_parameters[key] = value
+
+    return query_parameters
+
+parseUrl = (url) ->
+    url_parts = url.split('?')
+
+    if url_parts.length == 1
+        return [url, {}]
     else
+        [base_url, query_string] = url_parts
+        query_parameters = parseQueryParameters(query_string)
+        return [base_url, query_parameters]
+
+buildUrl = (url, query_parameters) ->
+    if not query_parameters
         return url
+
+    [base_url, parameters] = parseUrl(url)
+
+    $.extend(parameters, query_parameters)
+    return base_url + '?' + $.param(parameters)
 
 @SimpleDataGrid = SimpleDataGrid
 SimpleDataGrid.slugify = slugify

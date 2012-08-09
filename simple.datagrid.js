@@ -18,7 +18,7 @@ limitations under the License.
 
 
 (function() {
-  var $, SimpleDataGrid, SimpleWidget, SortOrder, buildUrl, max, min, range, slugify,
+  var $, SimpleDataGrid, SimpleWidget, SortOrder, buildUrl, max, min, parseQueryParameters, parseUrl, range, slugify,
     __slice = [].slice,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -750,12 +750,42 @@ limitations under the License.
     return string.replace(/[-\s]+/g, '_').replace(/[^a-zA-Z0-9\_]/g, '').toLowerCase();
   };
 
-  buildUrl = function(url, query_parameters) {
-    if (query_parameters) {
-      return url + '?' + $.param(query_parameters);
+  parseQueryParameters = function(query_string) {
+    var key, keyval, p, parameter_strings, query_parameters, value, _i, _len;
+    query_parameters = {};
+    parameter_strings = query_string.toString().split(/[&;]/);
+    for (_i = 0, _len = parameter_strings.length; _i < _len; _i++) {
+      p = parameter_strings[_i];
+      if (p !== "") {
+        keyval = p.split('=');
+        key = keyval[0];
+        value = keyval[1];
+        query_parameters[key] = value;
+      }
+    }
+    return query_parameters;
+  };
+
+  parseUrl = function(url) {
+    var base_url, query_parameters, query_string, url_parts;
+    url_parts = url.split('?');
+    if (url_parts.length === 1) {
+      return [url, {}];
     } else {
+      base_url = url_parts[0], query_string = url_parts[1];
+      query_parameters = parseQueryParameters(query_string);
+      return [base_url, query_parameters];
+    }
+  };
+
+  buildUrl = function(url, query_parameters) {
+    var base_url, parameters, _ref;
+    if (!query_parameters) {
       return url;
     }
+    _ref = parseUrl(url), base_url = _ref[0], parameters = _ref[1];
+    $.extend(parameters, query_parameters);
+    return base_url + '?' + $.param(parameters);
   };
 
   this.SimpleDataGrid = SimpleDataGrid;
