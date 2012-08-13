@@ -256,8 +256,8 @@ limitations under the License.
       this.$selected_row = null;
       this.current_page = 1;
       this.parameters = {};
-      this.order_by = this.options.order_by;
-      this.sort_order = SortOrder.ASCENDING;
+      this.order_by = this._parseOrderByOption();
+      this.sort_order = this._parseSortorderOption() || SortOrder.ASCENDING;
       this._generateColumnData();
       this._createDomElements();
       this._bindEvents();
@@ -271,7 +271,7 @@ limitations under the License.
       this.options = {};
       this.parameters = {};
       this.order_by = null;
-      this.sort_order = SortOrder.ASCENDING;
+      this.sort_order = null;
       this.$selected_row = null;
       this.current_page = 1;
       this._url = null;
@@ -352,6 +352,32 @@ limitations under the License.
           title: column,
           key: slugify(column)
         };
+      }
+    };
+
+    SimpleDataGrid.prototype._parseOrderByOption = function() {
+      var order_by, order_by_from_data, order_by_from_options;
+      order_by_from_options = this.options.order_by;
+      order_by_from_data = this.$el.data('order-by');
+      order_by = !!(order_by_from_options || order_by_from_data);
+      if (typeof order_by_from_data === 'string') {
+        order_by = order_by_from_data;
+      }
+      if (typeof order_by_from_options === 'string') {
+        order_by = order_by_from_options;
+      }
+      return order_by;
+    };
+
+    SimpleDataGrid.prototype._parseSortorderOption = function() {
+      var sortorder;
+      sortorder = this.$el.data('sortorder');
+      if (sortorder === 'asc') {
+        return SortOrder.ASCENDING;
+      } else if (sortorder === 'desc') {
+        return SortOrder.DESCENDING;
+      } else {
+        return false;
       }
     };
 

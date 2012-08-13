@@ -197,7 +197,7 @@ class SimpleDataGrid extends SimpleWidget
         order_by_from_options = @options.order_by
         order_by_from_data = @$el.data('order-by')
 
-        order_by = not not (order_by_from_options and order_by_from_data)
+        order_by = not not (order_by_from_options or order_by_from_data)
 
         if typeof order_by_from_data == 'string'
             order_by = order_by_from_data
