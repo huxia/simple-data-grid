@@ -396,48 +396,6 @@
   ]
 });</code></pre>
 
-                <h4 id="api-data-callback">Define the data in a javascript callback</h4>
-                <p>
-                    You can define the data in a javascript callback using the <strong>on_get_data</strong> option.
-                    <br>
-                    The callback has the following signature: function(parameters, on_success). You can return the data by calling <strong>on_success</strong>:
-                </p>
-
-<pre id="code1"><code>$('table1').simple_datagrid({
-  on_get_data: function(parameters, on_success) {
-    on_success(
-      [
-        ["Avocado", "Persea americana"],
-        ["Bell pepper", "Capsicum annuum"],
-        ["Bitter melon", "Momordica charantia"]
-      ]
-    );
-  }
-});</code></pre>
-
-                <p>
-                    The <strong>parameters</strong> object has the following properties:
-                    <ul>
-                        <li><strong>page</strong>: page index; starts with 1</li>
-                        <li><strong>order_by</strong>: column that is sorted</li>
-                        <li><strong>sortorder</strong>: sort order; 'asc' or 'desc'</li>
-                    </ul>
-                </p>
-
-                <h3 id="api-functions">Functions</h3>
-
-                <h4 id="api-functions-loaddata">loadData</h4>
-                <p>
-                    Load data.
-                </p>
-<pre><code class="javascript">$('#tree1').simple_datagrid(
-  'loadData',
-  [
-    ["Avocado", "Persea americana"],
-    ["Bell pepper", "Capsicum annuum"]
-  ]
-);</code></pre>
-
                 <h4 id="api-functions-reload">reload</h4>
                 <p>
                     Reload the data.
