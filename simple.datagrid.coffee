@@ -109,8 +109,8 @@ class SimpleDataGrid extends SimpleWidget
         @$selected_row = null
         @current_page = 1
         @parameters = {}
-        @order_by = @options.order_by
-        @sort_order = SortOrder.ASCENDING
+        @order_by = @_parseOrderByOption()
+        @sort_order = @_parseSortorderOption() or SortOrder.ASCENDING
 
         @_generateColumnData()
         @_createDomElements()
@@ -125,7 +125,7 @@ class SimpleDataGrid extends SimpleWidget
         @options = {}
         @parameters = {}
         @order_by = null
-        @sort_order = SortOrder.ASCENDING
+        @sort_order = null
         @$selected_row = null
         @current_page = 1
         @_url = null
@@ -192,6 +192,30 @@ class SimpleDataGrid extends SimpleWidget
                 title: column,
                 key: slugify(column)
             }
+
+    _parseOrderByOption: ->
+        order_by_from_options = @options.order_by
+        order_by_from_data = @$el.data('order-by')
+
+        order_by = not not (order_by_from_options and order_by_from_data)
+
+        if typeof order_by_from_data == 'string'
+            order_by = order_by_from_data
+
+        if typeof order_by_from_options == 'string'
+            order_by = order_by_from_options
+
+        return order_by
+
+    _parseSortorderOption: ->
+        sortorder = @$el.data('sortorder')
+
+        if sortorder == 'asc'
+            return SortOrder.ASCENDING
+        else if sortorder == 'desc'
+            return SortOrder.DESCENDING            
+        else
+            return false
 
     _createDomElements: ->
         initTable = =>
