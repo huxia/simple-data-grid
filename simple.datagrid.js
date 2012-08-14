@@ -457,11 +457,13 @@ limitations under the License.
       }
       getDataFromUrl = function() {
         var url;
+        _this.$el.addClass('loading');
         url = buildUrl(_this._url, query_parameters);
         return $.ajax({
           url: url,
           success: function(response) {
             var result;
+            _this.$el.removeClass('loading');
             if ($.isArray(response) || typeof response === 'object') {
               result = response;
             } else {

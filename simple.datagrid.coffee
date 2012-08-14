@@ -283,11 +283,15 @@ class SimpleDataGrid extends SimpleWidget
                 query_parameters.sortorder = 'asc'
 
         getDataFromUrl = =>
+            @$el.addClass('loading')
+
             url = buildUrl(@_url, query_parameters)
 
             $.ajax(
                 url: url,
                 success: (response) =>
+                    @$el.removeClass('loading')
+
                     if $.isArray(response) or typeof response == 'object'
                         result = response
                     else
