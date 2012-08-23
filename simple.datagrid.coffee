@@ -402,7 +402,7 @@ class SimpleDataGrid extends SimpleWidget
 
             for page in pages
                 if not page
-                    html += '<li>...</li>'
+                    html += '<li><span>...</span></li>'
                 else
                     if page == current_page
                         html += "<li class=\"active\"><a>#{ page }</a></li>"
