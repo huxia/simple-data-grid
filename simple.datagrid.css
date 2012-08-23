@@ -16,11 +16,15 @@
     padding: 0.5em;
     border-right: solid 1px #ccc;
     text-align: left;
+    white-space: nowrap;
+    vertical-align: top;
 }
 
 .simple-data-grid thead th a {
     color: #000;
     text-decoration: none;
+    white-space: nowrap;
+    vertical-align: top;
 }
 
 .simple-data-grid thead th a .sort {
