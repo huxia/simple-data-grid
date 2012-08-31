@@ -438,9 +438,11 @@ class SimpleDataGrid extends SimpleWidget
                         class_html = "sort "
                         if @sort_order == SortOrder.DESCENDING
                             class_html += "asc sprite-icons-down"
+                            sort_text = '&#x25b2;'
                         else
                             class_html += "desc sprite-icons-up"
-                        html += "<span class=\"#{ class_html }\">sort</span>"
+                            sort_text = '&#x25bc;'
+                        html += "<span class=\"#{ class_html }\">#{ sort_text }</span>"
 
                     html += "</a>"
 

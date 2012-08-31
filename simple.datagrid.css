@@ -29,6 +29,7 @@
 
 .simple-data-grid thead th a .sort {
     margin-left: 1em;
+    font-size: 12px;
 }
 
 .simple-data-grid thead tr.sorted:hover {
@@ -98,14 +99,3 @@
     text-decoration: none;
     color: #000;
 }
-
-.sprite-icons-up,
-.sprite-icons-down {
-    display: inline-block;
-    text-indent: -9999px;
-}
-
-.sprite-icons-up,
-.sprite-icons-down{background-image:url(simple-data-grid-icons.png);background-repeat:no-repeat}
-.sprite-icons-up{background-position:0px 0px;width:9px;height:8px;line-height:8px;}
-.sprite-icons-down{background-position:-9px 0px;width:9px;height:8px;line-height:8px;}

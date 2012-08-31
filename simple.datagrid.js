@@ -607,7 +607,7 @@ limitations under the License.
         return html;
       };
       fillHeader = function(row_count) {
-        var class_html, column, html, is_sorted, order_by, _i, _len, _ref;
+        var class_html, column, html, is_sorted, order_by, sort_text, _i, _len, _ref;
         order_by = _this._getOrderByColumn();
         is_sorted = order_by && (row_count !== 0);
         if (is_sorted) {
@@ -627,10 +627,12 @@ limitations under the License.
               class_html = "sort ";
               if (_this.sort_order === SortOrder.DESCENDING) {
                 class_html += "asc sprite-icons-down";
+                sort_text = '&#x25b2;';
               } else {
                 class_html += "desc sprite-icons-up";
+                sort_text = '&#x25bc;';
               }
-              html += "<span class=\"" + class_html + "\">sort</span>";
+              html += "<span class=\"" + class_html + "\">" + sort_text + "</span>";
             }
             html += "</a>";
           }
