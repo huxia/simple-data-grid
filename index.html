@@ -6,14 +6,14 @@
 
     <link rel="stylesheet" href="extra/bootstrap.min.css">
     <link rel="stylesheet" href="simple.datagrid.css">
+    <link rel="stylesheet" href="extra/prism/prism.css">
     <link rel="stylesheet" href="extra/documentation.css">
-    <link rel="stylesheet" href="extra/highlight/sunburst.css">
 
     <script src="extra/jquery-1.8.0.min.js"></script>
     <script src="simple.datagrid.js"></script>
     <script src="extra/jsuri-1.1.1.js"></script>
     <script src="examples/example-data.js"></script>
-    <script src="extra/highlight/highlight.pack.js"></script>
+    <script src="extra/prism/prism.js"></script>
     <script src="extra/jquery.mockjax.js"></script>
 </head>
 <body>
@@ -132,7 +132,8 @@
                         </script>
                     </div>
                     <div class="span6">
-<pre class="no-margin"><code>&lt;table id="demo-table" data-url="/fruits.json"&gt;
+<pre class="no-margin"><code class="language-markup">
+&lt;table id="demo-table" data-url="/fruits.json"&gt;
   &lt;thead&gt;
     &lt;tr&gt;
       &lt;th&gt;Name&lt;/th&gt;
@@ -140,7 +141,8 @@
     &lt;/tr&gt;
   &lt;/thead&gt;
 &lt;/table&gt;</code></pre>
-<pre class="no-margin"><code>$(function() {
+<pre class="no-margin"><code class="language-javascript">
+$(function() {
   $('#demo-table').simple_datagrid();
 });</code></pre>
                     </div>
@@ -158,38 +160,45 @@
                     First, we need an html table.
                 </p>
 
-<pre><code>&lt;table id="example1"&gt;
-&lt;/table&gt;</code></pre>
+<pre><code class="language-markup">
+&lt;table id="example1"&gt;
+&lt;/table&gt;
+</code></pre>
 
                 <h4 id="example1-step2">Step 2: add columns</h4>
                 <p>
                     Lets's add some columns. We can define them in <strong>&lt;th&gt;</strong> elements.
                 </p>
 
-<pre><code>&lt;table id="example1"&gt;
+<pre><code class="language-markup">
+&lt;table id="example1"&gt;
   &lt;thead&gt;
     &lt;tr&gt;
       &lt;th>Name&lt;/th&gt;
       &lt;th>Latin name&lt;/th&gt;
     &lt;/tr&gt;
   &lt;/thead&gt;
-&lt;/table&gt;</code></pre>
+&lt;/table&gt;
+</code></pre>
 
                 <h4 id="example1-step3">Step 3: include javascript and css</h4>
                 <p>
                     We need to include some javascript and css.
                 </p>
 
-<pre><code>&lt;link rel="stylesheet" href="simple.datagrid.css"&gt;
+<pre><code class="language-markup">
+&lt;link rel="stylesheet" href="simple.datagrid.css"&gt;
 &lt;script src="extra/jquery-1.8.0.min.js"&gt;&lt;/script&gt;
-&lt;script src="simple.datagrid.js"&gt;&lt;/script&gt;</code></pre>
+&lt;script src="simple.datagrid.js"&gt;&lt;/script&gt;
+</code></pre>
 
                 <h4 id="example1-step4">Step 4: some javascript</h4>
                 <p>
                     Fill the grid with some data:
                 </p>
 
-<pre><code>&lt;script&gt;
+<pre><code class="language-javascript">
+&lt;script&gt;
   $(function() {
     $('#example1').simple_datagrid({
       data: [
@@ -199,7 +208,8 @@
       ]
     });
   });
-&lt;/script&gt;</code></pre>
+&lt;/script&gt;
+</code></pre>
 
                 <p>
                     The result looks like this:
@@ -234,24 +244,28 @@
                     Define a table with a <strong>data-url</strong> property:
                 </p>
 
-<pre><code>&lt;table id="example1a" data-url="extra/fruits.json"&gt;
+<pre><code class="language-markup">
+&lt;table id="example1a" data-url="extra/fruits.json"&gt;
   &lt;thead&gt;
     &lt;tr&gt;
       &lt;th>Name&lt;/th&gt;
       &lt;th>Latin name&lt;/th&gt;
     &lt;/tr&gt;
   &lt;/thead&gt;
-&lt;/table&gt;</code></pre>
+&lt;/table&gt;
+</code></pre>
 
                 <p>
                     Initialize the grid:
                 </p>
 
-<pre><code>&lt;script&gt;
+<pre><code class="language-javascript">
+&lt;script&gt;
   $(function() {
     $('#example1a').simple_datagrid();
   });
-&lt;/script&gt;</code></pre>
+&lt;/script&gt;
+</code></pre>
 
                 <h2 id="api">Api</h2>
                 <h3 id="api-columns">Defining columns</h3>
@@ -275,12 +289,14 @@
                 <p>
                     You can define columns in the <strong>&lt;th&gt;</strong> elements of a table. The elements must be in the <strong>&lt;thead&gt;</strong>.
                 </p>
-<pre><code>&lt;table&gt;
+<pre><code class="language-markup">
+&lt;table&gt;
   &lt;thead&gt;
     &lt;th&gt;Name&lt;/th&gt;
     &lt;th&gt;Latin name&lt;/th&gt;
   &lt;/thead&gt;
-&lt;/table&gt;</code></pre>
+&lt;/table&gt;
+</code></pre>
 
                 <p>
                     You can also set the <strong>key</strong> of a column in the <strong>data-key</strong> property.
@@ -288,26 +304,31 @@
                     For example, to set the key for the <strong>Latin name</strong> column to <strong>latin</strong>:
                 </p>
 
-<pre><code>&lt;table&gt;
+<pre><code class="language-markup">
+&lt;table&gt;
   &lt;thead&gt;
     &lt;th&gt;Name&lt;/th&gt;
     &lt;th data-key="latin"&gt;Latin name&lt;/th&gt;
   &lt;/thead&gt;
-&lt;/table&gt;</code></pre>
+&lt;/table&gt;
+</code></pre>
                 <h4 id="api-columns-javascript">Define columns in javascript</h4>
                 <p>
                     You can define the columns in the <strong>columns</strong> property of the javascript options.
                 </p>
 
-<pre><code class="javascript">$('#table1').simple_datagrid({
+<pre><code class="language-javascript">
+$('#table1').simple_datagrid({
   columns: ['Name', 'Latin name']
-});</code></pre>
+});
+</code></pre>
 
                 <p>
                     You can also define columns as an object:
                 </p>
 
-<pre><code class="javascript">$('#table1').simple_datagrid({
+<pre><code class="language-javascript">
+$('#table1').simple_datagrid({
   columns: [
     {
       title: 'Name'
@@ -317,7 +338,8 @@
       key: 'latin'
     }
   ]
-});</code></pre>
+});
+</code></pre>
 
                 <h3 id="api-data">Defining the data</h3>
 
@@ -329,15 +351,18 @@
                     <li>
                         <strong>array</strong>: an array of strings, for all the columns in the grid:
                         <br>
-<pre><code>var data = [
+<pre><code class="language-javascript">
+var data = [
   ['Avocado', 'Persea americana'],
   ['Bell pepper', 'Capsicum annuum']
-];</code></pre>
+];
+</code></pre>
                     </li>
                     <li>
                         <strong>object</strong>: an object with the column keys:
                         <br>
-<pre><code>var data = [
+<pre><code class="language-javascript">
+var data = [
   {
     name: 'Avocado',
     'latin_name': 'Persea americana'
@@ -346,7 +371,8 @@
     name: 'Bell pepper',
     'latin_name': 'Capsicum annuum'
   }
-];</code></pre>
+];
+</code></pre>
                     </li>
                 </ul>
 
@@ -355,35 +381,42 @@
                     You can set an url in the <strong>data-url</strong> property of the table.
                 </p>
 
-<pre><code>&lt;table data-url="/fruits.json"&gt;
-&lt;/table&gt;</code></pre>
+<pre><code class="language-markup">
+&lt;table data-url="/fruits.json"&gt;
+&lt;/table&gt;
+</code></pre>
 
                 <p>
                     You can also set the url in javascript.
                 </p>
 
-<pre><code class="javascript">$('#table1').simple_datagrid({
+<pre><code class="language-javascript">
+$('#table1').simple_datagrid({
   url: '/fruits.json'
-});</code></pre>
+});
+</code></pre>
 
                 <h4 id="api-data-array">Define the data as an array</h4>
                 <p>
                     You can define the data in a javascript array:
                 </p>
 
-<pre><code class="javascript">$('#table1').simple_datagrid({
+<pre><code class="language-javascript">
+$('#table1').simple_datagrid({
   data: [
     ["Avocado", "Persea americana"],
     ["Bell pepper", "Capsicum annuum"],
     ["Bitter melon", "Momordica charantia"]
   ]
-});</code></pre>
+});
+</code></pre>
 
                 <p>
                     You can also define the data as an array of objects:
                 </p>
 
-<pre><code class="javascript">$('#table1').simple_datagrid({
+<pre><code class="language-javascript">
+$('#table1').simple_datagrid({
   data: [
     {
       name: 'Avocado',
@@ -394,20 +427,23 @@
       'latin_name': 'Capsicum annuum'
     }
   ]
-});</code></pre>
+});
+</code></pre>
 
                 <h4 id="api-functions-reload">reload</h4>
                 <p>
                     Reload the data.
                 </p>
-<pre><code class="javascript">$('#tree1').simple_datagrid('reload');</code></pre>
+<pre><code class="language-javascript">
+$('#tree1').simple_datagrid('reload');
+</code></pre>
 
             </div>
         </div>
     </div>
 
     <script>
-        hljs.initHighlightingOnLoad();
+        
     </script>
 </body>
 </html>
