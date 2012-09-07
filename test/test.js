@@ -42,6 +42,7 @@ test('buildUrl', function() {
     equal(buildUrl('abc', {x: '1', y: '2'}), 'abc?x=1&y=2');  // params x and y
     equal(buildUrl('/abc/?x=1&y=2', {x: '3', z: '4'}), '/abc/?x=3&y=2&z=4');  // override parameter x
     equal(buildUrl('/abc/?', {x: '1'}), '/abc/?x=1');  // querystring is '?'
+    equal(buildUrl('/abc/?search=abc+def', {}), '/abc/?search=abc+def'); // original url contains parameter with space
 });
 
 module('simple-data-grid', {

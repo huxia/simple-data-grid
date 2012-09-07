@@ -586,7 +586,7 @@ parseQueryParameters = (query_string) ->
         if p != ""
             keyval = p.split('=')
             key = keyval[0]
-            value = keyval[1]
+            value = keyval[1].replace('+', ' ')
             query_parameters[key] = value
 
     return query_parameters
