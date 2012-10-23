@@ -208,7 +208,10 @@ class SimpleDataGrid extends SimpleWidget
         return order_by
 
     _parseSortorderOption: ->
-        sortorder = @$el.data('sortorder')
+        sortorder_from_options = @options.sortorder
+        sortorder_from_data = @$el.data('sortorder')
+
+        sortorder = sortorder_from_options or sortorder_from_data
 
         if sortorder == 'asc'
             return SortOrder.ASCENDING

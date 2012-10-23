@@ -370,8 +370,10 @@ limitations under the License.
     };
 
     SimpleDataGrid.prototype._parseSortorderOption = function() {
-      var sortorder;
-      sortorder = this.$el.data('sortorder');
+      var sortorder, sortorder_from_data, sortorder_from_options;
+      sortorder_from_options = this.options.sortorder;
+      sortorder_from_data = this.$el.data('sortorder');
+      sortorder = sortorder_from_options || sortorder_from_data;
       if (sortorder === 'asc') {
         return SortOrder.ASCENDING;
       } else if (sortorder === 'desc') {
