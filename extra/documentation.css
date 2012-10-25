@@ -34,7 +34,7 @@ body {
 }
 
 h1 {
-    margin-bottom: 16px;
+    margin: 0 0 16px 0;
     font-family: 'League-gothic';
     font-size: 60px;
     letter-spacing: 1px;
