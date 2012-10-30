@@ -142,19 +142,9 @@ class SimpleDataGrid extends SimpleWidget
     _generateColumnData: ->
         column_map = {}
 
-        updateColumn = (info) =>
-            column = column_map[info.key]
-
-            for key, value of info
-                column[key] = value
-            return null
-
         addColumn = (info) =>
-            if info.key of column_map
-                updateColumn(info)
-            else
-                @columns.push(info)
-                column_map[info.key] = info
+            @columns.push(info)
+            column_map[info.key] = info
 
         generateFromThElements = =>
             $th_elements = @$el.find('th')
@@ -170,8 +160,20 @@ class SimpleDataGrid extends SimpleWidget
 
         generateFromOptions = =>
             for column in @options.columns
-                column_info = @_createColumnInfo(column)
-                addColumn(column_info)
+                if typeof column == 'object'
+                    if 'key' of column
+                        key = column.key
+                        if typeof key == 'string'
+                            column_info = column_map[column.key]
+                        else
+                            column_info = @columns[key]
+
+                if column_info
+                    @_updateColumnInfo(column_info, column)
+                else
+                    column_info = @_createColumnInfo(column)
+                    if column_info
+                        addColumn(column_info)
 
             return null
 
@@ -182,16 +184,26 @@ class SimpleDataGrid extends SimpleWidget
 
     _createColumnInfo: (column) ->
         if typeof column == 'object'
-            return {
-                title: column.title,
-                key: column.key or slugify(column.title),
-                on_generate: column.on_generate
-            }
+            if not column.title
+                return null
+            else
+                return {
+                    title: column.title
+                    key: column.key or slugify(column.title)
+                    on_generate: column.on_generate
+                }
         else
             return {
-                title: column,
+                title: column
                 key: slugify(column)
             }
+
+    _updateColumnInfo: (column_info, column) ->
+        if column.title
+            column_info = column.title
+
+        if column.on_generate
+            column_info.on_generate = column.on_generate
 
     _parseOrderByOption: ->
         order_by_from_options = @options.order_by
