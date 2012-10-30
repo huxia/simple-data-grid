@@ -160,6 +160,7 @@ class SimpleDataGrid extends SimpleWidget
 
         generateFromOptions = =>
             for column in @options.columns
+                column_info = null
                 if typeof column == 'object'
                     if 'key' of column
                         key = column.key
@@ -200,7 +201,7 @@ class SimpleDataGrid extends SimpleWidget
 
     _updateColumnInfo: (column_info, column) ->
         if column.title
-            column_info = column.title
+            column_info.title = column.title
 
         if column.on_generate
             column_info.on_generate = column.on_generate

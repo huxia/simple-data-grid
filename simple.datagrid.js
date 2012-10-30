@@ -315,6 +315,7 @@ limitations under the License.
         _ref = _this.options.columns;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           column = _ref[_i];
+          column_info = null;
           if (typeof column === 'object') {
             if ('key' in column) {
               key = column.key;
@@ -364,7 +365,7 @@ limitations under the License.
 
     SimpleDataGrid.prototype._updateColumnInfo = function(column_info, column) {
       if (column.title) {
-        column_info = column.title;
+        column_info.title = column.title;
       }
       if (column.on_generate) {
         return column_info.on_generate = column.on_generate;
