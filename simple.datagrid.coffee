@@ -165,7 +165,7 @@ class SimpleDataGrid extends SimpleWidget
                     if 'key' of column
                         key = column.key
                         if typeof key == 'string'
-                            column_info = column_map[column.key]
+                            column_info = column_map[key]
                         else
                             column_info = @columns[key]
 
@@ -185,7 +185,7 @@ class SimpleDataGrid extends SimpleWidget
 
     _createColumnInfo: (column) ->
         if typeof column == 'object'
-            if not column.title
+            if not (column.title or column.key)
                 return null
             else
                 return {

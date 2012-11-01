@@ -320,7 +320,7 @@ limitations under the License.
             if ('key' in column) {
               key = column.key;
               if (typeof key === 'string') {
-                column_info = column_map[column.key];
+                column_info = column_map[key];
               } else {
                 column_info = _this.columns[key];
               }
@@ -346,7 +346,7 @@ limitations under the License.
 
     SimpleDataGrid.prototype._createColumnInfo = function(column) {
       if (typeof column === 'object') {
-        if (!column.title) {
+        if (!(column.title || column.key)) {
           return null;
         } else {
           return {
