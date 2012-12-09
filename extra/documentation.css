@@ -73,9 +73,7 @@ h4 {
     border-bottom: solid 2px #333;
 }
 
-pre {
-    padding: 0;
-    border: 0;
+pre[class*="language-"] {
     margin: 2em 0;
 }
 
