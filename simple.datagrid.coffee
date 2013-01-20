@@ -301,10 +301,9 @@ class SimpleDataGrid extends SimpleWidget
         getDataFromUrl = =>
             @$el.addClass('loading')
 
-            url = buildUrl(@_url, query_parameters)
-
             $.ajax(
-                url: url
+                url: @_url
+                data: query_parameters
                 success: (response) =>
                     @$el.removeClass('loading')
 
@@ -619,18 +618,9 @@ parseUrl = (url) ->
         query_parameters = parseQueryParameters(query_string)
         return [base_url, query_parameters]
 
-buildUrl = (url, query_parameters) ->
-    if not query_parameters
-        return url
-
-    [base_url, parameters] = parseUrl(url)
-
-    $.extend(parameters, query_parameters)
-    return base_url + '?' + $.param(parameters)
 
 @SimpleDataGrid = SimpleDataGrid
 SimpleDataGrid.slugify = slugify
-SimpleDataGrid.buildUrl = buildUrl
 
 SortOrder =
     ASCENDING: 1

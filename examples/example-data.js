@@ -1,10 +1,9 @@
 ExampleData = {};
 
 ExampleData.handleMockjaxResponse = function(settings) {
-    var uri = new Uri(settings.url);
-    var page = uri.getQueryParamValue('page') || 1;
-    var order_by = uri.getQueryParamValue('order_by');
-    var sortorder = uri.getQueryParamValue('sortorder');
+    var page = settings.data.page || 1;
+    var order_by = settings.data.order_by;
+    var sortorder = settings.data.sortorder;
 
 	var rows_per_page = 5;
 	var start_index = (page - 1) * rows_per_page;

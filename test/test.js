@@ -35,16 +35,6 @@ test('slugify', function() {
     equal(slugify('abc_def'), 'abc_def');
 });
 
-test('buildUrl', function() {
-    buildUrl = SimpleDataGrid.buildUrl;
-
-    equal(buildUrl('abc'), 'abc');
-    equal(buildUrl('abc', {x: '1', y: '2'}), 'abc?x=1&y=2');  // params x and y
-    equal(buildUrl('/abc/?x=1&y=2', {x: '3', z: '4'}), '/abc/?x=3&y=2&z=4');  // override parameter x
-    equal(buildUrl('/abc/?', {x: '1'}), '/abc/?x=1');  // querystring is '?'
-    equal(buildUrl('/abc/?search=abc+def', {}), '/abc/?search=abc+def'); // original url contains parameter with space
-});
-
 module('simple-data-grid', {
     setup: function(e) {
         $('body').append(
@@ -276,8 +266,7 @@ test('pagination', function() {
 
     // setup
     function getResponse(settings) {
-        var uri = new Uri(settings.url);
-        var page = uri.getQueryParamValue('page') || 1;
+        var page = settings.data.page || 1;
 
         var total_pages = 100;
         var rows_per_page = 5;
@@ -364,10 +353,9 @@ test('pagination', function() {
 
 test('sorting', function() {
     function getResponse(settings) {
-        var uri = new Uri(settings.url);
-        var page = uri.getQueryParamValue('page') || 1;
-        var order_by = uri.getQueryParamValue('order_by');
-        var sortorder = uri.getQueryParamValue('sortorder');
+        var page = settings.data.page || 1;
+        var order_by = settings.data.order_by;
+        var sortorder = settings.data.sortorder;
 
         var data = [];
 
@@ -496,8 +484,7 @@ test('setParameter', function() {
     var response_count = 0;
 
     function getResponse(settings) {
-        var uri = new Uri(settings.url);
-        var my_param = uri.getQueryParamValue('my_param');
+        var my_param = settings.data.my_param;
 
         if (response_count == 0) {
             equal(my_param, undefined);
@@ -550,8 +537,7 @@ test('setCurrentPage', function() {
     var response_count = 0;
 
     function getResponse(settings) {
-        var uri = new Uri(settings.url);
-        var page = uri.getQueryParamValue('page');
+        var page = settings.data.page;
 
         if (response_count == 0) {
             equal(page, 1);

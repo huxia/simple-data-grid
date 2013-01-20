@@ -18,7 +18,7 @@ limitations under the License.
 
 
 (function() {
-  var $, SimpleDataGrid, SimpleWidget, SortOrder, buildUrl, max, min, parseQueryParameters, parseUrl, range, slugify,
+  var $, SimpleDataGrid, SimpleWidget, SortOrder, max, min, parseQueryParameters, parseUrl, range, slugify,
     __slice = [].slice,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -475,11 +475,10 @@ limitations under the License.
         }
       }
       getDataFromUrl = function() {
-        var url;
         _this.$el.addClass('loading');
-        url = buildUrl(_this._url, query_parameters);
         return $.ajax({
-          url: url,
+          url: _this._url,
+          data: query_parameters,
           success: function(response) {
             var result;
             _this.$el.removeClass('loading');
@@ -829,21 +828,9 @@ limitations under the License.
     }
   };
 
-  buildUrl = function(url, query_parameters) {
-    var base_url, parameters, _ref;
-    if (!query_parameters) {
-      return url;
-    }
-    _ref = parseUrl(url), base_url = _ref[0], parameters = _ref[1];
-    $.extend(parameters, query_parameters);
-    return base_url + '?' + $.param(parameters);
-  };
-
   this.SimpleDataGrid = SimpleDataGrid;
 
   SimpleDataGrid.slugify = slugify;
-
-  SimpleDataGrid.buildUrl = buildUrl;
 
   SortOrder = {
     ASCENDING: 1,
