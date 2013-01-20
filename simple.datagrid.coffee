@@ -308,7 +308,7 @@ class SimpleDataGrid extends SimpleWidget
                 success: (response) =>
                     @$el.removeClass('loading')
 
-                    if $.isArray(response) or typeof response == 'object'
+                    if $.isArray(response) or typeof response == 'object' or not response?
                         result = response
                     else
                         result = $.parseJSON(response)
@@ -470,7 +470,7 @@ class SimpleDataGrid extends SimpleWidget
         if $.isArray(data)
             rows = data
             total_pages = 0
-        else if data.rows
+        else if data and data.rows
             rows = data.rows
             total_pages = data.total_pages or 0
         else

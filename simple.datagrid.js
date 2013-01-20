@@ -483,7 +483,7 @@ limitations under the License.
           success: function(response) {
             var result;
             _this.$el.removeClass('loading');
-            if ($.isArray(response) || typeof response === 'object') {
+            if ($.isArray(response) || typeof response === 'object' || !(response != null)) {
               result = response;
             } else {
               result = $.parseJSON(response);
@@ -663,7 +663,7 @@ limitations under the License.
       if ($.isArray(data)) {
         rows = data;
         total_pages = 0;
-      } else if (data.rows) {
+      } else if (data && data.rows) {
         rows = data.rows;
         total_pages = data.total_pages || 0;
       } else {
