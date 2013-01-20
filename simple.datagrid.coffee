@@ -304,7 +304,7 @@ class SimpleDataGrid extends SimpleWidget
             url = buildUrl(@_url, query_parameters)
 
             $.ajax(
-                url: url,
+                url: url
                 success: (response) =>
                     @$el.removeClass('loading')
 
@@ -315,6 +315,8 @@ class SimpleDataGrid extends SimpleWidget
 
                     @_fillGrid(result)
                 cache: false
+                type: 'GET'
+                dataType: 'json'
             )
 
         getDataFromArray = =>

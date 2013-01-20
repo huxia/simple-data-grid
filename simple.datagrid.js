@@ -490,7 +490,9 @@ limitations under the License.
             }
             return _this._fillGrid(result);
           },
-          cache: false
+          cache: false,
+          type: 'GET',
+          dataType: 'json'
         });
       };
       getDataFromArray = function() {
