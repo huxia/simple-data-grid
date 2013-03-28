@@ -1,0 +1,23 @@
+{
+    "name": "simpledatagrid",
+    "version": "0.1.0",
+    "title": "jqTree",
+    "description": "Simple-data-grid is a datagrid widget",
+    "keywords": [
+        "datagrid"
+    ],
+    "author": {
+        "name": "Marco Braak"
+    },
+    "homepage": "http://mbraak.github.com/simple-data-grid/",
+    "download": "https://github.com/mbraak/simple-data-grid/tarball/master",
+    "licenses": [
+        {
+            "type": "Apache-2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0"
+        }
+    ],
+    "dependencies": {
+        "jquery": ">=1.5"
+    }
+}
