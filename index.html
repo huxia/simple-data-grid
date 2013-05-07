@@ -2,135 +2,133 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple data grid</title>
-
-    <link rel="stylesheet" href="extra/bootstrap.min.css">
-    <link rel="stylesheet" href="extra/bootstrap-responsive.min.css">
+    <title>jqTree</title>
+    <link rel="stylesheet" href="extra/css/gridless.css">
     <link rel="stylesheet" href="simple.datagrid.css">
     <link rel="stylesheet" href="extra/prism/prism.css">
-    <link rel="stylesheet" href="extra/documentation.css">
-
-    <script src="extra/jquery-1.9.1.min.js"></script>
+    <link rel="stylesheet" href="extra/css/documentation.css">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <!--[if lt IE 9]>
+        <script src="extra/js/jquery-1.9.1.min.js"></script>
+    <![endif]-->
+    <!--[if gte IE 9]><!-->
+        <script src="extra/js/jquery-2.0.0.min.js"></script>
+    <!--<![endif]-->
+    <script src="extra/prism/prism.js"></script>
     <script src="simple.datagrid.js"></script>
     <script src="examples/example-data.js"></script>
-    <script src="extra/prism/prism.js"></script>
-    <script src="extra/jquery.mockjax.js"></script>
+    <script src="extra/js/jquery.mockjax.js"></script>
 </head>
 <body>
+<div id="sidebar">
+    <ul class="first">
+        <li>
+            <a href="#simple-data-grid">Simple data grid</a>
+            <ul>
+                <li>
+                    <a href="#features">Features</a>
+                    <ul>
+                        <li><a href="#requirements">Requirements</a></li>
+                        <li><a href="#downloads">Downloads</a></li>
+                    </ul>
+                </li>
+                <li><a href="#demo">Demo</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#tutorial">Tutorial</a>
+            <ul>
+                <li>
+                    <a href="#example1">Example 1: a very simple data grid</a>
+                    <ul>
+                        <li><a href="#example1-step1">Step 1: define a table</a></li>
+                        <li><a href="#example1-step2">Step 2: add columns</a></li>
+                        <li><a href="#example1-step3">Step 3: include javascript and css</a></li>
+                        <li><a href="#example1-step4">Step 4: some javascript</a></li>
+                    </ul>
+                </li>
+                <li><a href="#example1a">Example 1a: get the data from the server</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#api">Api</a>
+            <ul>
+                <li>
+                    <a href="#api-columns">Defining columns</a>
+                    <ul>
+                        <li><a href="#api-columns-html">Define columns in html</a></li>
+                        <li><a href="#api-columns-javascript">Define columns in javascript</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#api-data">Defining the data</a>
+                    <ul>
+                        <li><a href="#api-data-syntax">Syntax of the data</a></li>
+                        <li><a href="#api-data-ajax">Define the data using ajax</a></li>
+                        <li><a href="#api-data-array">Define the data as an array</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#api-functions">Functions</a>
+                    <ul>
+                        <li><a href="#api-functions-reload">reload</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>
+<div id="page">
+    <div class="group">
+        <div id="main-title">
+            <img src="grid.png" class="logo" />
+            <h1 id="simple-data-grid">Simple data grid</h1>
+        </div>
+    </div>
+    <p>
+        Simple-data-grid is a datagrid widget.
+    </p>
+    <p>
+        The project is <a href="https://github.com/mbraak/simple-data-grid">hosted on github</a> and has <a href="test/test.html">unit tests</a>.
+    </p>
 
-    <div class="container-fluid">
-        <div class="row-fluid">
+    <h2 id="features">Features</h2>
+    <ul>
+        <li>Works on Internet Explorer 7+, Firefox 3.6+, Chrome and Safari</li>
+        <li>Written in Coffeescript</li>
+    </ul>
 
-            <div class="span3" id="toc">
-                <ul class="unstyled">
-                    <li>
-                        <a href="#simple-data-grid">Simple data grid</a>
-                        <ul>
-                            <li>
-                                <a href="#features">Features</a>
-                                <ul>
-                                    <li><a href="#requirements">Requirements</a></li>
-                                    <li><a href="#downloads">Downloads</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="#demo">Demo</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#tutorial">Tutorial</a>
-                        <ul>
-                            <li>
-                                <a href="#example1">Example 1: a very simple data grid</a>
-                                <ul>
-                                    <li><a href="#example1-step1">Step 1: define a table</a></li>
-                                    <li><a href="#example1-step2">Step 2: add columns</a></li>
-                                    <li><a href="#example1-step3">Step 3: include javascript and css</a></li>
-                                    <li><a href="#example1-step4">Step 4: some javascript</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="#example1a">Example 1a: get the data from the server</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#api">Api</a>
-                        <ul>
-                            <li>
-                                <a href="#api-columns">Defining columns</a>
-                                <ul>
-                                    <li><a href="#api-columns-html">Define columns in html</a></li>
-                                    <li><a href="#api-columns-javascript">Define columns in javascript</a></li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="#api-data">Defining the data</a>
-                                <ul>
-                                    <li><a href="#api-data-syntax">Syntax of the data</a></li>
-                                    <li><a href="#api-data-ajax">Define the data using ajax</a></li>
-                                    <li><a href="#api-data-array">Define the data as an array</a></li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="#api-functions">Functions</a>
-                                <ul>
-                                    <li><a href="#api-functions-reload">reload</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
+    <h3 id="requirements">Requirements</h3>
+    <ul>
+        <li><a href="http://jquery.com">jQuery 1.5+</a></li>
+    </ul>
 
-            <div class="span9" id="page">
-                <h1 id="simple-data-grid">Simple data grid</h1>
-                <p>
-                    Simple-data-grid is a datagrid widget.
-                </p>
-                <p>
-                    The project is <a href="https://github.com/mbraak/simple-data-grid">hosted on github</a> and has <a href="test/test.html">unit tests</a>.
-                </p>
+    <h3 id="downloads">Downloads</h3>
+    <p>
+        <a href="https://github.com/mbraak/simple-data-grid/tarball/master">simple-data-grid.tar.gz</a>
+    </p>
 
-                <h2 id="features">Features</h2>
-                <ul>
-                    <li>Works on Internet Explorer 7+, Firefox 3.6+, Chrome and Safari</li>
-                    <li>Written in Coffeescript</li>
-                </ul>
-
-                <h3 id="requirements">Requirements</h3>
-                <ul>
-                    <li><a href="http://jquery.com">jQuery 1.5+</a></li>
-                </ul>
-
-                <h3 id="downloads">Downloads</h3>
-                <p>
-                    <a href="https://github.com/mbraak/simple-data-grid/tarball/master">simple-data-grid.tar.gz</a>
-                </p>
-
-                <h2 id="demo">Demo</h2>
-                <div class="row-fluid">
-                    <div class="span4">
-                        <table id="demo-table" data-url="/fruits/">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Latin name</th>
-                                </tr>
-                            </thead>
-                        </table>
-                        <script>
-                            $.mockjax({
-                                url: '*',
-                                response: ExampleData.handleMockjaxResponse,
-                                responseTime: 0
-                            });
-                            $(function() {
-                                $('#demo-table').simple_datagrid({
-                                    order_by: true
-                                });
-                            });
-                        </script>
-                    </div>
-                    <div class="span6">
+    <h2 id="demo">Demo</h2>
+    <table id="demo-table" data-url="/fruits/">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Latin name</th>
+            </tr>
+        </thead>
+    </table>
+    <script>
+        $.mockjax({
+            url: '*',
+            response: ExampleData.handleMockjaxResponse,
+            responseTime: 0
+        });
+        $(function() {
+            $('#demo-table').simple_datagrid({
+                order_by: true
+            });
+        });
+    </script>
 <pre class="no-margin"><code class="language-markup">&lt;table id="demo-table" data-url="/fruits.json"&gt;
   &lt;thead&gt;
     &lt;tr&gt;
@@ -142,29 +140,27 @@
 <pre class="no-margin"><code class="language-javascript">$(function() {
   $('#demo-table').simple_datagrid();
 });</code></pre>
-                    </div>
-                </div>
 
-                <h2 id="tutorial">Tutorial</h2>
-                <h3 id="example1">Example 1: a very simple data grid</h3>
+    <h2 id="tutorial">Tutorial</h2>
+    <h3 id="example1">Example 1: a very simple data grid</h3>
 
-                <p>
-                    The result is in <a href="examples/example1.html">example1.html</a>.
-                </p>
+    <p>
+        The result is in <a href="examples/example1.html">example1.html</a>.
+    </p>
 
-                <h4 id="example1-step1">Step 1: define a table</h4>
-                <p>
-                    First, we need an html table.
-                </p>
+    <h4 id="example1-step1">Step 1: define a table</h4>
+    <p>
+        First, we need an html table.
+    </p>
 
 <pre><code class="language-markup">&lt;table id="example1"&gt;
 &lt;/table&gt;
 </code></pre>
 
-                <h4 id="example1-step2">Step 2: add columns</h4>
-                <p>
-                    Lets's add some columns. We can define them in <strong>&lt;th&gt;</strong> elements.
-                </p>
+    <h4 id="example1-step2">Step 2: add columns</h4>
+    <p>
+        Lets's add some columns. We can define them in <strong>&lt;th&gt;</strong> elements.
+    </p>
 
 <pre><code class="language-markup">&lt;table id="example1"&gt;
   &lt;thead&gt;
@@ -176,20 +172,20 @@
 &lt;/table&gt;
 </code></pre>
 
-                <h4 id="example1-step3">Step 3: include javascript and css</h4>
-                <p>
-                    We need to include some javascript and css.
-                </p>
+    <h4 id="example1-step3">Step 3: include javascript and css</h4>
+    <p>
+        We need to include some javascript and css.
+    </p>
 
 <pre><code class="language-markup">&lt;link rel="stylesheet" href="simple.datagrid.css"&gt;
-&lt;script src="extra/jquery-1.8.2.min.js"&gt;&lt;/script&gt;
+&lt;script src="extra/jquery-1.9.1.min.js"&gt;&lt;/script&gt;
 &lt;script src="simple.datagrid.js"&gt;&lt;/script&gt;
 </code></pre>
 
-                <h4 id="example1-step4">Step 4: some javascript</h4>
-                <p>
-                    Fill the grid with some data:
-                </p>
+    <h4 id="example1-step4">Step 4: some javascript</h4>
+    <p>
+        Fill the grid with some data:
+    </p>
 
 <pre><code class="language-javascript">&lt;script&gt;
   $(function() {
@@ -204,38 +200,38 @@
 &lt;/script&gt;
 </code></pre>
 
-                <p>
-                    The result looks like this:
-                </p>
+    <p>
+        The result looks like this:
+    </p>
 
-                <table id="table2">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Latin name</th>
-                        </tr>
-                    </thead>
-                </table>
-                <script>
-                    $(function() {
-                        $('#table2').simple_datagrid({
-                            data: [
-                                ["Avocado", "Persea americana"],
-                                ["Bell pepper", "Capsicum annuum"],
-                                ["Bitter melon", "Momordica charantia"]
-                            ]
-                        });
-                    });
-                </script>
+    <table id="table2">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Latin name</th>
+            </tr>
+        </thead>
+    </table>
+    <script>
+        $(function() {
+            $('#table2').simple_datagrid({
+                data: [
+                    ["Avocado", "Persea americana"],
+                    ["Bell pepper", "Capsicum annuum"],
+                    ["Bitter melon", "Momordica charantia"]
+                ]
+            });
+        });
+    </script>
 
-                <h3 id="example1a">Example 1a: get the data from the server</h3>
-                <p>
-                    In example 1 the data is defined in a javascript array. We can also get the data from the server via ajax.
-                    <br>
-                    The result is in <a href="examples/example1a.html">example1a.html</a>.
-                    <br><br>
-                    Define a table with a <strong>data-url</strong> property:
-                </p>
+    <h3 id="example1a">Example 1a: get the data from the server</h3>
+    <p>
+        In example 1 the data is defined in a javascript array. We can also get the data from the server via ajax.
+        <br>
+        The result is in <a href="examples/example1a.html">example1a.html</a>.
+        <br><br>
+        Define a table with a <strong>data-url</strong> property:
+    </p>
 
 <pre><code class="language-markup">&lt;table id="example1a" data-url="extra/fruits.json"&gt;
   &lt;thead&gt;
@@ -247,9 +243,9 @@
 &lt;/table&gt;
 </code></pre>
 
-                <p>
-                    Initialize the grid:
-                </p>
+    <p>
+        Initialize the grid:
+    </p>
 
 <pre><code class="language-javascript">&lt;script&gt;
   $(function() {
@@ -258,28 +254,29 @@
 &lt;/script&gt;
 </code></pre>
 
-                <h2 id="api">Api</h2>
-                <h3 id="api-columns">Defining columns</h3>
-                <p>
-                    A column has the following properties:
-                    <ul>
-                        <li>
-                            <strong>Title</strong>: the title is displayed in the grid header
-                        </li>
-                        <li>
-                            <strong>Key</strong>: you use a key to refer to a column, for example in the data.<
-                            <br>
-                            If you do not define the key for a column, then it's defined as the slugified title.
-                            <br>
-                            E.g. the title <strong>Latin name</strong> is slugified to <strong>latin_name</strong>.
-                        </li>
-                    </ul>
-                </p>
+    <h2 id="api">Api</h2>
+    <h3 id="api-columns">Defining columns</h3>
+    <p>
+        A column has the following properties:
+        <ul>
+            <li>
+                <strong>Title</strong>: the title is displayed in the grid header
+            </li>
+            <li>
+                <strong>Key</strong>: you use a key to refer to a column, for example in the data.<
+                <br>
+                If you do not define the key for a column, then it's defined as the slugified title.
+                <br>
+                E.g. the title <strong>Latin name</strong> is slugified to <strong>latin_name</strong>.
+            </li>
+        </ul>
+    </p>
 
-                <h4 id="api-columns-html">Define columns in html</h4>
-                <p>
-                    You can define columns in the <strong>&lt;th&gt;</strong> elements of a table. The elements must be in the <strong>&lt;thead&gt;</strong>.
-                </p>
+    <h4 id="api-columns-html">Define columns in html</h4>
+    <p>
+        You can define columns in the <strong>&lt;th&gt;</strong> elements of a table. The elements must be in the <strong>&lt;thead&gt;</strong>.
+    </p>
+
 <pre><code class="language-markup">&lt;table&gt;
   &lt;thead&gt;
     &lt;th&gt;Name&lt;/th&gt;
@@ -288,11 +285,11 @@
 &lt;/table&gt;
 </code></pre>
 
-                <p>
-                    You can also set the <strong>key</strong> of a column in the <strong>data-key</strong> property.
-                    <br><br>
-                    For example, to set the key for the <strong>Latin name</strong> column to <strong>latin</strong>:
-                </p>
+    <p>
+        You can also set the <strong>key</strong> of a column in the <strong>data-key</strong> property.
+        <br><br>
+        For example, to set the key for the <strong>Latin name</strong> column to <strong>latin</strong>:
+    </p>
 
 <pre><code class="language-markup">&lt;table&gt;
   &lt;thead&gt;
@@ -301,19 +298,20 @@
   &lt;/thead&gt;
 &lt;/table&gt;
 </code></pre>
-                <h4 id="api-columns-javascript">Define columns in javascript</h4>
-                <p>
-                    You can define the columns in the <strong>columns</strong> property of the javascript options.
-                </p>
+
+    <h4 id="api-columns-javascript">Define columns in javascript</h4>
+    <p>
+        You can define the columns in the <strong>columns</strong> property of the javascript options.
+    </p>
 
 <pre><code class="language-javascript">$('#table1').simple_datagrid({
   columns: ['Name', 'Latin name']
 });
 </code></pre>
 
-                <p>
-                    You can also define columns as an object:
-                </p>
+    <p>
+        You can also define columns as an object:
+    </p>
 
 <pre><code class="language-javascript">$('#table1').simple_datagrid({
   columns: [
@@ -328,25 +326,25 @@
 });
 </code></pre>
 
-                <h3 id="api-data">Defining the data</h3>
+    <h3 id="api-data">Defining the data</h3>
 
-                <h4 id="api-data-syntax">Syntax of the data</h4>
-                <p>
-                    The data is an array of rows. You can define a row as an <strong>array</strong> or as an <strong>object</strong>.
-                </p>
-                <ul>
-                    <li>
-                        <strong>array</strong>: an array of strings, for all the columns in the grid:
-                        <br>
+    <h4 id="api-data-syntax">Syntax of the data</h4>
+    <p>
+        The data is an array of rows. You can define a row as an <strong>array</strong> or as an <strong>object</strong>.
+    </p>
+    <ul>
+        <li>
+            <strong>array</strong>: an array of strings, for all the columns in the grid:
+            <br>
 <pre><code class="language-javascript">var data = [
   ['Avocado', 'Persea americana'],
   ['Bell pepper', 'Capsicum annuum']
 ];
 </code></pre>
-                    </li>
-                    <li>
-                        <strong>object</strong>: an object with the column keys:
-                        <br>
+        </li>
+        <li>
+            <strong>object</strong>: an object with the column keys:
+            <br>
 <pre><code class="language-javascript">var data = [
   {
     name: 'Avocado',
@@ -358,31 +356,31 @@
   }
 ];
 </code></pre>
-                    </li>
-                </ul>
+        </li>
+    </ul>
 
-                <h4 id="api-data-ajax">Define the data using ajax</h4>
-                <p>
-                    You can set an url in the <strong>data-url</strong> property of the table.
-                </p>
+    <h4 id="api-data-ajax">Define the data using ajax</h4>
+    <p>
+        You can set an url in the <strong>data-url</strong> property of the table.
+    </p>
 
 <pre><code class="language-markup">&lt;table data-url="/fruits.json"&gt;
 &lt;/table&gt;
 </code></pre>
 
-                <p>
-                    You can also set the url in javascript.
-                </p>
+    <p>
+        You can also set the url in javascript.
+    </p>
 
 <pre><code class="language-javascript">$('#table1').simple_datagrid({
   url: '/fruits.json'
 });
 </code></pre>
 
-                <h4 id="api-data-array">Define the data as an array</h4>
-                <p>
-                    You can define the data in a javascript array:
-                </p>
+    <h4 id="api-data-array">Define the data as an array</h4>
+    <p>
+        You can define the data in a javascript array:
+    </p>
 
 <pre><code class="language-javascript">$('#table1').simple_datagrid({
   data: [
@@ -393,9 +391,9 @@
 });
 </code></pre>
 
-                <p>
-                    You can also define the data as an array of objects:
-                </p>
+    <p>
+        You can also define the data as an array of objects:
+    </p>
 
 <pre><code class="language-javascript">$('#table1').simple_datagrid({
   data: [
@@ -411,21 +409,14 @@
 });
 </code></pre>
 
-                <h3 id="api-functions">Functions</h3>
+    <h3 id="api-functions">Functions</h3>
 
-                <h4 id="api-functions-reload">reload</h4>
-                <p>
-                    Reload the data.
-                </p>
+    <h4 id="api-functions-reload">reload</h4>
+    <p>
+        Reload the data.
+    </p>
 <pre><code class="language-javascript">$('#tree1').simple_datagrid('reload');
 </code></pre>
-
-            </div>
-        </div>
-    </div>
-
-    <script>
-        
-    </script>
+</div>
 </body>
 </html>
