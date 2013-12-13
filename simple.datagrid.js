@@ -17,7 +17,7 @@ limitations under the License.
 
 
 (function() {
-  var $, SimpleDataGrid, SimpleWidget, SortOrder, max, min, parseQueryParameters, parseUrl, range, slugify, _ref,
+  var $, SimpleDataGrid, SimpleWidget, SortOrder, html_escape, max, min, parseQueryParameters, parseUrl, range, slugify, _ref,
     __slice = [].slice,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -179,7 +179,8 @@ limitations under the License.
       data: null,
       paginator: null,
       on_generate_tr: null,
-      on_generate_footer: null
+      on_generate_footer: null,
+      auto_escape: true
     };
 
     SimpleDataGrid.prototype.loadData = function(data) {
@@ -515,6 +516,9 @@ limitations under the License.
           column = _ref1[_i];
           if (column.key in row) {
             value = row[column.key];
+            if (_this.options.auto_escape) {
+              value = html_escape(value);
+            }
             if (column.on_generate) {
               value = column.on_generate(value, row);
             }
@@ -833,6 +837,10 @@ limitations under the License.
   SortOrder = {
     ASCENDING: 1,
     DESCENDING: 2
+  };
+
+  html_escape = function(string) {
+    return ('' + string).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#x27;').replace(/\//g, '&#x2F;');
   };
 
 }).call(this);

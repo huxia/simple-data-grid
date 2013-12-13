@@ -52,6 +52,7 @@ class SimpleDataGrid extends SimpleWidget
         paginator: null
         on_generate_tr: null
         on_generate_footer: null
+        auto_escape: true
 
     loadData: (data) ->
         @_fillGrid(data)
@@ -334,6 +335,9 @@ class SimpleDataGrid extends SimpleWidget
             for column in @columns
                 if column.key of row
                     value = row[column.key]
+
+                    if @options.auto_escape
+                        value = html_escape(value)
 
                     if column.on_generate
                         value = column.on_generate(value, row)
@@ -625,3 +629,14 @@ SimpleDataGrid.slugify = slugify
 SortOrder =
     ASCENDING: 1
     DESCENDING: 2
+
+
+# Escape a string for HTML interpolation; copied from underscore js
+html_escape = (string) ->
+    return (''+string)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#x27;')
+        .replace(/\//g,'&#x2F;')
