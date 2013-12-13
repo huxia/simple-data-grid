@@ -103,6 +103,13 @@ class SimpleDataGrid extends SimpleWidget
 
         return @_url            
 
+    selectRow: (row_index) ->
+        $rows = @$tbody.find('tr')
+        row_element = $rows[row_index]
+
+        if row_element
+            @_selectRow($(row_element))
+
     _init: ->
         super()
 
@@ -491,17 +498,21 @@ class SimpleDataGrid extends SimpleWidget
         @$el.trigger(event)
 
     _clickRow: (e) ->
-        if @$selected_row
-            @$selected_row.removeClass('selected')
-
         $tr = $(e.target).closest('tr')
-        $tr.addClass('selected')
-        @$selected_row = $tr
+
+        @_selectRow($tr)
 
         event = $.Event('datagrid.select')
         event.row = $tr.data('row')
         event.$row = $tr
         @$el.trigger(event)
+
+    _selectRow: ($tr) ->
+        if @$selected_row
+            @$selected_row.removeClass('selected')
+
+        $tr.addClass('selected')
+        @$selected_row = $tr
 
     _handleClickPage: (e) ->
         page = $(e.target).data('page')

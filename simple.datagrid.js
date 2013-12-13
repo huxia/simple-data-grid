@@ -249,6 +249,15 @@ limitations under the License.
       return this._url;
     };
 
+    SimpleDataGrid.prototype.selectRow = function(row_index) {
+      var $rows, row_element;
+      $rows = this.$tbody.find('tr');
+      row_element = $rows[row_index];
+      if (row_element) {
+        return this._selectRow($(row_element));
+      }
+    };
+
     SimpleDataGrid.prototype._init = function() {
       SimpleDataGrid.__super__._init.call(this);
       this._url = this._getBaseUrl();
@@ -682,16 +691,20 @@ limitations under the License.
 
     SimpleDataGrid.prototype._clickRow = function(e) {
       var $tr, event;
-      if (this.$selected_row) {
-        this.$selected_row.removeClass('selected');
-      }
       $tr = $(e.target).closest('tr');
-      $tr.addClass('selected');
-      this.$selected_row = $tr;
+      this._selectRow($tr);
       event = $.Event('datagrid.select');
       event.row = $tr.data('row');
       event.$row = $tr;
       return this.$el.trigger(event);
+    };
+
+    SimpleDataGrid.prototype._selectRow = function($tr) {
+      if (this.$selected_row) {
+        this.$selected_row.removeClass('selected');
+      }
+      $tr.addClass('selected');
+      return this.$selected_row = $tr;
     };
 
     SimpleDataGrid.prototype._handleClickPage = function(e) {
