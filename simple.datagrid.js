@@ -538,7 +538,7 @@ limitations under the License.
               value = '';
             }
           }
-          html += "<td class=\"sdg-col_" + column.key + "\">" + value + "</td>";
+          html += "<td class=\"sdg-column_" + column.key + "\">" + value + "</td>";
         }
         return html;
       };
@@ -556,7 +556,7 @@ limitations under the License.
           if (column.on_generate) {
             value = column.on_generate(value, row);
           }
-          html += "<td class=\"sdg-col_" + column.key + "\">" + value + "</td>";
+          html += "<td class=\"sdg-column_" + column.key + "\">" + value + "</td>";
         }
         return html;
       };
@@ -649,7 +649,7 @@ limitations under the License.
         _ref1 = _this.columns;
         for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
           column = _ref1[_i];
-          html += "<th data-key=\"" + column.key + "\" class=\"sdg-col_" + column.key + "\">";
+          html += "<th data-key=\"" + column.key + "\" class=\"sdg-column_" + column.key + "\">";
           if (!is_sorted) {
             html += column.title;
           } else {
@@ -657,10 +657,10 @@ limitations under the License.
             if (column.key === order_by) {
               class_html = "sdg-sort ";
               if (_this.sort_order === SortOrder.DESCENDING) {
-                class_html += "sdg-asc sprite-icons-down";
+                class_html += "sdg-asc";
                 sort_text = '&#x25b2;';
               } else {
-                class_html += "sdg-desc sprite-icons-up";
+                class_html += "sdg-desc";
                 sort_text = '&#x25bc;';
               }
               html += "<span class=\"" + class_html + "\">" + sort_text + "</span>";
