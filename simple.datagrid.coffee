@@ -354,7 +354,7 @@ class SimpleDataGrid extends SimpleWidget
                     else
                         value = ''
 
-                html += "<td class=\"sdg-column_#{ column.key }\">#{ value }</td>"
+                html += "<td class=\"sdg-col_#{ column.key }\">#{ value }</td>"
 
             return html
 
@@ -370,7 +370,7 @@ class SimpleDataGrid extends SimpleWidget
                 if column.on_generate
                     value = column.on_generate(value, row)
 
-                html += "<td class=\"sdg-column_#{ column.key }\">#{ value }</td>"
+                html += "<td class=\"sdg-col_#{ column.key }\">#{ value }</td>"
 
             return html
 
@@ -455,7 +455,7 @@ class SimpleDataGrid extends SimpleWidget
                 html = '<tr>'
 
             for column in @columns
-                html += "<th data-key=\"#{ column.key }\" class=\"sdg-column_#{ column.key }\">"
+                html += "<th data-key=\"#{ column.key }\" class=\"sdg-col_#{ column.key }\">"
 
                 if not is_sorted
                     html += column.title

@@ -538,7 +538,7 @@ limitations under the License.
               value = '';
             }
           }
-          html += "<td class=\"sdg-column_" + column.key + "\">" + value + "</td>";
+          html += "<td class=\"sdg-col_" + column.key + "\">" + value + "</td>";
         }
         return html;
       };
@@ -556,7 +556,7 @@ limitations under the License.
           if (column.on_generate) {
             value = column.on_generate(value, row);
           }
-          html += "<td class=\"sdg-column_" + column.key + "\">" + value + "</td>";
+          html += "<td class=\"sdg-col_" + column.key + "\">" + value + "</td>";
         }
         return html;
       };
@@ -649,7 +649,7 @@ limitations under the License.
         _ref1 = _this.columns;
         for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
           column = _ref1[_i];
-          html += "<th data-key=\"" + column.key + "\" class=\"sdg-column_" + column.key + "\">";
+          html += "<th data-key=\"" + column.key + "\" class=\"sdg-col_" + column.key + "\">";
           if (!is_sorted) {
             html += column.title;
           } else {
