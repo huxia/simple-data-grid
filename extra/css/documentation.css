@@ -115,3 +115,8 @@ pre[class*="language-"] {
     font-size: 13px;
     margin: 0 0 16px 0;
 }
+
+/* datagrid */
+.simple-data-grid a:hover {
+    border-bottom: 0;
+}
