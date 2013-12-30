@@ -27,12 +27,12 @@
     vertical-align: top;
 }
 
-.simple-data-grid thead th a .sort {
+.simple-data-grid thead th a .sdg-sort {
     margin-left: 1em;
     font-size: 12px;
 }
 
-.simple-data-grid thead tr.sorted:hover {
+.simple-data-grid thead tr.sdg-sorted:hover {
     cursor: pointer;
 }
 
@@ -56,8 +56,8 @@
     border-bottom: solid 1px #ddd;
 }
 
-.simple-data-grid tbody .selected,
-.simple-data-grid tbody .selected:hover {
+.simple-data-grid tbody .sdg-selected,
+.simple-data-grid tbody .sdg-selected:hover {
     background: #97bdd6;
     background: -webkit-gradient(linear, left top, left bottom, from(#bee0f5), to(#89afca));
     background: -moz-linear-gradient(top, #bee0f5, #89afca);
@@ -69,12 +69,12 @@
     padding: 0.5em;
 }
 
-.simple-data-grid tfoot .pagination {
+.simple-data-grid tfoot .sdg-pagination {
     background: #eaeaea;
     text-align: center;
 }
 
-.simple-data-grid tfoot .pagination ul {
+.simple-data-grid tfoot .sdg-pagination ul {
     list-style: none;
     margin: 0;
     padding: 0;
@@ -83,18 +83,18 @@
     overflow: hidden;
 }
 
-.simple-data-grid tfoot .pagination li {
+.simple-data-grid tfoot .sdg-pagination li {
     float: left;
 }
 
-.simple-data-grid tfoot .pagination a {
+.simple-data-grid tfoot .sdg-pagination a {
     padding: 0 0.5em;
 }
 
-.simple-data-grid tfoot .pagination li.disabled a,
-.simple-data-grid tfoot .pagination li.disabled a:hover,
-.simple-data-grid tfoot .pagination li.active a,
-.simple-data-grid tfoot .pagination li.active a:hover {
+.simple-data-grid tfoot .sdg-pagination li.sdg-disabled a,
+.simple-data-grid tfoot .sdg-pagination li.sdg-disabled a:hover,
+.simple-data-grid tfoot .sdg-pagination li.sdg-active a,
+.simple-data-grid tfoot .sdg-pagination li.sdg-active a:hover {
     cursor: default;
     text-decoration: none;
     color: #000;

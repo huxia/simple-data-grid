@@ -457,14 +457,14 @@ limitations under the License.
 
     SimpleDataGrid.prototype._bindEvents = function() {
       this.$el.delegate('tbody tr', 'click', $.proxy(this._clickRow, this));
-      this.$el.delegate('thead tr.sorted', 'click', $.proxy(this._clickHeader, this));
-      return this.$el.delegate('.pagination a', 'click', $.proxy(this._handleClickPage, this));
+      this.$el.delegate('thead tr.sdg-sorted', 'click', $.proxy(this._clickHeader, this));
+      return this.$el.delegate('.sdg-pagination a', 'click', $.proxy(this._handleClickPage, this));
     };
 
     SimpleDataGrid.prototype._removeEvents = function() {
       this.$el.undelegate('tbody tr', 'click');
       this.$el.undelegate('tbody thead th a', 'click');
-      return this.$el.undelegate('.pagination a', 'click');
+      return this.$el.undelegate('.sdg-pagination a', 'click');
     };
 
     SimpleDataGrid.prototype._loadData = function() {
@@ -483,13 +483,13 @@ limitations under the License.
         }
       }
       getDataFromUrl = function() {
-        _this.$el.addClass('loading');
+        _this.$el.addClass('sdg-loading');
         return $.ajax({
           url: _this._url,
           data: query_parameters,
           success: function(response) {
             var result;
-            _this.$el.removeClass('loading');
+            _this.$el.removeClass('sdg-loading');
             if ($.isArray(response) || typeof response === 'object' || (response == null)) {
               result = response;
             } else {
@@ -538,7 +538,7 @@ limitations under the License.
               value = '';
             }
           }
-          html += "<td class=\"column_" + column.key + "\">" + value + "</td>";
+          html += "<td class=\"sdg-col_" + column.key + "\">" + value + "</td>";
         }
         return html;
       };
@@ -556,7 +556,7 @@ limitations under the License.
           if (column.on_generate) {
             value = column.on_generate(value, row);
           }
-          html += "<td class=\"column_" + column.key + "\">" + value + "</td>";
+          html += "<td class=\"sdg-col_" + column.key + "\">" + value + "</td>";
         }
         return html;
       };
@@ -599,7 +599,7 @@ limitations under the License.
             html = '';
           }
         } else {
-          html = "<tr><td class=\"pagination\" colspan=\"" + _this.columns.length + "\">";
+          html = "<tr><td class=\"sdg-pagination\" colspan=\"" + _this.columns.length + "\">";
           html += fillPaginator(_this.current_page, total_pages);
           html += "</td></tr>";
         }
@@ -615,7 +615,7 @@ limitations under the License.
         if (current_page > 1) {
           html += "<li><a href=\"#\" data-page=\"" + (current_page - 1) + "\">&lsaquo;&lsaquo;&nbsp;previous</a></li>";
         } else {
-          html += "<li class=\"disabled\"><a href=\"#\">&lsaquo;&lsaquo;&nbsp;previous</a></li>";
+          html += "<li class=\"sdg-disabled\"><a href=\"#\">&lsaquo;&lsaquo;&nbsp;previous</a></li>";
         }
         for (_i = 0, _len = pages.length; _i < _len; _i++) {
           page = pages[_i];
@@ -623,7 +623,7 @@ limitations under the License.
             html += '<li><span>...</span></li>';
           } else {
             if (page === current_page) {
-              html += "<li class=\"active\"><a>" + page + "</a></li>";
+              html += "<li class=\"sdg-active\"><a>" + page + "</a></li>";
             } else {
               html += "<li><a href=\"#\" data-page=\"" + page + "\">" + page + "</a></li>";
             }
@@ -632,7 +632,7 @@ limitations under the License.
         if (current_page < total_pages) {
           html += "<li><a href=\"#\" data-page=\"" + (current_page + 1) + "\">next&nbsp;&rsaquo;&rsaquo;</a></li>";
         } else {
-          html += "<li class=\"disabled\"><a>next&nbsp;&rsaquo;&rsaquo;</a></li>";
+          html += "<li class=\"sdg-disabled\"><a>next&nbsp;&rsaquo;&rsaquo;</a></li>";
         }
         html += '</ul>';
         return html;
@@ -642,25 +642,25 @@ limitations under the License.
         order_by = _this._getOrderByColumn();
         is_sorted = order_by && (row_count !== 0);
         if (is_sorted) {
-          html = '<tr class="sorted">';
+          html = '<tr class="sdg-sorted">';
         } else {
           html = '<tr>';
         }
         _ref1 = _this.columns;
         for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
           column = _ref1[_i];
-          html += "<th data-key=\"" + column.key + "\" class=\"column_" + column.key + "\">";
+          html += "<th data-key=\"" + column.key + "\" class=\"sdg-col_" + column.key + "\">";
           if (!is_sorted) {
             html += column.title;
           } else {
             html += "<a href=\"#\">" + column.title;
             if (column.key === order_by) {
-              class_html = "sort ";
+              class_html = "sdg-sort ";
               if (_this.sort_order === SortOrder.DESCENDING) {
-                class_html += "asc sprite-icons-down";
+                class_html += "sdg-asc sprite-icons-down";
                 sort_text = '&#x25b2;';
               } else {
-                class_html += "desc sprite-icons-up";
+                class_html += "sdg-desc sprite-icons-up";
                 sort_text = '&#x25bc;';
               }
               html += "<span class=\"" + class_html + "\">" + sort_text + "</span>";
@@ -701,9 +701,9 @@ limitations under the License.
 
     SimpleDataGrid.prototype._selectRow = function($tr) {
       if (this.$selected_row) {
-        this.$selected_row.removeClass('selected');
+        this.$selected_row.removeClass('sdg-selected');
       }
-      $tr.addClass('selected');
+      $tr.addClass('sdg-selected');
       return this.$selected_row = $tr;
     };
 

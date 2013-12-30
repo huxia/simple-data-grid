@@ -286,13 +286,13 @@ class SimpleDataGrid extends SimpleWidget
 
     _bindEvents: ->
         @$el.delegate('tbody tr', 'click', $.proxy(@_clickRow, this))
-        @$el.delegate('thead tr.sorted', 'click', $.proxy(@_clickHeader, this))
-        @$el.delegate('.pagination a', 'click', $.proxy(@_handleClickPage, this))
+        @$el.delegate('thead tr.sdg-sorted', 'click', $.proxy(@_clickHeader, this))
+        @$el.delegate('.sdg-pagination a', 'click', $.proxy(@_handleClickPage, this))
 
     _removeEvents: ->
         @$el.undelegate('tbody tr', 'click')
         @$el.undelegate('tbody thead th a', 'click')
-        @$el.undelegate('.pagination a', 'click')
+        @$el.undelegate('.sdg-pagination a', 'click')
 
     _loadData: ->
         query_parameters = $.extend({}, @parameters, {page: @current_page})
@@ -307,13 +307,13 @@ class SimpleDataGrid extends SimpleWidget
                 query_parameters.sortorder = 'asc'
 
         getDataFromUrl = =>
-            @$el.addClass('loading')
+            @$el.addClass('sdg-loading')
 
             $.ajax(
                 url: @_url
                 data: query_parameters
                 success: (response) =>
-                    @$el.removeClass('loading')
+                    @$el.removeClass('sdg-loading')
 
                     if $.isArray(response) or typeof response == 'object' or not response?
                         result = response
@@ -354,7 +354,7 @@ class SimpleDataGrid extends SimpleWidget
                     else
                         value = ''
 
-                html += "<td class=\"column_#{ column.key }\">#{ value }</td>"
+                html += "<td class=\"sdg-col_#{ column.key }\">#{ value }</td>"
 
             return html
 
@@ -370,7 +370,7 @@ class SimpleDataGrid extends SimpleWidget
                 if column.on_generate
                     value = column.on_generate(value, row)
 
-                html += "<td class=\"column_#{ column.key }\">#{ value }</td>"
+                html += "<td class=\"sdg-col_#{ column.key }\">#{ value }</td>"
 
             return html
 
@@ -410,7 +410,7 @@ class SimpleDataGrid extends SimpleWidget
                 else
                     html = ''
             else
-                html = "<tr><td class=\"pagination\" colspan=\"#{ @columns.length }\">"
+                html = "<tr><td class=\"sdg-pagination\" colspan=\"#{ @columns.length }\">"
                 html += fillPaginator(@current_page, total_pages)
                 html += "</td></tr>"
 
@@ -426,21 +426,21 @@ class SimpleDataGrid extends SimpleWidget
             if current_page > 1
                 html += "<li><a href=\"#\" data-page=\"#{current_page - 1}\">&lsaquo;&lsaquo;&nbsp;previous</a></li>"
             else
-                html += "<li class=\"disabled\"><a href=\"#\">&lsaquo;&lsaquo;&nbsp;previous</a></li>"
+                html += "<li class=\"sdg-disabled\"><a href=\"#\">&lsaquo;&lsaquo;&nbsp;previous</a></li>"
 
             for page in pages
                 if not page
                     html += '<li><span>...</span></li>'
                 else
                     if page == current_page
-                        html += "<li class=\"active\"><a>#{ page }</a></li>"
+                        html += "<li class=\"sdg-active\"><a>#{ page }</a></li>"
                     else
                         html += "<li><a href=\"#\" data-page=\"#{ page }\">#{ page }</a></li>"
 
             if current_page < total_pages
                 html += "<li><a href=\"#\" data-page=\"#{ current_page + 1 }\">next&nbsp;&rsaquo;&rsaquo;</a></li>"
             else
-                html += "<li class=\"disabled\"><a>next&nbsp;&rsaquo;&rsaquo;</a></li>"
+                html += "<li class=\"sdg-disabled\"><a>next&nbsp;&rsaquo;&rsaquo;</a></li>"
 
             html += '</ul>'
             return html
@@ -450,12 +450,12 @@ class SimpleDataGrid extends SimpleWidget
             is_sorted = order_by and (row_count != 0)
 
             if is_sorted
-                html = '<tr class="sorted">'
+                html = '<tr class="sdg-sorted">'
             else
                 html = '<tr>'
 
             for column in @columns
-                html += "<th data-key=\"#{ column.key }\" class=\"column_#{ column.key }\">"
+                html += "<th data-key=\"#{ column.key }\" class=\"sdg-col_#{ column.key }\">"
 
                 if not is_sorted
                     html += column.title
@@ -463,12 +463,12 @@ class SimpleDataGrid extends SimpleWidget
                     html += "<a href=\"#\">#{ column.title }"
 
                     if column.key == order_by
-                        class_html = "sort "
+                        class_html = "sdg-sort "
                         if @sort_order == SortOrder.DESCENDING
-                            class_html += "asc sprite-icons-down"
+                            class_html += "sdg-asc sprite-icons-down"
                             sort_text = '&#x25b2;'
                         else
-                            class_html += "desc sprite-icons-up"
+                            class_html += "sdg-desc sprite-icons-up"
                             sort_text = '&#x25bc;'
                         html += "<span class=\"#{ class_html }\">#{ sort_text }</span>"
 
@@ -509,9 +509,9 @@ class SimpleDataGrid extends SimpleWidget
 
     _selectRow: ($tr) ->
         if @$selected_row
-            @$selected_row.removeClass('selected')
+            @$selected_row.removeClass('sdg-selected')
 
-        $tr.addClass('selected')
+        $tr.addClass('sdg-selected')
         @$selected_row = $tr
 
     _handleClickPage: (e) ->
