@@ -234,13 +234,13 @@ test('getSelectedRow', function() {
 
     // 2. select second row
     $table1.find('tbody tr:eq(1) td:first').click();
-    ok($('tbody tr:eq(1)').hasClass('selected'));
+    ok($('tbody tr:eq(1)').hasClass('sdg-selected'));
     equal($table1.simple_datagrid('getSelectedRow').id, 201);
 
     // 2. select first row
     $table1.find('tbody tr:eq(0) td:first').click();
-    ok($('tbody tr:eq(0)').hasClass('selected'));
-    ok(! $('tbody tr:eq(1)').hasClass('selected'));
+    ok($('tbody tr:eq(0)').hasClass('sdg-selected'));
+    ok(! $('tbody tr:eq(1)').hasClass('sdg-selected'));
     equal($table1.simple_datagrid('getSelectedRow').id, 200);
 });
 
@@ -328,7 +328,7 @@ test('pagination', function() {
                 );
 
                 // go to next page
-                $table1.find('.pagination a:last').click();
+                $table1.find('.sdg-pagination a:last').click();
             },
             function() {
                 // step 2: expect second page
@@ -338,7 +338,7 @@ test('pagination', function() {
                 );
 
                 // go to last page
-                $table1.find('.pagination a:eq(10)').click();
+                $table1.find('.sdg-pagination a:eq(10)').click();
             },
             function() {
                 // expect last page
