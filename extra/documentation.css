@@ -42,7 +42,7 @@ h1, h2, h3, body {
   margin: 0;
   color: #fff;
   font-size: 18px;
-  padding: 8px 20px;
+  padding: 8px 10px;
 }
 
 #menu a:hover {
@@ -65,15 +65,13 @@ h1, h2, h3, body {
 .bs-sidenav {
   margin-top: 0;
   margin-bottom: 30px;
-  padding-top: 10px;
-  padding-bottom: 10px;
 }
 
 /* All levels of nav */
 .bs-sidebar .nav > li > a {
   display: block;
   color: #000;
-  padding: 5px 20px;
+  padding: 5px 10px;
 }
 .bs-sidebar .nav > li > a:hover,
 .bs-sidebar .nav > li > a:focus {
@@ -96,7 +94,7 @@ h1, h2, h3, body {
 .bs-sidebar .nav .nav > li > a {
   padding-top: 3px;
   padding-bottom: 3px;
-  padding-left: 30px;
+  padding-left: 20px;
   font-size: 90%;
 }
 

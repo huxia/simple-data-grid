@@ -8,8 +8,8 @@
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="simple.datagrid.css">
     <link rel="stylesheet" href="bower_components/prism/themes/prism-okaidia.css">
-    <link rel="stylesheet" href="extra/css/documentation.css">
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700|Faster+One' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="extra/documentation.css">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
 </head>
 <body>
     <div class="jumbotron" id="main-jumbotron">
@@ -40,6 +40,12 @@
                         <li><a href="#requirements">Requirements</a></li>
                         <li><a href="#downloads">Downloads</a></li>
                         <li><a href="#demo">Demo</a></li>
+                        <li>
+                            <a href="#examples">Examples</a>
+                            <ul class="nav">
+                                <li><a href="#tutorial">Tutorial</a></li>
+                            </ul>
+                        </li>
                         <li>
                             <a href="#functions">Functions</a>
                             <ul class="nav">
@@ -109,6 +115,11 @@
                 <pre><code class="language-javascript">$(function() {
   $('#demo-table').simple_datagrid();
 });</code></pre>
+
+                <h2 id="examples">Examples</h2>
+                <ul>
+                    <li><a href="examples/tutorial.html" id="tutorial">Tutorial</a></li>
+                </ul>
 
                 <h2 id="functions">Functions</h2>
 
@@ -275,7 +286,7 @@ $('#demo-table').simple_datagrid('selectRow', 0);
         </div>
     </div>
     <!--[if lt IE 9]>
-        <script src="extra/js/jquery-1.10.2.min.js"></script>
+        <script src="extra/jquery-1.10.2.min.js"></script>
     <![endif]-->
     <!--[if gte IE 9]><!-->
         <script src="bower_components/jquery/jquery.min.js"></script>
@@ -285,6 +296,6 @@ $('#demo-table').simple_datagrid('selectRow', 0);
     <script src="examples/example-data.js"></script>
     <script src="bower_components/jquery-mockjax/jquery.mockjax.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="extra/js/documentation.js"></script>
+    <script src="extra/documentation.js"></script>
 </body>
 </html>

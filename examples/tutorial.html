@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Tutorial for simple-data-grid</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="../simple.datagrid.css">
+    <link rel="stylesheet" href="../bower_components/prism/themes/prism-okaidia.css">
+    <link rel="stylesheet" href="../extra/documentation.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Tutorial for simple-data-grid</h1>
+
+        <p>
+            This example loads data using ajax.
+        </p>
+
+        <table id="demo-table" data-url="/fruits/">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Latin name</th>
+                </tr>
+            </thead>
+        </table>
+
+        <h3>Step 1 - include javascript and css</h3>
+        <p>
+            Include <strong>jquery</strong>, <strong>simple.datagrid.js</strong> and <strong>simple.datagrid.css</strong>.
+        </p>
+
+        <pre><code class="language-markup">&lt;script src="jquery.min.js"&gt;&lt;/script&gt;
+&lt;script src="simple.datagrid.js"&gt;&lt;/script&gt;
+&lt;link rel="stylesheet" href="simple.datagrid.css"&gt;
+</code></pre>
+
+        <h3>Step 2 - html</h3>
+
+        <p>
+            Define the table and the column in html. You can define the datasource using the <strong>data-url</strong>
+            property.
+        </p>
+        <pre><code class="language-markup">&lt;table id="demo-table" data-url="/fruit_data/"&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Name&lt;/th&gt;
+      &lt;th&gt;Latin name&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+&lt;/table&gt;</code></pre>
+
+        <p>
+            This example defines a table with id <strong>demo-table</strong> with columns <strong>Name</strong>
+            and <strong>Latin name</strong>. It also defines the data-url <strong>/fruit_data/</strong>.
+        </p>
+
+        <h3>Step 3 - javascript</h3>
+        <p>
+            Initialize the datagrid by calling the <strong>simple_datagrid</strong> function.
+        </p>
+
+        <pre><code class="language-javascript">$('#demo-table').simple_datagrid({
+  order_by: true
+});</code></pre>
+    </div>
+
+    <!--[if lt IE 9]>
+        <script src="../extra/jquery-1.10.2.min.js"></script>
+    <![endif]-->
+    <!--[if gte IE 9]><!-->
+        <script src="../bower_components/jquery/jquery.min.js"></script>
+    <!--<![endif]-->
+    <script src="../bower_components/prism/prism.js"></script>
+    <script src="../simple.datagrid.js"></script>
+    <script src="example-data.js"></script>
+    <script src="../bower_components/jquery-mockjax/jquery.mockjax.js"></script>
+    <script src="tutorial.js"></script>
+</body>
+</html>
