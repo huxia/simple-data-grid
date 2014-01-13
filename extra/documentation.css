@@ -6,7 +6,7 @@ h1, h2, h3, body {
 /* jumbotron */
 
 #main-jumbotron {
-  background: #000;
+  background: #001F3F;
   padding-top: 24px;
   text-align: center;
 }
@@ -22,14 +22,14 @@ h1, h2, h3, body {
 }
 
 #main-jumbotron .btn-primary {
-  background-color: #000;
+  background-color: #001F3F;
   background-image: none;
   border: solid 1px #fff;
   color: #fff;
 }
 
 #main-jumbotron .btn-primary:hover {
-  background-color: #222;
+  background-color: #001F3F;
 }
 
 /* sidebar */
@@ -38,7 +38,7 @@ h1, h2, h3, body {
 }
 
 #menu h2 {
-  background: #000;
+  background: #001F3F;
   margin: 0;
   color: #fff;
   font-size: 18px;
