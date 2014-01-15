@@ -5,30 +5,30 @@ h1, h2, h3, body {
 
 /* jumbotron */
 
-#main-jumbotron {
+#simpledatagrid {
   background: #001F3F;
   padding-top: 24px;
   text-align: center;
 }
 
-#main-jumbotron h1 {
+#simpledatagrid h1 {
   margin-bottom: 32px;
   font-weight: bold;
 }
 
-#main-jumbotron h1,
-#main-jumbotron p {
+#simpledatagrid h1,
+#simpledatagrid p {
   color: #fff;
 }
 
-#main-jumbotron .btn-primary {
+#simpledatagrid .btn-primary {
   background-color: #001F3F;
   background-image: none;
   border: solid 1px #fff;
   color: #fff;
 }
 
-#main-jumbotron .btn-primary:hover {
+#simpledatagrid .btn-primary:hover {
   background-color: #001F3F;
 }
 
