@@ -16,11 +16,9 @@
         <div class="container">
             <h1>Simple data grid</h1>
             <p>
-                Simple-data-grid is a datagrid widget.
+                Simple-data-grid is a <strong>datagrid</strong> widget.
             </p>
             <p>
-                Works on Internet Explorer 7+, Firefox 3.6+, Chrome and Safari
-                <br>
                 Written in Coffeescript
             </p>
             <p>
@@ -46,6 +44,16 @@
                             <a href="#examples">Examples</a>
                             <ul class="nav">
                                 <li><a href="#tutorial">Tutorial</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#options">Options</a>
+                            <ul class="nav">
+                                <li><a href="#options-auto_escape">auto_escape</a></li>
+                                <li><a href="#options-data">data</a></li>
+                                <li><a href="#options-on_generate_footer">on_generate_footer</a></li>
+                                <li><a href="#options-on_generate_tr">on_generate_tr</a></li>
+                                <li><a href="#options-order_by">order_by</a></li>
                             </ul>
                         </li>
                         <li>
@@ -123,6 +131,85 @@
                     <li><a href="examples/tutorial.html" id="tutorial">Tutorial</a></li>
                 </ul>
 
+                <h2 id="options">Options</h2>
+
+                <h3 id="options-auto_escape">auto_escape</h3>
+                <p>
+                    Auto-escape the html (true / false). Default is <strong>true</strong>
+                <p>
+
+                <pre><code class="language-javascript">// Turn autoescape off
+$('#demo-table').simple_datagrid(
+  {
+    auto_escape: false
+  }
+);</code></pre>
+
+                <h3 id="options-data">data</h3>
+                <p>
+                    Provide the data for the datagrid.
+                </p>
+
+                <pre><code class="language-javascript">var data = [
+  {
+    "latin_name": "Persea americana",
+    "name": "Avocado"
+  },
+  {
+    "latin_name": "Capsicum annuum",
+    "name": "Bell pepper"
+  }
+];
+
+$('#demo-table').simple_datagrid(
+  {
+    data: data
+  }
+);</code></pre>
+
+                <h3 id="options-on_generate_footer">on_generate_footer</h3>
+                <p>
+                    Callback function to create footer html.
+                    <br>
+                    The function looks like this: <strong>function($footer_element, datagrid_widget, data)</strong>
+                </p>
+
+<pre><code class="language-javascript">function generate_footer($footer, datagrid, data) {
+    $footer.append(
+        "&lt;tr&gt;&lt;td colspan="3"&gt;my footer&lt;/td&gt;&lt;/tr&gt;"
+    );
+}
+
+$('#demo-table').simple_datagrid(
+  {
+    on_generate_footer: generate_footer
+  }
+);</code></pre>
+
+                <h3 id="options-on_generate_tr">on_generate_tr</h3>
+                <p>
+                    Callback function to add html to the row elements.
+                    <br>
+                    The function looks like this: <strong>function($row_element, row_data)</strong>
+                </p>
+
+<pre><code class="language-javascript">function generate_row($row_element, row_data) {
+    if (row_data.blocked) {
+        $row_element.addClass('blocked');
+    }
+}</code></pre>
+
+                <h3 id="options-order_by">order_by</h3>
+                <p>
+                </p>
+
+<pre><code class="language-javascript">// Order by 'name' column
+$('#demo-table').simple_datagrid(
+  {
+    order_by: 'name'
+  }
+);</code></pre>
+
                 <h2 id="functions">Functions</h2>
 
                 <h3 id="functions-addcolumn">addColumn</h3>
@@ -150,8 +237,8 @@ $('#demo-table').simple_datagrid('addColumn', 'New column', 2);</code></pre>
 
                 <pre><code class="language-javascript">// Add column with title 'New column' and key 'newcolumn'
 $('#demo-table').simple_datagrid({
-    title: 'New column',
-    key: 'newcolumn'
+  title: 'New column',
+  key: 'newcolumn'
 });</code></pre>
 
                 <h3 id="functions-getcolumns">getColumns</h3>

@@ -14,22 +14,26 @@ h1, h2, h3, body {
 #simpledatagrid h1 {
   margin-bottom: 32px;
   font-weight: bold;
+  color: #0074D9;
 }
 
-#simpledatagrid h1,
 #simpledatagrid p {
   color: #fff;
 }
 
-#simpledatagrid .btn-primary {
-  background-color: #001F3F;
-  background-image: none;
-  border: solid 1px #fff;
-  color: #fff;
+#simpledatagrid .btn-primary,
+#simpledatagrid .btn-primary:hover {
+  background-color: #001F3F;  
 }
 
-#simpledatagrid .btn-primary:hover {
-  background-color: #001F3F;
+#simpledatagrid .btn-primary {
+  background-image: none;
+  border: solid 1px #AAAAAA;
+  color: #AAAAAA;
+}
+
+#simpledatagrid strong {
+  color: #F012BE;
 }
 
 /* sidebar */
