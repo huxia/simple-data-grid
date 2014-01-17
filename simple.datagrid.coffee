@@ -53,6 +53,7 @@ class SimpleDataGrid extends SimpleWidget
         on_generate_tr: null
         on_generate_footer: null
         auto_escape: true
+        keyboard_support: false
 
     loadData: (data) ->
         @_fillGrid(data)
@@ -289,10 +290,14 @@ class SimpleDataGrid extends SimpleWidget
         @$el.delegate('thead tr.sdg-sorted', 'click', $.proxy(@_clickHeader, this))
         @$el.delegate('.sdg-pagination a', 'click', $.proxy(@_handleClickPage, this))
 
+        if @options.keyboard_support
+            $(document).bind('keydown.datagrid', $.proxy(@_handleKeyDown, this))
+
     _removeEvents: ->
         @$el.undelegate('tbody tr', 'click')
         @$el.undelegate('tbody thead th a', 'click')
         @$el.undelegate('.sdg-pagination a', 'click')
+        $(document).unbind('keydown.datagrid', $.proxy(@_handleKeyDown, this))
 
     _loadData: ->
         query_parameters = $.extend({}, @parameters, {page: @current_page})
@@ -603,6 +608,57 @@ class SimpleDataGrid extends SimpleWidget
             return @columns[0].key
         else
             return null
+
+    _handleKeyDown: (e) ->
+        UP = 38
+        DOWN = 40
+
+        if not @options.keyboard_support
+            return
+
+        if $(document.activeElement).is('textarea,input')
+            return true
+
+        key = e.which
+
+        switch key
+            when DOWN
+                return @_moveDown()
+
+            when UP
+                return @_moveUp()
+
+    _moveDown: ->
+        if not @$selected_row
+            @_selectFirstRow()
+            return false
+        else
+            $tr = @$selected_row.next('tr')
+
+            if $tr.length
+                @_selectRow($tr)
+                return false
+            else
+                return true
+
+    _moveUp: ->
+        if not @$selected_row
+            @_selectFirstRow()
+            return false
+        else
+            $tr = @$selected_row.prev('tr')
+
+            if $tr.length
+                @_selectRow($tr)
+                return false
+            else
+                return true
+
+    _selectFirstRow: ->
+        $tr = @$tbody.find('tr:first-child')
+
+        if $tr.length
+            @_selectRow($tr)
 
 SimpleWidget.register(SimpleDataGrid, 'simple_datagrid')
 

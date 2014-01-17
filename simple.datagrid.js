@@ -192,7 +192,8 @@ limitations under the License.
       paginator: null,
       on_generate_tr: null,
       on_generate_footer: null,
-      auto_escape: true
+      auto_escape: true,
+      keyboard_support: false
     };
 
     SimpleDataGrid.prototype.loadData = function(data) {
@@ -470,13 +471,17 @@ limitations under the License.
     SimpleDataGrid.prototype._bindEvents = function() {
       this.$el.delegate('tbody tr', 'click', $.proxy(this._clickRow, this));
       this.$el.delegate('thead tr.sdg-sorted', 'click', $.proxy(this._clickHeader, this));
-      return this.$el.delegate('.sdg-pagination a', 'click', $.proxy(this._handleClickPage, this));
+      this.$el.delegate('.sdg-pagination a', 'click', $.proxy(this._handleClickPage, this));
+      if (this.options.keyboard_support) {
+        return $(document).bind('keydown.datagrid', $.proxy(this._handleKeyDown, this));
+      }
     };
 
     SimpleDataGrid.prototype._removeEvents = function() {
       this.$el.undelegate('tbody tr', 'click');
       this.$el.undelegate('tbody thead th a', 'click');
-      return this.$el.undelegate('.sdg-pagination a', 'click');
+      this.$el.undelegate('.sdg-pagination a', 'click');
+      return $(document).unbind('keydown.datagrid', $.proxy(this._handleKeyDown, this));
     };
 
     SimpleDataGrid.prototype._loadData = function() {
@@ -814,6 +819,65 @@ limitations under the License.
         return this.columns[0].key;
       } else {
         return null;
+      }
+    };
+
+    SimpleDataGrid.prototype._handleKeyDown = function(e) {
+      var DOWN, UP, key;
+      UP = 38;
+      DOWN = 40;
+      if (!this.options.keyboard_support) {
+        return;
+      }
+      if ($(document.activeElement).is('textarea,input')) {
+        return true;
+      }
+      key = e.which;
+      switch (key) {
+        case DOWN:
+          return this._moveDown();
+        case UP:
+          return this._moveUp();
+      }
+    };
+
+    SimpleDataGrid.prototype._moveDown = function() {
+      var $tr;
+      if (!this.$selected_row) {
+        this._selectFirstRow();
+        return false;
+      } else {
+        $tr = this.$selected_row.next('tr');
+        if ($tr.length) {
+          this._selectRow($tr);
+          return false;
+        } else {
+          return true;
+        }
+      }
+    };
+
+    SimpleDataGrid.prototype._moveUp = function() {
+      var $tr;
+      if (!this.$selected_row) {
+        this._selectFirstRow();
+        return false;
+      } else {
+        $tr = this.$selected_row.prev('tr');
+        if ($tr.length) {
+          this._selectRow($tr);
+          return false;
+        } else {
+          return true;
+        }
+      }
+    };
+
+    SimpleDataGrid.prototype._selectFirstRow = function() {
+      var $tr;
+      $tr = this.$tbody.find('tr:first-child');
+      if ($tr.length) {
+        return this._selectRow($tr);
       }
     };
 
