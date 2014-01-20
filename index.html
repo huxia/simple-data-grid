@@ -201,9 +201,17 @@ $('#demo-table').simple_datagrid(
 
                 <h3 id="options-order_by">order_by</h3>
                 <p>
+                    Enable sorting (true/false/column name). The default is false.
                 </p>
 
-<pre><code class="language-javascript">// Order by 'name' column
+<pre><code class="language-javascript">// Enable sorting
+$('#demo-table').simple_datagrid(
+  {
+    order_by: true
+  }
+);</code></pre>
+
+<pre><code class="language-javascript">// Enable sorting; order by 'name' column
 $('#demo-table').simple_datagrid(
   {
     order_by: 'name'
