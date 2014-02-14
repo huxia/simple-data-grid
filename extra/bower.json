@@ -5,6 +5,7 @@
         "jquery": "2.1.0",
         "jquery-mockjax": "1.5.3",
         "prism": "gh-pages",
-        "qunit": "1.14.0"
+        "qunit": "1.14.0",
+        "qunit-phantomjs-runner": "jonkemp/qunit-phantomjs-runner"
     }
 }
