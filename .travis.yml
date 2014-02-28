@@ -7,5 +7,5 @@ before_script:
   - sleep 5
 script:
   - rm -f data.lcov
-  - phantomjs extra/bower_components/qunit-phantomjs-runner/runner.js "http://localhost:8000/test/test.html?gruntReport&coverage"
+  - phantomjs phantomjs/runner.js "http://localhost:8000/test/test.html?gruntReport&coverage"
   - node node_modules/coveralls/bin/coveralls.js < data.lcov
