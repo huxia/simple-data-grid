@@ -21,15 +21,15 @@ h1, h2, h3, body {
   color: #fff;
 }
 
-#simpledatagrid .btn-primary,
-#simpledatagrid .btn-primary:hover {
-  background-color: #001F3F;  
+#simpledatagrid .btn-primary {
+  background-color: #FFDC00;
+  background-image: none;
+  border: solid 1px #FFDC00;
+  color: #001F3F;
 }
 
-#simpledatagrid .btn-primary {
-  background-image: none;
-  border: solid 1px #AAAAAA;
-  color: #AAAAAA;
+#simpledatagrid .btn-primary:hover {
+  background-color: #FFDC00;
 }
 
 #simpledatagrid strong {
