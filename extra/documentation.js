@@ -15,7 +15,7 @@ $(function() {
 
     $.mockjax({
         url: '*',
-        response: ExampleData.handleMockjaxResponse,
+        response: ExampleData.pagedReponse,
         responseTime: 0
     });
 

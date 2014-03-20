@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Paging example for simple-data-grid</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../extra/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../extra/bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="../simple.datagrid.css">
+    <link rel="stylesheet" href="../extra/bower_components/prism/themes/prism-okaidia.css">
+    <link rel="stylesheet" href="../extra/documentation.css">
+</head>
+<body>
+    <div class="container">
+        <p>
+            <a href="tutorial.html">
+                <span class="glyphicon glyphicon-chevron-left"></span>
+                Tutorial
+            </a>
+        </p>
+
+        <h1>Paging example for simple-data-grid</h1>
+
+        <p>
+            This example shows how you can use pages.
+        </p>
+
+        <table id="demo-table" data-url="/fruits/">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Latin name</th>
+                </tr>
+            </thead>
+        </table>
+
+        <h4>JSON response</h4>
+        <p>
+            The JSON response from the server should contain the following properties:
+        </p>
+        <p>
+            <strong>total_pages</strong>: number of total pages in the data
+            <br>
+            <strong>rows</strong>: rows in this page; this is an array of objects
+        </p>
+
+<pre><code class="language-javascript">{
+  "total_pages": 10,
+  "rows": [
+    {
+      "latin_name": "Persea americana",
+      "name": "Avocado"
+    },
+    {
+      "latin_name": "Capsicum annuum",
+      "name": "Bell pepper"
+    }
+  ]
+}</code></pre>
+    </div>
+
+    <!--[if lt IE 9]>
+        <script src="../extra/jquery-1.11.0.min.js"></script>
+    <![endif]-->
+    <!--[if gte IE 9]><!-->
+        <script src="../extra/bower_components/jquery/jquery.min.js"></script>
+    <!--<![endif]-->
+    <script src="../extra/bower_components/prism/prism.js"></script>
+    <script src="../simple.datagrid.js"></script>
+    <script src="example-data.js"></script>
+    <script src="../extra/bower_components/jquery-mockjax/jquery.mockjax.js"></script>
+    <script src="paging.js"></script>
+</body>

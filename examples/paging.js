@@ -1,7 +1,7 @@
 $(function() {
     $.mockjax({
         url: '*',
-        responseText: ExampleData.fruits.slice(0, 5),
+        response: ExampleData.pagedReponse,
         responseTime: 0
     });
 

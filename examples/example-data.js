@@ -1,6 +1,7 @@
 ExampleData = {};
 
-ExampleData.handleMockjaxResponse = function(settings) {
+ExampleData.pagedReponse = function(settings) {
+    // Return mockjax response; handle paging and sorting
     var page = settings.data.page || 1;
     var order_by = settings.data.order_by;
     var sortorder = settings.data.sortorder;
