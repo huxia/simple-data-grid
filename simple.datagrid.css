@@ -50,6 +50,7 @@
 
 .simple-data-grid tbody td {
     padding: 0.5em;
+    vertical-align: top;
 }
 
 .simple-data-grid tbody tr {
