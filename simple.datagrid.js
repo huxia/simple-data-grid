@@ -192,7 +192,8 @@ limitations under the License.
       on_generate_tr: null,
       on_generate_footer: null,
       auto_escape: true,
-      keyboard_support: false
+      keyboard_support: false,
+      parameters: {}
     };
 
     SimpleDataGrid.prototype.loadData = function(data) {
@@ -276,7 +277,7 @@ limitations under the License.
       this._url = this._getBaseUrl();
       this.$selected_row = null;
       this.current_page = 1;
-      this.parameters = {};
+      this.parameters = this.options.parameters;
       this.order_by = this._parseOrderByOption();
       this.sort_order = this._parseSortorderOption() || SortOrder.ASCENDING;
       this._generateColumnData();

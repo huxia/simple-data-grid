@@ -54,6 +54,7 @@ class SimpleDataGrid extends SimpleWidget
         on_generate_footer: null
         auto_escape: true
         keyboard_support: false
+        parameters: {}
 
     loadData: (data) ->
         @_fillGrid(data)
@@ -117,7 +118,7 @@ class SimpleDataGrid extends SimpleWidget
         @_url = @_getBaseUrl()
         @$selected_row = null
         @current_page = 1
-        @parameters = {}
+        @parameters = @options.parameters
         @order_by = @_parseOrderByOption()
         @sort_order = @_parseSortorderOption() or SortOrder.ASCENDING
 
