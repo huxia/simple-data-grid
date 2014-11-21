@@ -2,10 +2,10 @@
     "name": "simpledatagrid",
     "dependencies": {
         "blanket": "1.1.5",
-        "bootstrap": "3.1.1",
+        "bootstrap": "3.3.1",
         "jquery": "2.1.1",
-        "jquery-mockjax": "1.5.3",
+        "jquery-mockjax": "1.6.1",
         "prism": "gh-pages",
-        "qunit": "1.14.0"
+        "qunit": "1.15.0"
     }
 }
