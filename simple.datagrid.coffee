@@ -77,6 +77,9 @@ class SimpleDataGrid extends SimpleWidget
     setCurrentPage: (page) ->
         @current_page = page
 
+    getCurrentPage: ->
+        return @current_page
+
     addColumn: (column, index) ->
         column_info = @_createColumnInfo(column)
 
