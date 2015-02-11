@@ -504,15 +504,15 @@ limitations under the License.
     SimpleDataGrid.prototype._loadData = function() {
       var getDataFromArray, getDataFromUrl, order_by, query_parameters;
       query_parameters = $.extend({}, this.parameters, {
-        page: this.current_page
+        _page: this.current_page
       });
       order_by = this._getOrderByColumn();
       if (order_by) {
-        query_parameters.order_by = order_by;
+        query_parameters._sortby = order_by;
         if (this.sort_order === SortOrder.DESCENDING) {
-          query_parameters.sortorder = 'desc';
+          query_parameters._sortorder = 'desc';
         } else {
-          query_parameters.sortorder = 'asc';
+          query_parameters._sortorder = 'asc';
         }
       }
       getDataFromUrl = (function(_this) {
